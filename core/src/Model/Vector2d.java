@@ -31,5 +31,13 @@ public class Vector2d {
         return new Vector2d(this.x, this.y);
     }
     public void add(double x, double y){this.x+=x;this.y+=y;}
+    public double difference(Vector2d vector){
+        double xDiff =this.x-vector.getX();
+        double yDiff = this.y-vector.getY();
+       return Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+    }
+    public double evaluateVector(){
+        return Math.sqrt(x*x+y*y);
+    }
 
 }

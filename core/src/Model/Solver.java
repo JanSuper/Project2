@@ -2,6 +2,8 @@ package Model;
 
 import com.mygdx.game.CourseShaper;
 import com.mygdx.game.FunctionMaker;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static java.lang.Math.sqrt;
 
@@ -9,6 +11,7 @@ public abstract class Solver implements PhysicsEngine{
     /**
      * this is the time step that the system will be updating off of
      * 1/165s is every 0.00606060606060606060606060606061 seconds
+     * 0.00001
      * TODO: make an array of all positions at these time intervals so we can set a the screen to update
      * ball position based off of this array instead of calculating on the fly, this will allow us to calculate the motion in smaller steps and only store evere 0.006 seconds
      */
@@ -17,7 +20,8 @@ public abstract class Solver implements PhysicsEngine{
      * Solver Step size
      * This is the step size that is changed for the set_step_size
      */
-    protected double solverStepSize = 1.0/165.0;
+    protected double solverStepSize = 0.00001;
+    private int modulus = (int)((1.0/fps)/solverStepSize);
 
 
     protected double currentPosZ;
@@ -101,6 +105,26 @@ public abstract class Solver implements PhysicsEngine{
 
     public Vector2d getVelocity() {
         return velocity;
+    }
+    public Vector2d takeShot(Vector2d position, Vector2d velocity){
+        Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
+        while((tmpPosition.difference(position)>0.000000001)&&(acceleration.evaluateVector()>0.000001)){
+            nextStep();
+        }
+        return position;
+    }
+    public LinkedList<Vector2d> takeShot(Vector2d velocity){
+        LinkedList<Vector2d> positionList = new LinkedList<Vector2d>();
+        int stepCounter=0;
+        Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
+        while((tmpPosition.difference(position)>0.000000001)&&(acceleration.evaluateVector()>0.000001)){
+            nextStep();
+            if(stepCounter%modulus==0) {
+                positionList.add(position.clone());
+            }
+            stepCounter++;
+        }
+        return positionList;
     }
 
 }
