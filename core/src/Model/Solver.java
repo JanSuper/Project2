@@ -20,7 +20,7 @@ public abstract class Solver implements PhysicsEngine{
      * Solver Step size
      * This is the step size that is changed for the set_step_size
      */
-    protected double solverStepSize = 0.00001;
+    protected double solverStepSize = 1.0/165.0;
     private int modulus = (int)((1.0/fps)/solverStepSize);
 
 
