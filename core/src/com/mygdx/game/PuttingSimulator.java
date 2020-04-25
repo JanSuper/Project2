@@ -61,7 +61,7 @@ public class PuttingSimulator extends Game implements Screen{
     btCollisionObject ballObject;
     btCollisionObject wallObject;
     
-    CourseShaper shape = new CourseShaper("1 sin x + y ^ 2");
+    Function2d shape = new FunctionMaker(" sin (x) + y ^ 2");
 
     
     int count;
@@ -209,7 +209,7 @@ public class PuttingSimulator extends Game implements Screen{
                 (this.ballPosition.getX() <= course.get_flag_position().getX()+ course.get_hole_tolerance()))
                 &&((course.get_flag_position().getY() - course.get_hole_tolerance() <= this.ballPosition.getY())
                 && (this.ballPosition.getY() <= course.get_flag_position().getY() + course.get_hole_tolerance())))
-                && (physicsEngine.getVelX()<= 5 && physicsEngine.getVelY()<= 5))) {
+                && (physicsEngine.getVelocity().getX()<= 5 && physicsEngine.getVelocity().getY()<= 5))) {
            
         	Menu holdMenu = new Menu(main);
         	holdMenu.newLVL = true;
@@ -248,7 +248,7 @@ public class PuttingSimulator extends Game implements Screen{
             for(ModelInstance instance : instances) if(isVisible(cam, instance)) modelBatch.render(instance, environment);
             modelBatch.end();
             
-            if (Math.abs(physicsEngine.getVelX()) <= 0.2f &&  Math.abs(physicsEngine.getVelY()) <= 0.2f) {
+            if (Math.abs(physicsEngine.getVelocity().getX()) <= 0.2f &&  Math.abs(physicsEngine.getVelocity().getY()) <= 0.2f) {
             	count++;
             }
             else {
@@ -346,7 +346,7 @@ public class PuttingSimulator extends Game implements Screen{
     public void setCourse(OptionMenu menu) {
     	this.shape = new CourseShaper(menu.course);
     	this.course.set_Func2d(shape);
-    	physicsEngine = (PhysicsEngine)new VerletSolver(menu.course);
+    	physicsEngine = new RKSolver(menu.course);
     	physicsEngine.setMu(menu.mu);
     	physicsEngine.setVMax(menu.vMax);
     	course.set_flag_positon(menu.finish);

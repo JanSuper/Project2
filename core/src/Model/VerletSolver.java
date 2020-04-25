@@ -49,14 +49,8 @@ public class VerletSolver extends Solver {
         return position;
     }
 
-    @Override
-    public double getVelX(){
-        return this.velocity.getX();
-    }
-    @Override
-    public double getVelY(){
-        return this.velocity.getY();
-    }
+
+
     @Override
     public double getPosZ(){
         return this.shape.evaluate(position);

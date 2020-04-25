@@ -16,11 +16,9 @@ public class RKSolver extends Solver {
     @Override
     public void nextStep() {
 
-        DzDx = slopeDzDx(currentPosX, currentPosY, stepSize);
-        DzDy = slopeDzDy(currentPosX, currentPosY, stepSize);
-        setForce();
+
         setNextPositions(solverStepSize);
-        currentPosZ = get_height(currentPosX,currentPosY);
+        currentPosZ = get_height(position);
 
         this.position = getNextPositions(this.position, this.velocity, this.solverStepSize);
         this.velocity = computeSpeeds(this.position,this.velocity, this.solverStepSize);
@@ -37,7 +35,7 @@ public class RKSolver extends Solver {
     public Vector2d getNextPositions(Vector2d positions, Vector2d velocity, double solverStepSize) {
         Vector2d velApprox;
 
-        double kx1 = solverStepSize*currentVelX,ky1 =solverStepSize*currentVelY;
+        double kx1 = solverStepSize*velocity.getX(),ky1 =solverStepSize*velocity.getY();
         velApprox = computeSpeeds(positions.cloneAndAdd(kx1/2, ky1/2), velocity, solverStepSize);
         double kx2 = solverStepSize*velApprox.getX(), ky2 = solverStepSize*velApprox.getY();
         velApprox = computeSpeeds(positions.cloneAndAdd(kx2/2, ky2/2), velocity, solverStepSize);
@@ -71,18 +69,13 @@ public class RKSolver extends Solver {
         this.position = position;
     }
 
-    @Override
-    public double getVelX(){
-        return this.velocity.getX();
-    }
-    @Override
-    public double getVelY(){
-        return this.velocity.getY();
-    }
+
     @Override
     public double getPosZ(){
         return this.shape.evaluate(position);
     }
+
+
 
 
     public Vector2d getPosition(){
@@ -91,6 +84,10 @@ public class RKSolver extends Solver {
 
     public void setVelocity(Vector2d v){
         this.velocity=v;
+    }
+    @Override
+    public Vector2d getVelocity() {
+        return velocity;
     }
 
 }

@@ -4,19 +4,23 @@ import org.graalvm.compiler.lir.amd64.vector.AMD64VectorMove;
 
 public class EulerSolver extends Solver{
 
-    Vector2d position;
-    Vector2d velocity;
-    Vector2d acceleration;
+
 
     public EulerSolver(String ab) {
         super(ab);
     }
     @Override
     public void setNextPositions(double solverStepSize) {
-        currentPosX = currentPosX + solverStepSize*velocityX(solverStepSize);
-        currentPosY = currentPosY + solverStepSize*velocityY(solverStepSize);
-        currentVelX = velocityX(solverStepSize);
-        currentVelY = velocityY(solverStepSize);
+    /*    acceleration = getNextAcceleration(currentPosition, velocity);
+        //update positions based on velocity
+        currentPosition.add(solverStepSize*(velocity.getX()+acceleration.getX()*solverStepSize),
+                solverStepSize*(velocity.getY()+acceleration.getY()*solverStepSize));// = currentPosX + solverStepSize*velocityX(solverStepSize);
+        //currentPosY = currentPosY + solverStepSize*velocityY(solverStepSize);
+        //update velocity
+        velocity.add(acceleration.getX()*solverStepSize, acceleration.getY()*solverStepSize);
+//        currentVelX = velocityX(solverStepSize);
+//        currentVelY = velocityY(solverStepSize);*/
+        acceleration = getNextAcceleration(position, velocity);
         position = nextPosition(position, velocity, this.solverStepSize);
         velocity = nextVelocity(velocity, acceleration, stepSize );
 
@@ -56,5 +60,10 @@ public class EulerSolver extends Solver{
     @Override
     public Vector2d getPosition() {
         return position;
+    }
+
+    @Override
+    public Vector2d getVelocity() {
+        return velocity;
     }
 }
