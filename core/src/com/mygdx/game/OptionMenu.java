@@ -30,7 +30,7 @@ public class OptionMenu implements Screen {
 
     private final int EXIT_HEIGHT = 75;
 
-    public float velocity = 15;
+    public float velocity =10;
     public float angle = 15;
 
     Texture exitButtonActive;
@@ -165,6 +165,10 @@ public class OptionMenu implements Screen {
 
     }
 
+    /**
+     * Shows the option Menu screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0.4f,0,1);

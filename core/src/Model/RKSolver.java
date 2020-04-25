@@ -7,19 +7,9 @@ public class RKSolver extends Solver {
     public RKSolver(String ab) {
         super(ab);
     }
-
-    // variable instances to change in the core Solver?
-    Vector2d position;
-    Vector2d velocity;
-
-
     @Override
     public void nextStep() {
-
-
-        setNextPositions(solverStepSize);
         currentPosZ = get_height(position);
-
         this.position = getNextPositions(this.position, this.velocity, this.solverStepSize);
         this.velocity = computeSpeeds(this.position,this.velocity, this.solverStepSize);
 

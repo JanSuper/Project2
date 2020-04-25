@@ -2,23 +2,20 @@ package Model;
 
 
 public class VerletSolver extends Solver {
-    Vector2d position;
-    Vector2d velocity;
-    Vector2d acceleration;
     double vy =0;
     int x =0;
     //update so that the only fields that reference velocity and directions are in solvers not menu classes
     public VerletSolver(String ab) {
         super(ab);
     }
+
     @Override
     public void nextStep(){
         acceleration = getNextAcceleration(position, velocity);
-        velocity = getNextVelocity(velocity,acceleration, stepSize);
+        velocity = getNextVelocity(velocity,acceleration, solverStepSize);
         position = getNextPosition(position, velocity, solverStepSize );
         acceleration=getNextAcceleration(position, velocity);
-//        tempVel = tempVel.cloneAndAdd(0.5*acceleration.getX()*stepSize,0.5*acceleration.getY()*stepSize);
-        velocity = getNextVelocity(velocity,acceleration, stepSize);
+        velocity = getNextVelocity(velocity,acceleration, solverStepSize);
 
     }
 
@@ -48,8 +45,6 @@ public class VerletSolver extends Solver {
     public Vector2d getPosition() {
         return position;
     }
-
-
 
     @Override
     public double getPosZ(){
