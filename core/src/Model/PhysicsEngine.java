@@ -4,23 +4,22 @@ public interface PhysicsEngine {
 	
 	
 	public double get_height(double x, double y);
-	public void NextStep();
+	public void nextStep();
 	
-	public void setPosX(double d);
-	public void setPosY(double d);
+
+	public void setPosition(Vector2d v);
 	public void setPosZ(double d);
 	
-	public void setVelX(double d);
-	public void setVelY(double d);
+
+	public void setVelocity(Vector2d v);
 	
 	public void setMu(double mu);
 	public void setVMax (double vMax);
 	
-	public double getPosX();
-	public double getPosY();
+
+	public Vector2d getPosition();
 	public double getPosZ();
 	
-	public double getVelX();
-	public double getVelY();
+	public Vector2d getVelocity();
 	
 }

@@ -1,9 +1,7 @@
 package com.mygdx.game;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -23,12 +21,8 @@ import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithm;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithmConstructionInfo;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
-import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcherInfo;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldResult;
 import com.badlogic.gdx.physics.bullet.collision.btSphereBoxCollisionAlgorithm;
@@ -39,7 +33,7 @@ import Model.*;
 
 public class PuttingSimulator extends Game implements Screen{
     private PuttingCourse course;
-    private PhysicsEngine eulerSolver;
+    private PhysicsEngine physicsEngine;
 
     private Vector2d ballPosition;
 
@@ -67,7 +61,7 @@ public class PuttingSimulator extends Game implements Screen{
     btCollisionObject ballObject;
     btCollisionObject wallObject;
     
-    CourseShaper shape = new CourseShaper("1 sin x + y ^ 2");
+    Function2d shape = new FunctionMaker(" sin (x) + y ^ 2");
 
     
     int count;
@@ -75,11 +69,11 @@ public class PuttingSimulator extends Game implements Screen{
 
     public PuttingSimulator(PuttingCourse course, PhysicsEngine euler){
         this.course=course;
-        this.eulerSolver=euler;
+        this.physicsEngine =euler;
     }
     public PuttingSimulator(PuttingCourse course, PhysicsEngine euler, Main main, OptionMenu menu){
         this.course=course;
-        this.eulerSolver=euler;
+        this.physicsEngine =euler;
         this.main=main;
         this.menu=menu;
 
@@ -94,8 +88,10 @@ public class PuttingSimulator extends Game implements Screen{
     }
 
     public void take_shot(Vector2d initial_ball_velocity){
-    	eulerSolver.setVelX((float)initial_ball_velocity.getX());
-    	eulerSolver.setVelY((float)initial_ball_velocity.getY());
+   /** 	physicsEngine.setVelX((float)initial_ball_velocity.getX());
+    	physicsEngine.setVelY((float)initial_ball_velocity.getY());
+    *///changes to
+        physicsEngine.setVelocity(initial_ball_velocity);
     }
 
     @Override
@@ -193,10 +189,11 @@ public class PuttingSimulator extends Game implements Screen{
 //        collisionConfig = new btDefaultCollisionConfiguration();
 //        dispatcher = new btCollisionDispatcher(collisionConfig);
 
-        eulerSolver.setPosX((float)ballPosition.getX());
-        eulerSolver.setPosY((float)ballPosition.getY());
-        eulerSolver.setPosZ(eulerSolver.get_height((float)ballPosition.getX(), (float)ballPosition.getY()) + 1f);
-
+/**        physicsEngine.setPosX((float)ballPosition.getX());
+        physicsEngine.setPosY((float)ballPosition.getY());
+        physicsEngine.setPosZ(physicsEngine.get_height((float)ballPosition.getX(), (float)ballPosition.getY()) + 1f);
+*///changing these lines to make use of RKM
+        physicsEngine.setPosition(ballPosition);
 
         take_shot(calcInit());
         //System.out.println(course.get_flag_position().getX() + " " + course.get_flag_position().getY());
@@ -212,7 +209,7 @@ public class PuttingSimulator extends Game implements Screen{
                 (this.ballPosition.getX() <= course.get_flag_position().getX()+ course.get_hole_tolerance()))
                 &&((course.get_flag_position().getY() - course.get_hole_tolerance() <= this.ballPosition.getY())
                 && (this.ballPosition.getY() <= course.get_flag_position().getY() + course.get_hole_tolerance())))
-                && (eulerSolver.getVelX()<= 5 && eulerSolver.getVelY()<= 5))) {
+                && (physicsEngine.getVelocity().getX()<= 5 && physicsEngine.getVelocity().getY()<= 5))) {
            
         	Menu holdMenu = new Menu(main);
         	holdMenu.newLVL = true;
@@ -223,21 +220,18 @@ public class PuttingSimulator extends Game implements Screen{
         	main.setScreen(holdMenu);
         }
         else {
+        	physicsEngine.nextStep();
+        	physicsEngine.setPosZ(physicsEngine.get_height(physicsEngine.getPosition().getX(), physicsEngine.getPosition().getY()));
 
-        	//System.out.println(eulerSolver.getVelX() + " " + eulerSolver.getVelY());
+   /**     	this.ballPosition.setX(physicsEngine.getPosX());
+        	this.ballPosition.setY(physicsEngine.getPosY());
+     */  // changes to..
+            this.ballPosition= physicsEngine.getPosition();
 
-        	eulerSolver.NextStep();
-        	eulerSolver.setPosZ(eulerSolver.get_height(eulerSolver.getPosX(), eulerSolver.getPosY()));
-
-//            System.out.println(golfBall.currentPosZ + " " + (golfBall.currentPosZ - golfBall.get_height(golfBall.currentPosX+golfBall.currentVelX, golfBall.currentPosY+golfBall.currentVelY)));
-
-        	this.ballPosition.setX(eulerSolver.getPosX());
-        	this.ballPosition.setY(eulerSolver.getPosY());
-        	
-            ball.transform.setToTranslation((float)eulerSolver.getPosX(), (float)eulerSolver.getPosZ()+.5f,(float) eulerSolver.getPosY());
+            ball.transform.setToTranslation((float)ballPosition.getX(), (float) physicsEngine.getPosZ()+.5f,(float) ballPosition.getY());
             ballObject.setWorldTransform(ball.transform);
 
-            cam.position.set((float)eulerSolver.getPosX() - 5f, (float)Math.max(5f,eulerSolver.getPosZ()+3f),(float) eulerSolver.getPosY());
+            cam.position.set((float) ballPosition.getX() - 5f, (float)Math.max(5f, physicsEngine.getPosZ()+3f),(float) ballPosition.getY());
             cam.update();
             camController.update();
 
@@ -249,7 +243,7 @@ public class PuttingSimulator extends Game implements Screen{
             for(ModelInstance instance : instances) if(isVisible(cam, instance)) modelBatch.render(instance, environment);
             modelBatch.end();
             
-            if (Math.abs(eulerSolver.getVelX()) <= 0.2f &&  Math.abs(eulerSolver.getVelY()) <= 0.2f) {
+            if (Math.abs(physicsEngine.getVelocity().getX()) <= 0.2f &&  Math.abs(physicsEngine.getVelocity().getY()) <= 0.2f) {
             	count++;
             }
             else {
@@ -347,9 +341,9 @@ public class PuttingSimulator extends Game implements Screen{
     public void setCourse(OptionMenu menu) {
     	this.shape = new CourseShaper(menu.course);
     	this.course.set_Func2d(shape);
-    	eulerSolver = (PhysicsEngine)new RKSolver(menu.course);
-    	eulerSolver.setMu(menu.mu);
-    	eulerSolver.setVMax(menu.vMax);
+    	physicsEngine = new RKSolver(menu.course);
+    	physicsEngine.setMu(menu.mu);
+    	physicsEngine.setVMax(menu.vMax);
     	course.set_flag_positon(menu.finish);
     	course.set_start_position(menu.start);
     	course.set_hole_tolerance((double)menu.goalRadius);

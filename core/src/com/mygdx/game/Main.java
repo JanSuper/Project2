@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Main extends Game {
 	
 	private PuttingCourse course;
-	private PhysicsEngine eulerSolver;
+	private PhysicsEngine solver;
+	private String function=" sin (x) + y ^ 2";
 	
     public SpriteBatch batch;
 
@@ -21,8 +22,8 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        eulerSolver = new RKSolver("1 sin x + y ^ 2");
-        course = new PuttingCourse(new CourseShaper("1 sin x + y ^ 2"), new Vector2d(50,0), new Vector2d(0,0));
+        solver = new RKSolver(function);
+        course = new PuttingCourse(new FunctionMaker(function), new Vector2d(50,0), new Vector2d(0,0));
         this.setScreen(new Menu(this));
     }
 
@@ -37,10 +38,10 @@ public class Main extends Game {
     }
 
     public void setEngine(PhysicsEngine engine){
-        this.eulerSolver = engine;
+        this.solver = engine;
     }
     public PhysicsEngine getEngine(){
-        return this.eulerSolver;
+        return this.solver;
     }
     public void setCourse(PuttingCourse course){
         this.course = course;
