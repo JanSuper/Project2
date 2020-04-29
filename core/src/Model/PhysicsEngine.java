@@ -22,4 +22,6 @@ public interface PhysicsEngine {
 	
 	public Vector2d getVelocity();
 	
+	public void setGoalPosition (Vector2d newGoal);
+	public boolean finish();
 }

@@ -24,7 +24,7 @@ public class Main extends Game {
         batch = new SpriteBatch();
         solver = new RKSolver(function);
         course = new PuttingCourse(new FunctionMaker(function), new Vector2d(50,0), new Vector2d(0,0));
-        this.setScreen(new Menu(this));
+        this.setScreen(new OptionMenu(this));
     }
 
     @Override

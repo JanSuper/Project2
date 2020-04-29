@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class OptionMenu implements Screen {
+	
+	public PuttingSimulator hold;
 
     String decimalPattern = "([0-9]*)\\.([0-9]*)";
     String naturalPattern = "([0-9]*)";
@@ -68,6 +70,10 @@ public class OptionMenu implements Screen {
 
     public OptionMenu(Main main){
         this.main = main;
+        
+        hold = new PuttingSimulator(main.getCourse(), main.getEngine(), main, this);
+        hold.create();
+        
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         
         mode2 = new Label("enter file here for mode 2", skin);
@@ -99,6 +105,7 @@ public class OptionMenu implements Screen {
                 if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
                         (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern)))
                     play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                
                 else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
                     textFieldSpeed.setText("");
                 else if(!Pattern.matches(decimalPattern, textFieldAngle.getText()))
@@ -192,8 +199,12 @@ public class OptionMenu implements Screen {
     public void play(float speed, float angle){
         this.velocity=speed;
         this.angle=angle;
-        Menu hold = new Menu(main);
-        hold.setOptionMenu(this);
+//        Menu hold = new Menu(main);
+//        hold.setOptionMenu(this);
+//        main.setScreen(hold);
+        hold.create();
+        hold.setOption(this);
+        hold.take_shot(hold.calcInit());
         main.setScreen(hold);
     }
 

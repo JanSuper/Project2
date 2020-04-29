@@ -1,4 +1,6 @@
 package com.mygdx.game;
+import java.util.regex.Pattern;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -27,11 +29,21 @@ import com.badlogic.gdx.physics.bullet.collision.btDispatcherInfo;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldResult;
 import com.badlogic.gdx.physics.bullet.collision.btSphereBoxCollisionAlgorithm;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import Model.*;
 
 
 public class PuttingSimulator extends Game implements Screen{
+	String decimalPattern = "([0-9]*)\\.([0-9]*)";
+    String naturalPattern = "([0-9]*)";
+	
     private PuttingCourse course;
     private PhysicsEngine physicsEngine;
 
@@ -61,10 +73,22 @@ public class PuttingSimulator extends Game implements Screen{
     btCollisionObject ballObject;
     btCollisionObject wallObject;
     
+    TextField textFieldSpeed;
+    TextField textFieldAngle;
+    
+    TextButton buttonShot;
+    
+    Label shotLabelSpeed;
+    Label shotLabelAngle;
+    
+    private Stage stage;
+    
     Function2d shape = new FunctionMaker(" sin (x) + y ^ 2");
 
     
     int count;
+    
+    boolean shot = false;
 
 
     public PuttingSimulator(PuttingCourse course, PhysicsEngine euler){
@@ -199,25 +223,101 @@ public class PuttingSimulator extends Game implements Screen{
         //System.out.println(course.get_flag_position().getX() + " " + course.get_flag_position().getY());
         
         count = 0;
+        
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+        
+        shotLabelSpeed= new Label("Speed:", skin);
+        shotLabelAngle = new Label("Angle:", skin);
+
+        shotLabelSpeed.setSize(100, 60);
+        shotLabelSpeed.setPosition(50,main.HEIGHT-100);
+        shotLabelAngle.setSize(100, 60);
+        shotLabelAngle.setPosition(50,main.HEIGHT-170);
+
+        textFieldSpeed = new TextField("", skin);
+        textFieldSpeed.setPosition(150, main.HEIGHT-100);
+        textFieldSpeed.setSize(300,60);
+        textFieldAngle = new TextField("", skin);
+        textFieldAngle.setPosition(150, main.HEIGHT-170);
+        textFieldAngle.setSize(300,60);
+        stage = new Stage();
+
+        buttonShot = new TextButton("Take a shot!",skin);
+        buttonShot.setPosition(470,main.HEIGHT-170);
+        buttonShot.setSize(100,30);
+        buttonShot.addListener(new ClickListener(){
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button){
+            	count = 0;
+            	System.out.println("here");
+                if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
+                        (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern))) {
+                	
+                	
+                    play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                }
+                else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
+                    textFieldSpeed.setText("");
+                else if(!Pattern.matches(decimalPattern, textFieldAngle.getText()))
+                    textFieldAngle.setText("");
+                
+                
+               
+            }
+        });
+        
+        stage = new Stage();
+        
+        stage.addActor(buttonShot);
+        stage.addActor(textFieldSpeed);
+        stage.addActor(textFieldAngle);
+        stage.addActor(shotLabelSpeed);
+        stage.addActor(shotLabelAngle);
+        
+        physicsEngine.setGoalPosition(course.get_flag_position());
     }
 
     @Override
     public void render (float delta) {
 
         //TODO: add game over
-        if (((((course.get_flag_position().getX() - course.get_hole_tolerance() <= this.ballPosition.getX()) &&
-                (this.ballPosition.getX() <= course.get_flag_position().getX()+ course.get_hole_tolerance()))
-                &&((course.get_flag_position().getY() - course.get_hole_tolerance() <= this.ballPosition.getY())
-                && (this.ballPosition.getY() <= course.get_flag_position().getY() + course.get_hole_tolerance())))
-                && (physicsEngine.getVelocity().getX()<= 5 && physicsEngine.getVelocity().getY()<= 5))) {
+        if ( physicsEngine.finish()) {
            
         	Menu holdMenu = new Menu(main);
         	holdMenu.newLVL = true;
             main.setScreen(holdMenu);
         }
+        else if (shot) {
+        	stage.act(delta);
+            stage.draw();
+        }
         else if (count == 2*60) {
-        	Menu holdMenu = new Menu(main);
-        	main.setScreen(holdMenu);
+        	Gdx.input.setInputProcessor(stage);
+        	shot = true;
+//        	Menu holdMenu = new Menu(main);
+//        	main.setScreen(holdMenu);
+        	 buttonShot.addListener(new ClickListener(){
+                 @Override
+                 public void touchUp(InputEvent e, float x, float y, int point, int button){
+                 	count = 0;
+                 	System.out.println("here");
+                     if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
+                             (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern))) {
+                     	
+                         play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                         shot = false;
+                         Gdx.input.setInputProcessor(camController);
+                     }
+                     else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
+                         textFieldSpeed.setText("");
+                     else if(!Pattern.matches(decimalPattern, textFieldAngle.getText()))
+                         textFieldAngle.setText("");
+                     
+                     
+                    
+                 }
+             });
+        	
         }
         else {
         	physicsEngine.nextStep();
@@ -300,6 +400,7 @@ public class PuttingSimulator extends Game implements Screen{
 
         modelBatch.dispose();
         model.dispose();
+        
     }
 
     @Override
@@ -347,5 +448,14 @@ public class PuttingSimulator extends Game implements Screen{
     	course.set_flag_positon(menu.finish);
     	course.set_start_position(menu.start);
     	course.set_hole_tolerance((double)menu.goalRadius);
+    }
+    
+    public void play(float speed, float angle){
+    	double holdxv = (speed*Math.cos(angle));
+    	double holdyv = (speed*Math.sin(angle));
+    	Vector2d shot = new Vector2d(holdxv, holdyv);
+        this.physicsEngine.setVelocity(shot);
+        take_shot(shot);
+        physicsEngine.nextStep();
     }
 }

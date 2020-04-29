@@ -42,7 +42,7 @@ public abstract class Solver implements PhysicsEngine{
     protected double vmax= 15.0;
     protected double tol = 0.02;
 
-    protected Vector2d goalPosition;
+    protected static Vector2d goalPosition;
     protected static Function2d shape;
 
     public Solver(String ab) {
@@ -101,6 +101,10 @@ public abstract class Solver implements PhysicsEngine{
     public double getPosZ() {
         return currentPosZ;
     }
+    
+    public void setGoalPosition (Vector2d newGoal) {
+    	this.goalPosition = newGoal;
+    }
 
 
     public Vector2d getVelocity() {
@@ -125,6 +129,14 @@ public abstract class Solver implements PhysicsEngine{
             stepCounter++;
         }
         return positionList;
+    }
+    public boolean finish() {
+    	return (((((goalPosition.getX() - tol <= this.position.getX()) &&
+                (position.getX() <= goalPosition.getX()+ tol))
+                &&((goalPosition.getY() - tol <= this.position.getY())
+                && (this.position.getY() <= goalPosition.getY() + tol)))
+                && (velocity.getX()<= 5 && velocity.getY()<= 5)));
+
     }
 
 }

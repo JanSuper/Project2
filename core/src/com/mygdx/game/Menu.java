@@ -72,7 +72,7 @@ public class Menu implements Screen {
         if(Gdx.input.getX()<Main.WIDTH/2-BUTTON_WIDTH/2+BUTTON_WIDTH && Gdx.input.getX() > Main.WIDTH/2-3*BUTTON_WIDTH/8
         && Gdx.input.getY()>Main.HEIGHT-(PLAY_HEIGHT+BUTTON_HEIGHT) && Gdx.input.getY()<Main.HEIGHT-PLAY_HEIGHT){
             main.batch.draw(playButtonInactive,Main.WIDTH/2-BUTTON_WIDTH/2,PLAY_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
-            if(Gdx.input.isTouched()){
+            if(Gdx.input.isTouched()){ // need to talk?
                 this.dispose();
                 
                 if (newLVL) {
