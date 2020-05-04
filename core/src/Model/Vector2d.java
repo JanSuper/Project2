@@ -1,5 +1,7 @@
 package Model;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Vector2d {
     private double x;
     private double y;
@@ -38,6 +40,22 @@ public class Vector2d {
     }
     public double evaluateVector(){
         return Math.sqrt(x*x+y*y);
+    }
+
+    public Vector2d add(Vector2d tmp){
+        return new Vector2d(this.x+tmp.getX(), this.y+tmp.getY());
+    }
+    public Vector2d subtract(Vector2d tmp){
+        return new Vector2d(this.x-tmp.getX(),this.y-tmp.getY());
+    }
+    public Vector2d absDifference(Vector2d tmp){
+        return  new Vector2d(Math.abs(this.x-tmp.getX()),Math.abs(this.y-tmp.getY()));
+    }
+    public Vector2d multiplyBy(Vector2d tmp){
+        return  new Vector2d(this.x*tmp.getX(),this.y*tmp.getY());
+    }
+    public Vector2d divideBy(Vector2d tmp){
+        return new Vector2d(this.x/tmp.getX(), this.y/tmp.getY());
     }
 
 }

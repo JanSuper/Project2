@@ -108,7 +108,9 @@ public abstract class Solver implements PhysicsEngine{
     }
 
     public Vector2d takeShot(Vector2d position, Vector2d velocity){
-        Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
+        //Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
+        this.velocity=velocity;
+        this.position=position;
         int count =0;
         while(count<120){
             nextStep();
@@ -118,7 +120,7 @@ public abstract class Solver implements PhysicsEngine{
                 count = 0;
             }
         }
-        return position;
+        return this.position;
     }
 
     public LinkedList<Vector2d> takeShot(Vector2d velocity){
@@ -135,4 +137,10 @@ public abstract class Solver implements PhysicsEngine{
         return positionList;
     }
 
+    /**
+     * this sets goal position but does not set flag position TODO need to link these up
+     * @param x Vector2D value that we want to set the goal position to
+     */
+    public void setGoalPosition(Vector2d x){this.goalPosition=x;}
+    public Vector2d getGoalPosition(){return goalPosition;}
 }
