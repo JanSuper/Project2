@@ -106,13 +106,21 @@ public abstract class Solver implements PhysicsEngine{
     public Vector2d getVelocity() {
         return velocity;
     }
+
     public Vector2d takeShot(Vector2d position, Vector2d velocity){
         Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
-        while((tmpPosition.difference(position)>0.000000001)&&(acceleration.evaluateVector()>0.000001)){
+        int count =0;
+        while(count<120){
             nextStep();
+            if((velocity.getX()<0.2)&&(velocity.getY()<0.2)){
+                count++;
+            }else{
+                count = 0;
+            }
         }
         return position;
     }
+
     public LinkedList<Vector2d> takeShot(Vector2d velocity){
         LinkedList<Vector2d> positionList = new LinkedList<Vector2d>();
         int stepCounter=0;
