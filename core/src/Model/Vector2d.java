@@ -42,6 +42,7 @@ public class Vector2d {
         return Math.sqrt(x*x+y*y);
     }
 
+
     public Vector2d add(Vector2d tmp){
         return new Vector2d(this.x+tmp.getX(), this.y+tmp.getY());
     }

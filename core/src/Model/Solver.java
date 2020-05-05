@@ -112,9 +112,9 @@ public abstract class Solver implements PhysicsEngine{
         this.velocity=velocity;
         this.position=position;
         int count =0;
-        while(count<120){
+        while(count<300){
             nextStep();
-            if((velocity.getX()<0.2)&&(velocity.getY()<0.2)){
+            if((this.velocity.getX()<0.2)&&(this.velocity.getY()<0.2)){
                 count++;
             }else{
                 count = 0;

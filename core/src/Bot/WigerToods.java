@@ -21,15 +21,60 @@ public class WigerToods {
         return testFin;
     }
     public Vector2d calibrateVel(Vector2d prevVel, Vector2d prevFin){
-        // newVel= prevVel+(prevVel*((goal-prevFin)/abs(prevFin-startPos)))
+        // newVel= prevVel+(prevVel*((goal-prevFin)/abs(goal-startPos)))
+
+
         return   prevVel.add(prevVel.multiplyBy ((solver.getGoalPosition().subtract(prevFin) ).divideBy(  (  solver.getGoalPosition().absDifference(startPos) )  )  )) ;//need to make vector multiply and add methods
     }
 
+    public Vector2d search2(){
+        boolean recalibrateY=true;
+        boolean recalibrateX=true;
+        double scaler = 0.9;
+        Vector2d testFin = startPos.clone();
+        Vector2d testVelocity = (solver.getGoalPosition().subtract(startPos)).multiplyBy(new Vector2d(.5,.5));
+        Vector2d distanceToFlag = startPos.absDifference(solver.getGoalPosition());
+        while(recalibrateX||recalibrateY){
+            testFin = solver.takeShot(startPos, testVelocity);
+            Vector2d shotDistance = startPos.absDifference(testFin);
+
+
+            if(Math.abs(testFin.subtract(solver.getGoalPosition()).getX())<tol){
+                recalibrateX=false;
+            }else{
+                scaler = distanceToFlag.getX()/shotDistance.getX();
+                testVelocity.setX(testVelocity.getX()*Math.sqrt(scaler));
+//                if(shotDistance.getX()>distanceToFlag.getX()){//Overshoot
+//                    testVelocity.setX(testVelocity.getX()*scaler);
+//                }else{
+//                    testVelocity.setX(testVelocity.getX()/scaler);
+//                }
+            }
+            if(Math.abs(testFin.subtract(solver.getGoalPosition()).getY())<tol) {
+                recalibrateY = false;
+            }else{
+                scaler = distanceToFlag.getY()/shotDistance.getY();
+                testVelocity.setY(testVelocity.getY()*Math.sqrt(scaler));
+//                if(shotDistance.getY()>distanceToFlag.getY()){//Overshoot
+//                    testVelocity.setY(testVelocity.getY()*scaler);
+//                }else{
+//                    testVelocity.setY(testVelocity.getY()/scaler);
+//                }
+            }
+
+        }
+
+
+        return testVelocity;
+    }
+
     public static void main (String [] arg){
+        System.out.print(" wohoo " );
+
         WigerToods blah = new WigerToods();
-        blah.solver.setGoalPosition(new Vector2d(20.420352248333,0));//z should be -1 here the ball just needs to stop at the bottom of a hump
-        blah.startPos= new Vector2d(0,0);
-        Vector2d result = blah.search();
+        blah.solver.setGoalPosition(new Vector2d((Math.PI*9.0)/2.0,0));//z should be -1 here the ball just needs to stop at the bottom of a hump
+        blah.startPos= new Vector2d(0.0,0.0);
+        Vector2d result = blah.search2();
         System.out.print(result.getX() + " wohoo " +result.getY());
     }
 }
