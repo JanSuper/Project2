@@ -451,8 +451,8 @@ public class PuttingSimulator extends Game implements Screen{
     }
     
     public void play(float speed, float angle){
-    	double holdxv = (speed*Math.cos(angle));
-    	double holdyv = (speed*Math.sin(angle));
+    	double holdxv = (speed*(Math.cos(angle/180*Math.PI)));
+    	double holdyv = (speed*(Math.sin(angle/180*Math.PI)));
     	Vector2d shot = new Vector2d(holdxv, holdyv);
         this.physicsEngine.setVelocity(shot);
         take_shot(shot);
