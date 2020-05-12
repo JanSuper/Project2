@@ -23,7 +23,7 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         solver = new RKSolver(function);
-        course = new PuttingCourse(new FunctionMaker(function), new Vector2d(50,0), new Vector2d(0,0));
+        course = new PuttingCourse(new FunctionMaker(function), new Vector2d((Math.PI*9.0)/2.0,0), new Vector2d(0,0));
         this.setScreen(new OptionMenu(this));
     }
 

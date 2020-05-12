@@ -140,7 +140,7 @@ public abstract class Solver implements PhysicsEngine{
                 (position.getX() <= goalPosition.getX()+ tol))
                 &&((goalPosition.getY() - tol <= this.position.getY())
                 && (this.position.getY() <= goalPosition.getY() + tol)))
-                && (velocity.getX()<= 5 && velocity.getY()<= 5)));
+                && (Math.abs(velocity.getX())<= 0.0001 && Math.abs(velocity.getY())<= 0.0001)));
 
     }
 
