@@ -4,16 +4,20 @@ package com.mygdx.game;
 import Model.Function2d;
 import Model.Vector2d;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.model.MeshPart;
+import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.graphics.g3d.model.NodePart;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelMesh;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelMeshPart;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 //import jdk.nashorn.internal.objects.annotations.Function;
 
@@ -24,6 +28,7 @@ public class PuttingCourse{
     private double friction;
     private double maximumVelocity;
     private double holeTolerance;
+
 
 
     /**
@@ -52,7 +57,7 @@ public class PuttingCourse{
         ModelBuilder mb = new ModelBuilder();
         mb.begin();
         Array<ModelInstance> instances = new Array<>();
-        mb.node().id = "groundBalls";
+/*        mb.node().id = "groundBalls";
 //        mb.manage(new Texture(Gdx.files.internal("Grass.jpg")));
         mb.part("parcel", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.GREEN)))
                 .sphere(0.5f, 0.5f, 0.5f, 5, 5);
@@ -76,8 +81,92 @@ public class PuttingCourse{
                 instances.add(groundBall);
             }
         }
+*/
+        Texture grass = new Texture("grass.jpg");
+        Material material = new Material(TextureAttribute.createDiffuse(grass));
+        double margin = 25;
+        int chunkSize=5;
+        Vector2d[] coverage = getSurface(start, flag, margin);
+       // for (Vector2d v:coverage) System.out.println(v);
+        int numChunkX =(int)(coverage[1].getX()-coverage[0].getX())/chunkSize, numChunkY=(int)(coverage[1].getY()-coverage[0].getY())/chunkSize;
+        TerrainChunk[][] terrainChunks = new TerrainChunk[numChunkX][numChunkY];
+        TerrainChunk chunk;
+        Vector2d currentChunkPosition;
+        TerrainChunk.setFunction(height);
+        float scale = 1;
+        int print = 0;
+        int chunkNum=0;
+        for(int x = 0; x < numChunkX; x++){
+            for(int y = 0; y < numChunkY; y++){
+                //Create Chunk
+                currentChunkPosition=new Vector2d(coverage[0].getX()+chunkSize*x,coverage[0].getY()+chunkSize*y );
+                chunk = new TerrainChunk(currentChunkPosition, chunkSize);
+                chunk.setLocation((float)height.evaluate(new Vector2d(x*chunkSize, y*chunkSize)));
+                terrainChunks[x][y] = chunk;
+
+                //Create Mesh
+                Mesh mesh = new Mesh(true, chunk.vertices.length / 9, chunk.indices.length,
+                        new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
+                        new VertexAttribute(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
+                        new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+                        new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2,  ShaderProgram.TEXCOORD_ATTRIBUTE));
+                mesh.setVertices(chunk.vertices);
+                mesh.setIndices(chunk.indices);
+
+
+                Model result = createFromMesh(mesh, GL20.GL_TRIANGLES, material);
+
+                ModelInstance modelInstance = new ModelInstance(result, 0,0,0);
+
+                //Finish Chunk
+                chunk.setModelInstance(modelInstance);
+                instances.add(modelInstance);
+
+                modelInstance.transform.setToTranslation((float)currentChunkPosition.getX(), 0, (float)currentChunkPosition.getY());
+
+                chunkNum++;
+                if(print<=3){
+                    Mesh mesh2 = modelInstance.model.nodes.get(0).parts.get(0).meshPart.mesh;
+                    float[] temp = new float[mesh.getNumVertices()];
+                    mesh2.getVertices(temp);
+                    int counter = 0;
+                    String tempLine = "";
+                    System.out.println("" + mesh.getNumVertices() + " :" + mesh.getNumIndices());
+                    for(float temp2:temp){
+                        tempLine += (temp2 + " , ");
+                        counter++;
+                        if(counter == 9){
+                            System.out.println("DEBUG VERTEX INFO:" + tempLine);
+                            tempLine = "";
+                            counter = 0;
+                        }
+                    }
+                    print ++;
+                }
+            }
+        }
+
 
         return instances;
+    }
+
+    private Vector2d[] getSurface(Vector2d start, Vector2d finish, double margin){
+        double minX, minY, maxX, maxY;
+        if(start.getX()>finish.getX()){
+            maxX = start.getX()+margin;
+            minX=finish.getX()-margin;
+        }else{
+            minX = start.getX()-margin;
+            maxX=finish.getX()+margin;
+        }
+        if(start.getY()>finish.getY()){
+            maxY = start.getY()+margin;
+            minY=finish.getY()-margin;
+        }else{
+            minY = start.getY()-margin;
+            maxY=finish.getY()+margin;
+        }
+        return new Vector2d[]{new Vector2d(minX,minY), new Vector2d(maxX,maxY)};
     }
 
     /**
@@ -158,5 +247,32 @@ public class PuttingCourse{
      */
     public void set_Func2d(Function2d add) {
     	this.height = add;
+    }
+
+    public static Model createFromMesh (final Mesh mesh, int primitiveType, final Material material) {
+        return createFromMesh(mesh, 0, mesh.getNumIndices(), primitiveType, material);
+    }
+
+
+    public static Model createFromMesh (final Mesh mesh, int indexOffset, int vertexCount, int primitiveType,
+                                        final Material material) {
+        Model result = new Model();
+        MeshPart meshPart = new MeshPart();
+        meshPart.set("part1",mesh,indexOffset,vertexCount, primitiveType);
+
+
+        NodePart partMaterial = new NodePart();
+        partMaterial.material = material;
+        partMaterial.meshPart = meshPart;
+        Node node = new Node();
+        node.id = "node1";
+        node.parts.add(partMaterial);
+
+        result.meshes.add(mesh);
+        result.materials.add(material);
+        result.nodes.add(node);
+        result.meshParts.add(meshPart);
+        result.manageDisposable(mesh);
+        return result;
     }
 }

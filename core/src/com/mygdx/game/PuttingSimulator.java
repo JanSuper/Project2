@@ -340,7 +340,7 @@ public class PuttingSimulator extends Game implements Screen{
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
             modelBatch.begin(cam);
-            for(ModelInstance instance : instances) if(isVisible(cam, instance)) modelBatch.render(instance, environment);
+            for(ModelInstance instance : instances)  modelBatch.render(instance, environment);
             modelBatch.end();
             
             if (Math.abs(physicsEngine.getVelocity().getX()) <= 0.2f &&  Math.abs(physicsEngine.getVelocity().getY()) <= 0.2f) {
