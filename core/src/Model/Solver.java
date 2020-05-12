@@ -101,11 +101,6 @@ public abstract class Solver implements PhysicsEngine{
     public double getPosZ() {
         return currentPosZ;
     }
-    
-    public void setGoalPosition (Vector2d newGoal) {
-    	this.goalPosition = newGoal;
-    }
-
 
     public Vector2d getVelocity() {
         return velocity;
