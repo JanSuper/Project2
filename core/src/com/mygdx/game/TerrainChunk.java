@@ -84,16 +84,9 @@ public class TerrainChunk {
                 // POSITION
                 vertices[idx++] =  x;
 
-//                if(sand){
-//                    //10% of the terrain would be sand
-//                    if(sandInfo[x][y]==1){
-//                        vertices[idx++] = (float) (-mapFunction.evaluate(new Vector2d(x,y)));
-//                    }else{
-//                        vertices[idx++] = 0;
-//                    }
-//                }else{
+
                     vertices[idx++] = (float) (mapFunction.evaluate(new Vector2d(positionX+x,positionY+y)));
- //               }
+
 
                 vertices[idx++] = y ;
 
