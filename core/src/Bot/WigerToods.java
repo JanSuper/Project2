@@ -45,7 +45,7 @@ public class WigerToods {
                 recalibrateX=false;
             }else{
                 scaler = distanceToFlag.getX()/shotDistance.getX();
-                testVelocity.setX(testVelocity.getX()*Math.sqrt(scaler));
+                testVelocity.setX(testVelocity.getX()*Math.cbrt(scaler));
 //                if(shotDistance.getX()>distanceToFlag.getX()){//Overshoot
 //                    testVelocity.setX(testVelocity.getX()*scaler);
 //                }else{
@@ -56,7 +56,7 @@ public class WigerToods {
                 recalibrateY = false;
             }else{
                 scaler = distanceToFlag.getY()/shotDistance.getY();
-                testVelocity.setY(testVelocity.getY()*Math.sqrt(scaler));
+                testVelocity.setY(testVelocity.getY()*Math.cbrt(scaler));
 //                if(shotDistance.getY()>distanceToFlag.getY()){//Overshoot
 //                    testVelocity.setY(testVelocity.getY()*scaler);
 //                }else{

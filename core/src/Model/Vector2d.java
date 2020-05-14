@@ -59,4 +59,15 @@ public class Vector2d {
         return new Vector2d(this.x/tmp.getX(), this.y/tmp.getY());
     }
 
+    public String toString(){
+        return "x: "+x+" y: "+y;
+    }
+
+    public void scaleDown(double maxSpeed){
+        assert maxSpeed>0;
+        double norm=evaluateVector();
+        x=x/norm*maxSpeed;
+        y=y/norm*maxSpeed;
+    }
+
 }
