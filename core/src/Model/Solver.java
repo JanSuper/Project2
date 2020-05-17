@@ -4,7 +4,6 @@ import com.mygdx.game.CourseShaper;
 import com.mygdx.game.FunctionMaker;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 import static java.lang.Math.sqrt;
 
 public abstract class Solver implements PhysicsEngine{
@@ -119,7 +118,9 @@ public abstract class Solver implements PhysicsEngine{
                 count = 0;
             }
         }
-        return this.position;
+        Vector2d tmp = this.position;
+        this.position = position;
+        return tmp;
     }
 
     public LinkedList<Vector2d> takeShot(Vector2d velocity){

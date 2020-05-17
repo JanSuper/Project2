@@ -1,6 +1,5 @@
 package Model;
 
-import com.badlogic.gdx.math.Vector2;
 
 public class Vector2d {
     private double x;
