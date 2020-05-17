@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import Bot.WigerToods;
+import Model.Solver;
 import Model.Vector2d;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -53,11 +55,15 @@ public class OptionMenu implements Screen {
     
     Label mode2;
 
+    Label aiLabel;
+
     TextField loadMapTF;
     TextField loadSpeedTF;
 
     TextButton loadMapB;
     TextButton loadSpeedB;
+
+    TextButton aiButton;
     
     public String course;
     public float mu;
@@ -78,6 +84,9 @@ public class OptionMenu implements Screen {
         
         mode2 = new Label("enter file here for mode 2", skin);
         mode2.setPosition(150, main.HEIGHT-540);
+
+        aiLabel=new Label("Wiger Toods:", skin);
+        aiLabel.setPosition(150, main.HEIGHT-300);
 
         shotLabelSpeed= new Label("Speed:", skin);
         shotLabelAngle = new Label("Angle:", skin);
@@ -110,6 +119,16 @@ public class OptionMenu implements Screen {
                     textFieldSpeed.setText("");
                 else if(!Pattern.matches(decimalPattern, textFieldAngle.getText()))
                     textFieldAngle.setText("");
+            }
+        });
+
+        aiButton = new TextButton("Play", skin);
+        aiButton.setPosition(350, main.HEIGHT-300);
+        aiButton.setSize(100,30);
+        aiButton.addListener(new ClickListener(){
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button){
+                aiShot();
             }
         });
 
@@ -161,6 +180,8 @@ public class OptionMenu implements Screen {
         stage.addActor(loadSpeedB);
         stage.addActor(loadSpeedTF);
         stage.addActor(mode2);
+        stage.addActor(aiLabel);
+        stage.addActor(aiButton);
         exitButtonActive=new Texture("ExitButtonActive.jpg");
         exitButtonInactive=new Texture("ExitButtonInactive.jpg");
         //TODO: make possible to edit settings and such...
@@ -194,6 +215,17 @@ public class OptionMenu implements Screen {
         }else
             main.batch.draw(exitButtonActive,Main.WIDTH-BUTTON_WIDTH-10,EXIT_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
         main.batch.end();
+    }
+
+    public void aiShot(){
+        WigerToods.get().setSolver((Solver)main.getEngine());
+        WigerToods.get().setStartPos(main.getCourse().get_flag_position()); //NEEDS THE BALL POSITION
+//        hold.create();
+        hold.setOption(this);
+        hold.setAi(WigerToods.get());
+        Vector2d shot = WigerToods.get().search2();
+        hold.take_shot(shot);
+        main.setScreen(hold);
     }
 
     public void play(float speed, float angle){
@@ -264,36 +296,6 @@ public class OptionMenu implements Screen {
             String[] holda = line.split(" ");
             this.velocity = Float.parseFloat(holda[0]);
             this.angle = Float.parseFloat(holda[1]);
-//            double x=0, y=0;
-//            int ycounter = 0;
-//            int xcounter =0;
-//            ArrayList<Vector2d> speeds = new ArrayList<>();
-//            while(line!= null){
-//                String[] terms = line.split(",");
-//                if(terms.length==2){
-//                    if((terms[0].matches(decimalPattern)||terms[0].matches(naturalPattern))&&
-//                            (terms[1].matches(decimalPattern)||terms[1].matches(naturalPattern)))
-//                        speeds.add(new Vector2d(Double.parseDouble(terms[0]), Double.parseDouble(terms[1])));
-//                }else
-//                for(int i=0; i<terms.length;i++){
-//                    if(terms[i].contains("x") && i+1 < terms.length && (Pattern.matches(terms[i+1], decimalPattern) ||
-//                            Pattern.matches(terms[i+1], naturalPattern))) {
-//                        x=Double.parseDouble(terms[i+1]);
-//                        xcounter ++;
-//                    }
-//                    else if(terms[i].contains("y") && i+1 < terms.length && (Pattern.matches(terms[i+1], decimalPattern) ||
-//                            Pattern.matches(terms[i+1], naturalPattern))) {
-//                        y=Double.parseDouble(terms[i+1]);
-//                        ycounter++;
-//                    }
-//                    else if(xcounter == ycounter && xcounter !=0){
-//                        speeds.add(new Vector2d(x,y));
-//                        xcounter = 0;
-//                        ycounter = 0 ;
-//                    }
-//                }
-//                line = br.readLine();
-//            }
             
             
             fr.close();

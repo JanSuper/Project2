@@ -1,6 +1,8 @@
 package com.mygdx.game;
+
 import java.util.regex.Pattern;
 
+import Bot.WigerToods;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -49,7 +51,7 @@ public class PuttingSimulator extends Game implements Screen{
 
     private Vector2d ballPosition;
 
-    private Vector3 posTemp = new Vector3();
+    private WigerToods ai=null;
 
     PerspectiveCamera cam;
     CameraInputController camController;
@@ -292,32 +294,35 @@ public class PuttingSimulator extends Game implements Screen{
             stage.draw();
         }
         else if (count == 2*60) {
-        	Gdx.input.setInputProcessor(stage);
-        	shot = true;
+            if(ai==null) {
+                Gdx.input.setInputProcessor(stage);
+                shot = true;
 //        	Menu holdMenu = new Menu(main);
 //        	main.setScreen(holdMenu);
-        	 buttonShot.addListener(new ClickListener(){
-                 @Override
-                 public void touchUp(InputEvent e, float x, float y, int point, int button){
-                 	count = 0;
-                 	System.out.println("here");
-                     if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
-                             (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern))) {
-                     	
-                         play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
-                         shot = false;
-                         Gdx.input.setInputProcessor(camController);
-                     }
-                     else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
-                         textFieldSpeed.setText("");
-                     else if(!Pattern.matches(decimalPattern, textFieldAngle.getText()))
-                         textFieldAngle.setText("");
-                     
-                     
-                    
-                 }
-             });
-        	
+                buttonShot.addListener(new ClickListener() {
+                    @Override
+                    public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                        count = 0;
+                        System.out.println("here");
+                        if ((Pattern.matches(decimalPattern, textFieldSpeed.getText()) || textFieldSpeed.getText().matches(naturalPattern)) &&
+                                (Pattern.matches(decimalPattern, textFieldAngle.getText()) || textFieldAngle.getText().matches(naturalPattern))) {
+
+                            play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                            shot = false;
+                            Gdx.input.setInputProcessor(camController);
+                        } else if (!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
+                            textFieldSpeed.setText("");
+                        else if (!Pattern.matches(decimalPattern, textFieldAngle.getText()))
+                            textFieldAngle.setText("");
+
+
+                    }
+                });
+            }else{
+                ai.setStartPos(ballPosition);
+                Vector2d shot = ai.search2();
+                take_shot(shot);
+            }
         }
         else {
         	physicsEngine.nextStep();
@@ -353,9 +358,13 @@ public class PuttingSimulator extends Game implements Screen{
         }
     }
 
-    public boolean isVisible(PerspectiveCamera cam, ModelInstance instance){
-        instance.transform.getTranslation(posTemp);
-        return cam.frustum.pointInFrustum(posTemp);
+//    public boolean isVisible(PerspectiveCamera cam, ModelInstance instance){
+//        instance.transform.getTranslation(posTemp);
+//        return cam.frustum.pointInFrustum(posTemp);
+//    }
+
+    public void setAi(WigerToods wt){
+        this.ai = wt;
     }
 
     boolean checkCollision () {
