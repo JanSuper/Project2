@@ -5,9 +5,34 @@ import Model.*;
 
 
 public class WigerToods {
+    private static WigerToods ai=null;
     Vector2d startPos;
     static Solver solver = new RKSolver(" sin (x) + y ^ 2");
     double tol = 0.02;
+
+    /**
+     * Before using AI, be sure to set the current solver
+     * @param s solver
+     */
+    public void setSolver(Solver s){
+        solver = s;
+    }
+
+    /**
+     * mutator method to change the tolerance
+     * @param t
+     */
+    public void setTol(double t){
+        tol =t;
+    }
+
+    /**
+     * Before using solver be sure to set the start position
+     * @param pos
+     */
+    public void setStartPos(Vector2d pos){
+        startPos=pos;
+    }
 
     public Vector2d search(){
         Vector2d testFin = startPos.clone();
@@ -29,6 +54,10 @@ public class WigerToods {
         return   prevVel.add(prevVel.multiplyBy ((solver.getGoalPosition().subtract(prevFin) ).divideBy(  (  solver.getGoalPosition().absDifference(startPos) )  )  )) ;//need to make vector multiply and add methods
     }
 
+    /**
+     * Search method return the Vector2d of shot to make a hole in one
+     * @return Vector2d vector of shot(x and y strength)
+     */
     public Vector2d search2(){
         boolean recalibrateY=true;
         boolean recalibrateX=true;
@@ -70,13 +99,24 @@ public class WigerToods {
         return testVelocity;
     }
 
+    /**
+     * Singleton
+     * @return return the AI
+     */
+    public static WigerToods get(){
+        if (ai==null) ai=new WigerToods();
+        return ai;
+    }
+
+/*
     public static void main (String [] arg){
-        System.out.print(" wohoo " );
+//        System.out.print(" wohoo " );
 
         WigerToods blah = new WigerToods();
         blah.solver.setGoalPosition(new Vector2d((Math.PI*9.0)/2.0,0));//z should be -1 here the ball just needs to stop at the bottom of a hump
         blah.startPos= new Vector2d(0.0,0.0);
         Vector2d result = blah.search2();
-        System.out.print(result.getX() + " wohoo " +result.getY());
+//        System.out.print(result.getX() + " wohoo " +result.getY());
     }
+*/
 }
