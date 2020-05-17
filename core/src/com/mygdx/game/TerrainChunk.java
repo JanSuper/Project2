@@ -13,6 +13,12 @@ import static com.badlogic.gdx.math.MathUtils.random;
 
 //https://xoppa.github.io/blog/interacting-with-3d-objects/
 
+/**
+ * Original code :
+ * Terrain chunk taken from
+ * https://stackoverflow.com/questions/20337797/libgdx-mesh-heightmap-normals-and-lights
+ *
+ */
 public class TerrainChunk {
 
     float[] vertices; // The verticies which create elevation
@@ -82,13 +88,13 @@ public class TerrainChunk {
         for (int x = 0; x < heightPitch; x++) {
             for (int y = 0; y < widthPitch; y++) {
                 // POSITION
-                vertices[idx++] =  x;
+                vertices[idx++] =  x;//x position
 
 
-                    vertices[idx++] = (float) (mapFunction.evaluate(new Vector2d(positionX+x,positionY+y)));
+                    vertices[idx++] = (float) (mapFunction.evaluate(new Vector2d(positionX+x,positionY+y)));//height = y
 
 
-                vertices[idx++] = y ;
+                vertices[idx++] = y ;//z position
 
                 // NORMAL, skip these for now
                 idx += 3;

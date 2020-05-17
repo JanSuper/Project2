@@ -57,44 +57,20 @@ public class PuttingCourse{
         ModelBuilder mb = new ModelBuilder();
         mb.begin();
         Array<ModelInstance> instances = new Array<>();
-/*        mb.node().id = "groundBalls";
-//        mb.manage(new Texture(Gdx.files.internal("Grass.jpg")));
-        mb.part("parcel", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.GREEN)))
-                .sphere(0.5f, 0.5f, 0.5f, 5, 5);
-        mb.node().id = "waterBalls";
-//      mb.manage(new Texture(Gdx.files.internal("Grass.jpg")));
-      mb.part("parcel", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.BLUE)))
-              .sphere(0.5f, 0.5f, 0.5f, 5, 5);
 
-        model = mb.end();
-        ModelInstance groundBall = new ModelInstance(model, "groundBalls");
-        for (float j = -15f; j <= 15f; j += 0.3f) {
-            for (float i = -50; i <= 149; i += 0.3f) {
-            	
-            	if ((float)get_height().evaluate(new Vector2d(i,j)) < 0) {
-            		groundBall = new ModelInstance(model, "waterBalls");
-            		groundBall.transform.setToTranslation(i,-.25f, j);
-            		instances.add(groundBall);
-            	}
-            	groundBall = new ModelInstance(model, "groundBalls");
-                groundBall.transform.setToTranslation(i,(float)get_height().evaluate(new Vector2d(i,j))-.25f, j);
-                instances.add(groundBall);
-            }
-        }
-*/
-        Texture grass = new Texture("grass.jpg");
+        Texture grass = new Texture("grass.jpg");//doesn't work right now
         Material material = new Material(TextureAttribute.createDiffuse(grass));
-        double margin = 25;
-        int chunkSize=5;
-        Vector2d[] coverage = getSurface(start, flag, margin);
-       // for (Vector2d v:coverage) System.out.println(v);
+        double margin = 25;//the size of terrain outside of rectangle composed by start and goal position
+        int chunkSize=5;//these can go up to sqrt(Shot.Maxvalue)-1
+        Vector2d[] coverage = getSurface(start, flag, margin);//rectangle composed by start and goal position
+        //number of chunk object needed
         int numChunkX =(int)(coverage[1].getX()-coverage[0].getX())/chunkSize, numChunkY=(int)(coverage[1].getY()-coverage[0].getY())/chunkSize;
-        TerrainChunk[][] terrainChunks = new TerrainChunk[numChunkX][numChunkY];
-        TerrainChunk chunk;
-        Vector2d currentChunkPosition;
+        TerrainChunk[][] terrainChunks = new TerrainChunk[numChunkX][numChunkY];//array of chunks of the terrain
+        TerrainChunk chunk;//current terrain chunk
+        Vector2d currentChunkPosition;//position of the current terrainchunk
         TerrainChunk.setFunction(height);
-        float scale = 1;
-        int print = 0;
+        float scale = 1;//of later use?
+        int print = 0;//debugging purpose
         int chunkNum=0;
         for(int x = 0; x < numChunkX; x++){
             for(int y = 0; y < numChunkY; y++){
@@ -125,7 +101,7 @@ public class PuttingCourse{
                 modelInstance.transform.setToTranslation((float)currentChunkPosition.getX(), 0, (float)currentChunkPosition.getY());
 
                 chunkNum++;
-                if(print<=3){
+ /*               if(print<=3){
                     Mesh mesh2 = modelInstance.model.nodes.get(0).parts.get(0).meshPart.mesh;
                     float[] temp = new float[mesh.getNumVertices()];
                     mesh2.getVertices(temp);
@@ -142,7 +118,7 @@ public class PuttingCourse{
                         }
                     }
                     print ++;
-                }
+                }*/
             }
         }
 
@@ -150,6 +126,13 @@ public class PuttingCourse{
         return instances;
     }
 
+    /**
+     * Method to form the rectangle composed by start and goal position with added margin
+     * @param start ball position at the start
+     * @param finish flag position (aka goal position)
+     * @param margin additional terrain created
+     * @return surface to render
+     */
     private Vector2d[] getSurface(Vector2d start, Vector2d finish, double margin){
         double minX, minY, maxX, maxY;
         if(start.getX()>finish.getX()){
@@ -249,11 +232,26 @@ public class PuttingCourse{
     	this.height = add;
     }
 
+    /**
+     * Deprecated code used to change Meshes into Model and therefor Model Instances
+     * @param mesh
+     * @param primitiveType
+     * @param material
+     * @return Model of terrainchunk
+     */
     public static Model createFromMesh (final Mesh mesh, int primitiveType, final Material material) {
         return createFromMesh(mesh, 0, mesh.getNumIndices(), primitiveType, material);
     }
 
-
+    /**
+     * Deprecated code used to change Meshes into Model and therefor Model Instances
+     * @param mesh
+     * @param indexOffset
+     * @param vertexCount
+     * @param primitiveType
+     * @param material
+     * @return
+     */
     public static Model createFromMesh (final Mesh mesh, int indexOffset, int vertexCount, int primitiveType,
                                         final Material material) {
         Model result = new Model();
@@ -261,7 +259,7 @@ public class PuttingCourse{
         meshPart.set("part1",mesh,indexOffset,vertexCount, primitiveType);
 
 
-        NodePart partMaterial = new NodePart();
+        NodePart partMaterial = new NodePart(meshPart,material);
         partMaterial.material = material;
         partMaterial.meshPart = meshPart;
         Node node = new Node();

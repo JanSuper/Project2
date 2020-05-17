@@ -12,6 +12,7 @@ public class WigerToods {
 
     /**
      * Before using AI, be sure to set the current solver
+     * solver MUST have the right goal position
      * @param s solver
      */
     public void setSolver(Solver s){
@@ -95,7 +96,6 @@ public class WigerToods {
 
         }
 
-
         return testVelocity;
     }
 
@@ -108,15 +108,18 @@ public class WigerToods {
         return ai;
     }
 
-/*
+    /**
+     * FOR TESTING PURPOSES
+     * @param arg
+     */
     public static void main (String [] arg){
-//        System.out.print(" wohoo " );
+        System.out.print(" wohoo " );
 
         WigerToods blah = new WigerToods();
         blah.solver.setGoalPosition(new Vector2d((Math.PI*9.0)/2.0,0));//z should be -1 here the ball just needs to stop at the bottom of a hump
         blah.startPos= new Vector2d(0.0,0.0);
         Vector2d result = blah.search2();
-//        System.out.print(result.getX() + " wohoo " +result.getY());
+        System.out.print(result.getX() + " wohoo " +result.getY());
     }
-*/
+
 }
