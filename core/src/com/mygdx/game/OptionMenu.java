@@ -220,10 +220,12 @@ public class OptionMenu implements Screen {
     public void aiShot(){
         WigerToods.get().setSolver((Solver)main.getEngine());
         WigerToods.get().setStartPos(main.getCourse().get_start_position()); //NEEDS THE BALL POSITION
+
         hold.create();
         hold.setOption(this);
         hold.setAi(WigerToods.get());
         Vector2d shot = WigerToods.get().search2();
+//        play((float)shot.getX(), (float)shot.getY());
         hold.take_shot(shot);
         main.setScreen(hold);
     }
