@@ -406,7 +406,7 @@ public class FunctionMaker implements Function2d {
     }
     public static void main(String[] args){
         FunctionMaker k= new FunctionMaker("1 *sin (x) + y ^ 2 ");
-        System.out.print(k.evaluate(90,0));
+        System.out.print(k.evaluate(Math.PI/2,0));
     }
 }
 

@@ -454,7 +454,7 @@ public class PuttingSimulator extends Game implements Screen{
     }
     
     public void setCourse(OptionMenu menu) {
-    	this.shape = new CourseShaper(menu.course);
+    	this.shape = new FunctionMaker(menu.course);
     	this.course.set_Func2d(shape);
     	physicsEngine = new RKSolver(menu.course);
     	physicsEngine.setMu(menu.mu);
