@@ -109,12 +109,6 @@ public abstract class Solver implements PhysicsEngine{
         //Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
 
         this.velocity=velocity;
-        if(this.velocity.evaluateVector()>15.0){
-            while (this.velocity.evaluateVector()>15.0){
-                this.velocity.scaleDown(vmax);
-                System.out.println("vel: "+this.velocity.evaluateVector());
-            }
-        }
         this.position=position;
         int count =0;
         while(count<300){
