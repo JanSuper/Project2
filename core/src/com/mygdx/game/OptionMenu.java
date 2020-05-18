@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import Bot.WigerToods;
+import Model.RKSolver;
 import Model.Solver;
 import Model.Vector2d;
 import com.badlogic.gdx.Gdx;
@@ -269,6 +270,7 @@ public class OptionMenu implements Screen {
             e.printStackTrace();
         }
     	}
+    	//TODO
     
     	String[] holdarray = new String[14];
     	holdarray = path.split(" ");
@@ -288,6 +290,9 @@ public class OptionMenu implements Screen {
     	Menu hold = new Menu(main);
         hold.setOptionMenu(this);
         hold.newLVL = true;
+        WigerToods.get().setSolver(new RKSolver(course));
+        hold.hold.setCourse(this);
+        hold.hold.create();
         main.setScreen(hold);
 
     }
