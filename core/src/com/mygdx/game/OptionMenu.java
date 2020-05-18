@@ -230,6 +230,9 @@ public class OptionMenu implements Screen {
     }
 
     public void play(float speed, float angle){
+    	if (speed == 0) {
+    		speed = 0.00001f;
+    	}
         this.velocity=speed;
         this.angle=angle;
 //        Menu hold = new Menu(main);
