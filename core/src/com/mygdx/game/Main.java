@@ -24,7 +24,7 @@ public class Main extends Game {
         batch = new SpriteBatch();
         solver = new RKSolver(function);
         Vector2d start = new Vector2d(0,0);
-        Vector2d flag =  new Vector2d((Math.PI*18.0)/2.0,0);
+        Vector2d flag =  new Vector2d((Math.PI*9.0)/2.0,0);
         course = new PuttingCourse(new FunctionMaker(function),flag,start );
         this.setScreen(new OptionMenu(this));
     }
