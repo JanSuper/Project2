@@ -117,6 +117,7 @@ public class PuttingSimulator extends Game implements Screen{
    /** 	physicsEngine.setVelX((float)initial_ball_velocity.getX());
     	physicsEngine.setVelY((float)initial_ball_velocity.getY());
     *///changes to
+       // if(initial_ball_velocity.evaluateVector()> menu.vMax) initial_ball_velocity.scaleDown(menu.vMax);
         physicsEngine.setVelocity(initial_ball_velocity);
     }
 
