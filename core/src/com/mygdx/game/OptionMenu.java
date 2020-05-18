@@ -234,8 +234,12 @@ public class OptionMenu implements Screen {
     	if (speed == 0) {
     		speed = 0.00001f;
     	}
+
     	
         this.velocity=speed;
+        if (this.velocity>(float) Solver.vmax){
+            this.velocity=(float)Solver.vmax;
+        }
         this.angle=angle;
 //        Menu hold = new Menu(main);
 //        hold.setOptionMenu(this);

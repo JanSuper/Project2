@@ -38,7 +38,7 @@ public abstract class Solver implements PhysicsEngine{
     protected double g = 9.81;
     protected double m = 45.93;
     protected double mu = 0.3;
-    protected double vmax= 15.0;
+    public static double vmax= 15.0;
     protected double tol = 0.02;
 
     protected static Vector2d goalPosition;
@@ -107,7 +107,14 @@ public abstract class Solver implements PhysicsEngine{
 
     public Vector2d takeShot(Vector2d position, Vector2d velocity){
         //Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
+
         this.velocity=velocity;
+        if(this.velocity.evaluateVector()>15.0){
+            while (this.velocity.evaluateVector()>15.0){
+                this.velocity.scaleDown(vmax);
+                System.out.println("vel: "+this.velocity.evaluateVector());
+            }
+        }
         this.position=position;
         int count =0;
         while(count<300){

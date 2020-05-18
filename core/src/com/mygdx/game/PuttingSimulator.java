@@ -118,6 +118,7 @@ public class PuttingSimulator extends Game implements Screen{
     	physicsEngine.setVelY((float)initial_ball_velocity.getY());
     *///changes to
        // if(initial_ball_velocity.evaluateVector()> menu.vMax) initial_ball_velocity.scaleDown(menu.vMax);
+
         physicsEngine.setVelocity(initial_ball_velocity);
     }
 
@@ -429,7 +430,10 @@ public class PuttingSimulator extends Game implements Screen{
         return (float)(Math.sin(x) + Math.pow(Math.abs(y), 1.5));
     }
     public Vector2d calcInit() {
-
+            //max velocity
+        if (menu.velocity>Solver.vmax){
+            menu.velocity=(float)Solver.vmax;
+        }
     	return new Vector2d(Math.cos(menu.angle/360*2*Math.PI)*menu.velocity, Math.sin(menu.angle/360*2*Math.PI)*menu.velocity);
 
     }
@@ -464,6 +468,9 @@ public class PuttingSimulator extends Game implements Screen{
     	if (speed == 0) {
     		speed = 0.00001f;
     	}
+        if (speed>(float) Solver.vmax){
+            speed=(float)Solver.vmax;
+        }
     	double holdxv = (speed*(Math.cos(angle/180*Math.PI)));
     	double holdyv = (speed*(Math.sin(angle/180*Math.PI)));
     	Vector2d shot = new Vector2d(holdxv, holdyv);

@@ -3,7 +3,6 @@ package Bot;
 import Model.*;
 //mynamejeff
 
-
 public class WigerToods {
     private static WigerToods ai=null;
     Vector2d startPos;
