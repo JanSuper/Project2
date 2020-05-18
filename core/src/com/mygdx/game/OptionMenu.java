@@ -234,6 +234,7 @@ public class OptionMenu implements Screen {
     	if (speed == 0) {
     		speed = 0.00001f;
     	}
+    	
         this.velocity=speed;
         this.angle=angle;
 //        Menu hold = new Menu(main);
