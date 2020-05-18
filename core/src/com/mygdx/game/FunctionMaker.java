@@ -236,7 +236,8 @@ public class FunctionMaker implements Function2d {
             else arg1=y;
             computed[index]=true;
         }else if(type.get(index).equals("NUM")){
-            arg1 = Double.parseDouble(arguments.get(index-1));
+            if(index>0) arg1 = Double.parseDouble(arguments.get(index-1));
+            else arg1 = Double.parseDouble(arguments.get(index));
             computed[index]=true;
         }else if(type.get(index).equals("SP")){
             if(type.get(index+1).equals("FUN")){
@@ -327,8 +328,9 @@ public class FunctionMaker implements Function2d {
             }else{
                 int next = nextFrom(computed, index+1);
 //				System.out.println(arguments.get(index)+"comes before");
+                if(!computed[index+1])
                 arg = helper(arg, computed, index+1, x,y);
-                //because ealier if !index -> OP : index++
+                //because earlier if !index -> OP : index++
                 if(!computed[index-1]) computed[index-1]=true;
                 else computed[index]=true;
                 //next operation
@@ -374,8 +376,9 @@ public class FunctionMaker implements Function2d {
      */
     public static boolean priority(String a, String b){
         if(a.startsWith("OP") && b.startsWith("OP")) return a.charAt(2)>=b.charAt(2);
-        System.out.println("bug in priority");
-        System.out.println("op1: "+a+" / op2: "+b);
+        if(a.equals("FUN")) return true;
+//        System.out.println("bug in priority");
+//        System.out.println("op1: "+a+" / op2: "+b);
         return false;
     }
 
@@ -400,6 +403,10 @@ public class FunctionMaker implements Function2d {
             while(i<computed.length&&computed[i]) i++;
             if(i<computed.length) return i;
         }return -1;
+    }
+    public static void main(String[] args){
+        FunctionMaker k= new FunctionMaker("1 *sin (x) + y ^ 2 ");
+        System.out.print(k.evaluate(90,0));
     }
 }
 
