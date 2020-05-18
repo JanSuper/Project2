@@ -236,8 +236,7 @@ public class FunctionMaker implements Function2d {
             else arg1=y;
             computed[index]=true;
         }else if(type.get(index).equals("NUM")){
-            if(index>0) arg1 = Double.parseDouble(arguments.get(index-1));
-            else arg1=Double.parseDouble(arguments.get(index));
+            arg1 = Double.parseDouble(arguments.get(index-1));
             computed[index]=true;
         }else if(type.get(index).equals("SP")){
             if(type.get(index+1).equals("FUN")){
@@ -401,11 +400,6 @@ public class FunctionMaker implements Function2d {
             while(i<computed.length&&computed[i]) i++;
             if(i<computed.length) return i;
         }return -1;
-    }
-
-    public static void main(String[] args){
-        FunctionMaker n = new FunctionMaker("0 * x+0*y");
-        System.out.print(n.evaluate(new Vector2d(0,0)));
     }
 }
 
