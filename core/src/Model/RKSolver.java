@@ -1,5 +1,7 @@
 package Model;
 
+import com.mygdx.game.FunctionMaker;
+
 import static java.lang.Math.sqrt;
 
 public class RKSolver extends Solver {
@@ -95,7 +97,7 @@ public class RKSolver extends Solver {
 
     @Override
     public double getPosZ(){
-        return this.shape.evaluate(position);
+        return FunctionMaker.getInstance().evaluate(position);
     }
 
 

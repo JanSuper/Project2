@@ -16,7 +16,7 @@ public class Menu implements Screen {
     
     public boolean newLVL = false;
     
-    public PuttingSimulator hold;
+    public PuttingSimulator puttingSImulator;
 
     Texture exitButtonActive;
     Texture exitButtonInactive;
@@ -38,8 +38,8 @@ public class Menu implements Screen {
     public Menu(Main main){
         this.main = main;
         menu = new OptionMenu(main);
-        hold = new PuttingSimulator(main.getCourse(), main.getEngine(), main, menu);
-        hold.create();
+        puttingSImulator = new PuttingSimulator(main.getCourse(), main.getEngine(), menu);
+        puttingSImulator.create();
         
         newLVL = false;
         //TODO:Golf becomes PuttingSimulator
@@ -76,13 +76,13 @@ public class Menu implements Screen {
                 this.dispose();
                 
                 if (newLVL) {
-                	hold.setCourse(menu);
-                	hold.create();
+                	puttingSImulator.setCourse(menu);
+                	puttingSImulator.create();
                 }
                 
-                hold.setOption(menu);
-                hold.take_shot(hold.calcInit());
-                main.setScreen(hold);
+                puttingSImulator.setOption(menu);
+                puttingSImulator.take_shot(puttingSImulator.calcInit());
+                main.setScreen(puttingSImulator);
                 
             }
         } else

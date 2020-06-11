@@ -18,6 +18,13 @@ public class FunctionMaker implements Function2d {
         return singleton;
     }
 
+    public static FunctionMaker getInstance(){
+        if(singleton == null){
+            System.out.println("NEED TO SET THE FUNCTION FIRST");
+        }
+        return singleton;
+    }
+
     /**
      * FunctionMaker : makes a function that returns operations entered upon creation of Object
      *	op1: addition soustraction (lowest priority)
@@ -27,7 +34,7 @@ public class FunctionMaker implements Function2d {
      */
 
     private String function = " sin (x) + y ^ 2"; //initial String
-    public ArrayList<String> arguments; // translation into seperate arguments
+    private ArrayList<String> arguments; // translation into seperate arguments
     private ArrayList<String> type; //type of arguments (operators, numerical value,etc...)
     private static HashMap<String, Function> map=null; // map all functions that could be use
     //Pattern of decimal, natural numbers
@@ -106,7 +113,7 @@ public class FunctionMaker implements Function2d {
     /**
      * transfer the string into arguments and keep in memory the type
      */
-    public void transfer(){
+    private void transfer(){
         arguments = new ArrayList<>();
         type = new ArrayList<>();
         int counter = 0;
@@ -414,17 +421,15 @@ public class FunctionMaker implements Function2d {
             if(i<computed.length) return i;
         }return -1;
     }
-    public static void main(String[] args){
-        FunctionMaker k= new FunctionMaker("1 *sin (x) + y ^ 2 ");
-        System.out.print(k.evaluate(Math.PI/2,0));
-    }
 
     public String getFunction() {
         return function;
     }
 
-    public void setFunction(String function) {
-        this.function = function;
+    public static void setFunction(String function) {
+
+        FunctionMaker.singleton.function = function.toLowerCase().replace(" ","");
+        FunctionMaker.singleton.transfer();
     }
 }
 

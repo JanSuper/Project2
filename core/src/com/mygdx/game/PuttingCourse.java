@@ -66,7 +66,7 @@ public class PuttingCourse{
         TerrainChunk[][] terrainChunks = new TerrainChunk[numChunkX][numChunkY];//array of chunks of the terrain
         TerrainChunk chunk;//current terrain chunk
         Vector2d currentChunkPosition;//position of the current terrainchunk
-        TerrainChunk.setFunction(height);
+        TerrainChunk.setFunction(FunctionMaker.getInstance());
         float scale = 1;//of later use?
         int print = 0;//debugging purpose
         int chunkNum=0;
@@ -75,7 +75,7 @@ public class PuttingCourse{
                 //Create Chunk
                 currentChunkPosition=new Vector2d(coverage[0].getX()+chunkSize*x,coverage[0].getY()+chunkSize*y );
                 chunk = new TerrainChunk(currentChunkPosition, chunkSize);
-                chunk.setLocation((float)height.evaluate(new Vector2d(x*chunkSize, y*chunkSize)));
+                chunk.setLocation((float)FunctionMaker.getInstance().evaluate(new Vector2d(x*chunkSize, y*chunkSize)));
                 terrainChunks[x][y] = chunk;
 
                 //Create Mesh
@@ -150,13 +150,6 @@ public class PuttingCourse{
         return new Vector2d[]{new Vector2d(minX,minY), new Vector2d(maxX,maxY)};
     }
 
-    /**
-     * accessor
-     * @return get the function shaping the course
-     */
-    public Function2d get_height(){
-        return this.height;
-    }
 
     /**
      * accessor
@@ -221,14 +214,7 @@ public class PuttingCourse{
     public void set_hole_tolerance(double tol) {
     	this.holeTolerance = tol;
     }
-
-    /**
-     * mutator
-     * @param add change the function shapping the course
-     */
-    public void set_Func2d(Function2d add) {
-    	this.height = add;
-    }
+    
 
     /**
      * Deprecated code used to change Meshes into Model and therefor Model Instances

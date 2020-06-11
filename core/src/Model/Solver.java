@@ -41,10 +41,9 @@ public abstract class Solver implements PhysicsEngine{
     protected double tol = 0.02;
 
     protected static Vector2d goalPosition;
-    protected static Function2d shape;
 
     public Solver(String ab) {
-        shape = new FunctionMaker(ab);
+        FunctionMaker.setFunction(ab);
     }
 
     /**
@@ -56,20 +55,20 @@ public abstract class Solver implements PhysicsEngine{
     public void nextStep() {   }
 
     public double get_height(double x, double y){
-        return shape.evaluate(new Vector2d(x,y));
+        return FunctionMaker.getInstance().evaluate(new Vector2d(x,y));
     }
     public double get_height(Vector2d position){
-        return shape.evaluate(position);
+        return FunctionMaker.getInstance().evaluate(position);
     }
     public Vector2d getSlopes (double currentPosX, double currentPosY){
-       return  shape.gradient(new Vector2d(currentPosX,currentPosY));
+       return  FunctionMaker.getInstance().gradient(new Vector2d(currentPosX,currentPosY));
     }
     public Vector2d getSlopes (Vector2d position){
-        return shape.gradient(position);
+        return FunctionMaker.getInstance().gradient(position);
     }
 
     protected Vector2d  getNextAcceleration (Vector2d position, Vector2d velocity){
-        Vector2d slopes = this.shape.gradient(position);
+        Vector2d slopes = FunctionMaker.getInstance().gradient(position);
         double velY = velocity.getY();
         double velX = velocity.getX();
         double sqrtSpeeds = sqrt((velX * velX) + (velY * velY));

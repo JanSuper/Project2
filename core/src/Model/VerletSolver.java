@@ -1,6 +1,8 @@
 package Model;
 
 
+import com.mygdx.game.FunctionMaker;
+
 public class VerletSolver extends Solver {
     double vy =0;
     int x =0;
@@ -48,6 +50,6 @@ public class VerletSolver extends Solver {
 
     @Override
     public double getPosZ(){
-        return this.shape.evaluate(position);
+        return FunctionMaker.getInstance().evaluate(position);
     }
 }

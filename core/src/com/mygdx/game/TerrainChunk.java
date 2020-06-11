@@ -32,7 +32,6 @@ public class TerrainChunk {
     private float positionY;
     private float positionZ;
 
-
     private ModelInstance modelInstance;
 
     static Function2d mapFunction;

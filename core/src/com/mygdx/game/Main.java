@@ -10,7 +10,11 @@ public class Main extends Game {
 
     private PuttingCourse course;
 	private PhysicsEngine solver;
-	private String function=" sin (x) + y ^ 2";
+	private  String function;
+
+	//Adding the function2d??
+    //OK we don't need this instance variable but we still need to set the function
+    private Function2d height ;
 	
     public SpriteBatch batch;
 
@@ -27,7 +31,7 @@ public class Main extends Game {
         solver = new RKSolver(function);
         Vector2d start = new Vector2d(0,0);
         Vector2d flag =  new Vector2d((Math.PI*9.0)/2.0,0);
-        course = new PuttingCourse(new FunctionMaker(function),flag,start );
+        course = new PuttingCourse(flag,start );
         this.setScreen(new OptionMenu(this));
     }
 
@@ -60,16 +64,29 @@ public class Main extends Game {
      */
     public static Main getInstance(){
         if(singleton==null){
-            return new Main();
-        }else {
-            return singleton;
+            singleton= new Main();
         }
+            return singleton;
+
     }
 
     /**
      * singleton implementation for main complete
      */
     private Main(){
+        function=" sin (x) + y ^ 2";
+        height = FunctionMaker.getInstance(function);
+    }
 
+    /**
+     *
+     * @return
+     */
+    public  Function2d getHeight() {
+        return height;
+    }
+
+    public  void setHeight(Function2d height) {
+        this.height = height;
     }
 }

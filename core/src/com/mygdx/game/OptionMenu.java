@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class OptionMenu implements Screen {
@@ -78,7 +77,7 @@ public class OptionMenu implements Screen {
     public OptionMenu(Main main){
         this.main = main;
         
-        hold = new PuttingSimulator(main.getCourse(), main.getEngine(), main, this);
+        hold = new PuttingSimulator(main.getCourse(), main.getEngine(),  this);
         hold.create();
         
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -294,13 +293,13 @@ public class OptionMenu implements Screen {
     	}
     	
     	course = path;
-    	Menu hold = new Menu(main);
-        hold.setOptionMenu(this);
-        hold.newLVL = true;
+    	Menu menu = new Menu(Main.getInstance());
+        menu.setOptionMenu(this);
+        menu.newLVL = true;
         WigerToods.get().setSolver(new RKSolver(course));
-        hold.hold.setCourse(this);
-        hold.hold.create();
-        main.setScreen(hold);
+        menu.puttingSImulator.setCourse(this);
+        menu.puttingSImulator.create();
+        main.setScreen(menu);
 
     }
 
