@@ -1,8 +1,7 @@
 package Model;
 
-import com.mygdx.game.CourseShaper;
 import com.mygdx.game.FunctionMaker;
-import java.util.ArrayList;
+
 import java.util.LinkedList;
 import static java.lang.Math.sqrt;
 
@@ -68,6 +67,7 @@ public abstract class Solver implements PhysicsEngine{
     public Vector2d getSlopes (Vector2d position){
         return shape.gradient(position);
     }
+
     protected Vector2d  getNextAcceleration (Vector2d position, Vector2d velocity){
         Vector2d slopes = this.shape.gradient(position);
         double velY = velocity.getY();

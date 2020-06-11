@@ -429,6 +429,13 @@ public class PuttingSimulator extends Game implements Screen{
     public static float heightFormula(float x, float y) {
         return (float)(Math.sin(x) + Math.pow(Math.abs(y), 1.5));
     }
+
+    /**
+     * TODO: i think this is the definition
+     * To calc convert the double:velocity field in OptionMenu to a Vector2d
+     * would usually be used for user input of velocity and angle
+     * @return
+     */
     public Vector2d calcInit() {
             //max velocity
         if (menu.velocity>Solver.vmax){

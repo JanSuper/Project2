@@ -18,9 +18,7 @@ public class DesktopLauncher {
         config.resizable=false;
 		config.foregroundFPS = (int)Solver.fps;
 		config.backgroundFPS =(int) Solver.fps;
-		
-		Main hold = new Main();
-		
-		new LwjglApplication(hold, config);
+
+		new LwjglApplication(Main.getInstance(), config);
 	}
 }

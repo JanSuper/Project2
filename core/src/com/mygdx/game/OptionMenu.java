@@ -114,6 +114,7 @@ public class OptionMenu implements Screen {
             public void touchUp(InputEvent e, float x, float y, int point, int button){
                 if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
                         (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern)))
+
                     play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
                 
                 else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
@@ -231,6 +232,13 @@ public class OptionMenu implements Screen {
         main.setScreen(hold);
     }
 
+    /**
+     * I only see this being used in OptionMenu Constructor
+     * NOT SURE WHAT PURPOSE IT FILLS
+     * IF YOU KNOW AND ARE READING THIS PLEASE FILL IN
+     * @param speed
+     * @param angle
+     */
     public void play(float speed, float angle){
     	if (speed == 0) {
     		speed = 0.00001f;

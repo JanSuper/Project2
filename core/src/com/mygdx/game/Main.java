@@ -5,8 +5,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Main extends Game {
-	
-	private PuttingCourse course;
+
+    private static Main singleton;
+
+    private PuttingCourse course;
 	private PhysicsEngine solver;
 	private String function=" sin (x) + y ^ 2";
 	
@@ -50,5 +52,24 @@ public class Main extends Game {
     }
     public PuttingCourse getCourse(){
         return this.course;
+    }
+
+    /**
+     * Singeleton get instance method
+     * @return
+     */
+    public static Main getInstance(){
+        if(singleton==null){
+            return new Main();
+        }else {
+            return singleton;
+        }
+    }
+
+    /**
+     * singleton implementation for main complete
+     */
+    private Main(){
+
     }
 }

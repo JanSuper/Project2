@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.Array;
 //import jdk.nashorn.internal.objects.annotations.Function;
 
 public class PuttingCourse{
-    private Function2d height;
+
     private Vector2d flag;
     private Vector2d start;
     private double friction;
@@ -33,12 +33,10 @@ public class PuttingCourse{
 
     /**
      * constructor
-     * @param height function for the shape of the terrain
      * @param flag position of the hole
      * @param start position of the ball at the start of the game
      */
-    public PuttingCourse(Function2d height, Vector2d flag, Vector2d start){
-        this.height=height;
+    public PuttingCourse(Vector2d flag, Vector2d start){
         this.flag=flag;
         this.start=start;
         this.friction =  0.131;

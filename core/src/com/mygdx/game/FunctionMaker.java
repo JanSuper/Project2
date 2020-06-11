@@ -2,11 +2,21 @@ package com.mygdx.game;
 
 import Model.Function2d;
 import Model.Vector2d;
+import com.sun.org.apache.xpath.internal.compiler.FunctionTable;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class FunctionMaker implements Function2d {
+    private static FunctionMaker singleton = null;
+
+    public static FunctionMaker getInstance(String function){
+        if(singleton == null){
+            singleton = new FunctionMaker(function);
+            return singleton;
+        }
+        return singleton;
+    }
 
     /**
      * FunctionMaker : makes a function that returns operations entered upon creation of Object
@@ -16,7 +26,7 @@ public class FunctionMaker implements Function2d {
      *	sp: cos, acos, log...: treat as function whatever is on the right?
      */
 
-    private String function; //initial String
+    private String function = " sin (x) + y ^ 2"; //initial String
     public ArrayList<String> arguments; // translation into seperate arguments
     private ArrayList<String> type; //type of arguments (operators, numerical value,etc...)
     private static HashMap<String, Function> map=null; // map all functions that could be use
@@ -30,7 +40,7 @@ public class FunctionMaker implements Function2d {
     private int funcounter;//keep in memory which function has been computed already
 
     //call this once only as map is Static
-    public FunctionMaker(){
+    private FunctionMaker(){
         // make a Hashmap with all functions
         map = new HashMap<String, Function>();
 
@@ -80,7 +90,7 @@ public class FunctionMaker implements Function2d {
      * CONSTRUCTOR
      * @param function : String to translate into a function
      */
-    public FunctionMaker(String function){
+    private FunctionMaker(String function){
         if(map == null) new FunctionMaker();
         this.function = function.toLowerCase().replace(" ","");
         transfer();
@@ -407,6 +417,14 @@ public class FunctionMaker implements Function2d {
     public static void main(String[] args){
         FunctionMaker k= new FunctionMaker("1 *sin (x) + y ^ 2 ");
         System.out.print(k.evaluate(Math.PI/2,0));
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
     }
 }
 
