@@ -77,7 +77,7 @@ public class OptionMenu implements Screen {
     public OptionMenu(Main main){
         this.main = main;
         
-        puttingSimulator = new PuttingSimulator(main.getCourse(), main.getEngine(),  this);
+        puttingSimulator = new PuttingSimulator( main.getEngine(),  this);
         puttingSimulator.create();
         
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -295,8 +295,8 @@ public class OptionMenu implements Screen {
     	Menu menu = new Menu(Main.getInstance());
         menu.setOptionMenu(this);
         menu.newLVL = true;
-        WigerToods.getInstance().setSolver(new RKSolver(course));
-        menu.puttingSImulator.setCourse(this);
+        WigerToods.getInstance().setSolver(new RKSolver());
+        PuttingSimulator.getInstance().setCourse(this);
         menu.puttingSImulator.create();
         main.setScreen(menu);
 

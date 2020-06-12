@@ -185,9 +185,6 @@ public class FunctionMaker implements Function2d {
      * @return z coordinate
      */
     public double evaluate(Vector2d vector2d){
-        if(apiFunction!=null){
-            return apiFunction.evaluate(vector2d);
-        }
         //new calc -> no functions was used yet and nothing is computed
         double x = vector2d.getX(), y = vector2d.getY();
         funcounter=0;
@@ -230,9 +227,6 @@ public class FunctionMaker implements Function2d {
 
     @Override
     public Vector2d gradient(Vector2d p) {
-        if(apiFunction!= null){
-            return apiFunction.gradient(p);
-        }
        return new Vector2d((evaluate(p.getX()+step, p.getY()) - evaluate(p.getX()-step, p.getY()))/(2*step),
                (evaluate(p.getX(), p.getY()+step) - evaluate(p.getX(), p.getY()-step))/(2*step));
     }
@@ -295,7 +289,7 @@ public class FunctionMaker implements Function2d {
      * @param y : y coordinate
      * @return computed solution so far
      */
-    public double helper(double t,boolean[] computed, int index, double x, double y){
+    private double helper(double t,boolean[] computed, int index, double x, double y){
         double arg=0;
         //if still in boundaries to see one ahead
         if(index<computed.length-1){
@@ -379,9 +373,9 @@ public class FunctionMaker implements Function2d {
     }
 
 //    public static void main(String[] args){
-//        FunctionMaker f = new FunctionMaker("sin(x)+y");
+//        FunctionMaker f = new FunctionMaker("3");
 //        for(String s : f.arguments) System.out.print(s);
-//        System.out.println("HERE"+f.get_height(Math.PI/2,1));
+//        System.out.println("HERE "+f.evaluate(Math.PI/2,1));
 //        //System.out.println("HERE"+f.get_height(1,2));
 //    }
 
@@ -391,7 +385,7 @@ public class FunctionMaker implements Function2d {
      * @param b operation on the right
      * @return true if operation on the left is before
      */
-    public static boolean priority(String a, String b){
+    private  boolean priority(String a, String b){
         if(a.startsWith("OP") && b.startsWith("OP")) return a.charAt(2)>=b.charAt(2);
         if(a.equals("FUN")) return true;
 //        System.out.println("bug in priority");
@@ -404,7 +398,7 @@ public class FunctionMaker implements Function2d {
      * @param compute the boolean array representing the computations states
      * @return first index of which argument has not been computed yet, -1 otherwise
      */
-    public static int next(boolean[] compute){
+    private int next(boolean[] compute){
         for(int i=0; i< compute.length; i++) if(!compute[i]) return i;
         return -1;
     }
@@ -415,7 +409,7 @@ public class FunctionMaker implements Function2d {
      * @param i index at which to start the search
      * @returnfirst index of which argument has not been computed yet after index, -1 otherwise
      */
-    public static int nextFrom(boolean[] computed, int i){
+    private int nextFrom(boolean[] computed, int i){
         if(i<computed.length) {
             while(i<computed.length&&computed[i]) i++;
             if(i<computed.length) return i;

@@ -84,16 +84,20 @@ public class PuttingSimulator extends Game implements Screen{
     boolean shot = false;
 
 
-    public PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
+    private PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
         PuttingCourse.getInstance().setCourse(course);
         this.physicsEngine =solver;
     }
-    public PuttingSimulator(PuttingCourse course, PhysicsEngine solver,  OptionMenu menu){
-        this.course=course;
+    public PuttingSimulator( PhysicsEngine solver,  OptionMenu menu){
         this.physicsEngine =solver;
         this.menu=menu;
 
     }
+    public static PuttingSimulator getInstance(){
+       // if(singleton==null) singleton = new PuttingSimulator(Main.getInstance().getEngine(), Menu.getInstance());
+        return singleton;
+    }
+
     public void set_ball_position(Vector2d v){
         this.ballPosition=v;
     }
@@ -162,7 +166,7 @@ public class PuttingSimulator extends Game implements Screen{
         // translate is to a certain position if wanted
         // remember that the middle of the object is 0.0.0
         ball.transform.setToTranslation((float)PuttingCourse.getInstance().get_start_position().getX(),
-                (float)FunctionMaker.getInstance().evaluate(new Vector2d(PuttingCourse.getInstance().get_start_position().getX(),course.get_start_position().getY())) + 1f,
+                (float)FunctionMaker.getInstance().evaluate(new Vector2d(PuttingCourse.getInstance().get_start_position().getX(),PuttingCourse.getInstance().get_start_position().getY())) + 1f,
                 (float)PuttingCourse.getInstance().get_start_position().getY());
         // add the modelinstance of the object to the array of objects that has to be rendered
         instances = new Array<ModelInstance>();
@@ -179,11 +183,11 @@ public class PuttingSimulator extends Game implements Screen{
         instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
 
         flagPole = new ModelInstance(model, "flagpole");
-        flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)FunctionMaker.getInstance().evaluate(new Vector2d(course.get_flag_position().getX(), course.get_flag_position().getY())), (float)course.get_flag_position().getY());
+        flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)FunctionMaker.getInstance().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), course.get_flag_position().getY())), (float)course.get_flag_position().getY());
         instances.add(flagPole);
         
         flag = new ModelInstance(model, "flag");
-        flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)FunctionMaker.getInstance().evaluate(new Vector2d(course.get_flag_position().getX(), course.get_flag_position().getY())) + 4.5f, (float)course.get_flag_position().getY()- .5f);
+        flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)FunctionMaker.getInstance().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), course.get_flag_position().getY())) + 4.5f, (float)course.get_flag_position().getY()- .5f);
         instances.add(flag);
         
         // give the object a collision shape if you want it to have collision
