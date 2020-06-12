@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class OptionMenu implements Screen {
+
     private static OptionMenu singleton=null;
 
     String decimalPattern = "([0-9]*)\\.([0-9]*)";
@@ -280,7 +281,6 @@ public class OptionMenu implements Screen {
     		path += holdarray[i];
     	}
 
-        Menu.getInstance().setOptionMenu(this);
         Menu.getInstance().newLVL = true;
         WigerToods.getInstance().setSolver(new RKSolver());
         PuttingSimulator.getInstance().create();
@@ -306,7 +306,6 @@ public class OptionMenu implements Screen {
             
             fr.close();
             Main.getInstance().count++;
-            Menu.getInstance().setOptionMenu(this);
             Main.getInstance().setScreen(Menu.getInstance());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
