@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 public class OptionMenu implements Screen {
 	
-	public PuttingSimulator hold;
+	public PuttingSimulator puttingSimulator;
 
     String decimalPattern = "([0-9]*)\\.([0-9]*)";
     String naturalPattern = "([0-9]*)";
@@ -77,8 +77,8 @@ public class OptionMenu implements Screen {
     public OptionMenu(Main main){
         this.main = main;
         
-        hold = new PuttingSimulator(main.getCourse(), main.getEngine(),  this);
-        hold.create();
+        puttingSimulator = new PuttingSimulator(main.getCourse(), main.getEngine(),  this);
+        puttingSimulator.create();
         
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         
@@ -219,16 +219,15 @@ public class OptionMenu implements Screen {
     }
 
     public void aiShot(){
-        WigerToods.get().setSolver((Solver)main.getEngine());
-        WigerToods.get().setStartPos(main.getCourse().get_start_position()); //NEEDS THE BALL POSITION
+        WigerToods.getInstance().setSolver((Solver)main.getEngine());
 
-        hold.create();
-        hold.setOption(this);
-        hold.setAi(WigerToods.get());
-        Vector2d shot = WigerToods.get().search2();
+        puttingSimulator.create();
+        puttingSimulator.setOption(this);
+        puttingSimulator.setAi(WigerToods.getInstance());
+        Vector2d shot = WigerToods.getInstance().search();
 //        play((float)shot.getX(), (float)shot.getY());
-        hold.take_shot(shot);
-        main.setScreen(hold);
+        puttingSimulator.take_shot(shot);
+        main.setScreen(puttingSimulator);
     }
 
     /**
@@ -252,10 +251,10 @@ public class OptionMenu implements Screen {
 //        Menu hold = new Menu(main);
 //        hold.setOptionMenu(this);
 //        main.setScreen(hold);
-        hold.create();
-        hold.setOption(this);
-        hold.take_shot(hold.calcInit());
-        main.setScreen(hold);
+        puttingSimulator.create();
+        puttingSimulator.setOption(this);
+        puttingSimulator.take_shot(puttingSimulator.calcInit());
+        main.setScreen(puttingSimulator);
     }
 
     public void loadMap(String path){
@@ -296,7 +295,7 @@ public class OptionMenu implements Screen {
     	Menu menu = new Menu(Main.getInstance());
         menu.setOptionMenu(this);
         menu.newLVL = true;
-        WigerToods.get().setSolver(new RKSolver(course));
+        WigerToods.getInstance().setSolver(new RKSolver(course));
         menu.puttingSImulator.setCourse(this);
         menu.puttingSImulator.create();
         main.setScreen(menu);

@@ -1,6 +1,4 @@
 package com.mygdx.game;
-
-
 import Model.Function2d;
 import Model.Vector2d;
 import com.badlogic.gdx.Gdx;
@@ -19,31 +17,25 @@ import com.badlogic.gdx.graphics.g3d.model.data.ModelMeshPart;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
-//import jdk.nashorn.internal.objects.annotations.Function;
 
 public class PuttingCourse{
 
-    private Vector2d flag;
-    private Vector2d start;
-    private double friction;
-    private double maximumVelocity;
-    private double holeTolerance;
+    private static PuttingCourse singleton = null;
+    private Vector2d flag = new Vector2d(10,0);
+    private Vector2d start = new Vector2d( 0,0);
+    private double friction = 0.3;
+    private double holeTolerance = 0.02;
+    private double maximumVelocity =15.0;
 
 
+    private PuttingCourse(){ }
 
-    /**
-     * constructor
-     * @param flag position of the hole
-     * @param start position of the ball at the start of the game
-     */
-    public PuttingCourse(Vector2d flag, Vector2d start){
-        this.flag=flag;
-        this.start=start;
-        this.friction =  0.131;
-        this.maximumVelocity=10.0;
-        this.holeTolerance = 0.5f;
+    public static PuttingCourse getInstance(){
+        if(singleton==null){
+            return new PuttingCourse();
+        }
+        return singleton;
     }
-//TODO: should we move everthing related to the course modeling etc here?
 
     /**
      * accessor get the instance model for the terrain
@@ -213,6 +205,14 @@ public class PuttingCourse{
      */
     public void set_hole_tolerance(double tol) {
     	this.holeTolerance = tol;
+    }
+
+    /**
+     * Required for the API in the project manual
+     * @return FunctionMaker which implements the Function2d interface
+     */
+    public Function2d get_height(){
+        return FunctionMaker.getInstance();
     }
     
 

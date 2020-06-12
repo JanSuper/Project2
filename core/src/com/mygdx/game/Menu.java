@@ -38,7 +38,7 @@ public class Menu implements Screen {
     public Menu(Main main){
         this.main = main;
         menu = new OptionMenu(main);
-        puttingSImulator = new PuttingSimulator(main.getCourse(), main.getEngine(), menu);
+        puttingSImulator = new PuttingSimulator(, main.getEngine(), menu);
         puttingSImulator.create();
         
         newLVL = false;
@@ -76,7 +76,6 @@ public class Menu implements Screen {
                 this.dispose();
                 
                 if (newLVL) {
-                	puttingSImulator.setCourse(menu);
                 	puttingSImulator.create();
                 }
                 

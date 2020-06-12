@@ -1,6 +1,7 @@
 package Model;
 
 import com.mygdx.game.FunctionMaker;
+import com.mygdx.game.PuttingCourse;
 
 import java.util.LinkedList;
 import static java.lang.Math.sqrt;
@@ -21,30 +22,15 @@ public abstract class Solver implements PhysicsEngine{
     protected double solverStepSize = 1.0/165.0;//moving to 0.00001 when we refactor the putting simulator
     private int modulus = (int)((1.0/fps)/solverStepSize);
 
-
     protected double currentPosZ;
-
     protected Vector2d position;
     protected Vector2d velocity;
     protected Vector2d acceleration;
-
-    protected Vector2d slopes;
-
-
-    public double Fx;
-    public double Fy;
-
     protected double g = 9.81;
     protected double m = 45.93;
     protected double mu = 0.3;
     public static double vmax= 15.0;
-    protected double tol = 0.02;
 
-    protected static Vector2d goalPosition;
-
-    public Solver(String ab) {
-        FunctionMaker.setFunction(ab);
-    }
 
     /**
      * This is what the different solvers need to implement
@@ -105,8 +91,6 @@ public abstract class Solver implements PhysicsEngine{
     }
 
     public Vector2d takeShot(Vector2d position, Vector2d velocity){
-        //Vector2d tmpPosition = position.cloneAndAdd(-100,-100);
-
         this.velocity=velocity;
         this.position=position;
         int count =0;
@@ -136,19 +120,13 @@ public abstract class Solver implements PhysicsEngine{
         }
         return positionList;
     }
+
     public boolean finish() {
-    	return (((((goalPosition.getX() - tol <= this.position.getX()) &&
-                (position.getX() <= goalPosition.getX()+ tol))
-                &&((goalPosition.getY() - tol <= this.position.getY())
-                && (this.position.getY() <= goalPosition.getY() + tol)))
+    	return (((((PuttingCourse.getInstance().get_flag_position().getX() - PuttingCourse.getInstance().get_hole_tolerance() <= this.position.getX()) &&
+                (position.getX() <= PuttingCourse.getInstance().get_flag_position().getX()+ PuttingCourse.getInstance().get_hole_tolerance()))
+                &&((PuttingCourse.getInstance().get_flag_position().getY() - PuttingCourse.getInstance().get_hole_tolerance() <= this.position.getY())
+                && (this.position.getY() <= PuttingCourse.getInstance().get_flag_position().getY() + PuttingCourse.getInstance().get_hole_tolerance())))
     			&& (Math.abs(velocity.getX())<= 0.01 && Math.abs(velocity.getY())<= 0.01)));
 
     }
-
-    /**
-     * this sets goal position but does not set flag position TODO need to link these up
-     * @param x Vector2D value that we want to set the goal position to
-     */
-    public void setGoalPosition(Vector2d x){this.goalPosition=x;}
-    public Vector2d getGoalPosition(){return goalPosition;}
 }

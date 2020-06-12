@@ -1,5 +1,4 @@
 package com.mygdx.game;
-
 import Model.Function2d;
 import Model.Vector2d;
 import com.sun.org.apache.xpath.internal.compiler.FunctionTable;
@@ -7,33 +6,25 @@ import com.sun.org.apache.xpath.internal.compiler.FunctionTable;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * FunctionMaker : makes a function that returns operations entered upon creation of Object
+ *	op1: addition subtraction (lowest priority)
+ *	op2: multiplication division (higher priority)
+ *	op3: power (highest priority)
+ *	sp: cos, acos, log...: treat as function whatever is on the right?
+ */
+
 public class FunctionMaker implements Function2d {
     private static FunctionMaker singleton = null;
-
-    public static FunctionMaker getInstance(String function){
-        if(singleton == null){
-            singleton = new FunctionMaker(function);
-            return singleton;
-        }
-        return singleton;
-    }
+    private static String function = " sin (x) + y ^ 2";
 
     public static FunctionMaker getInstance(){
         if(singleton == null){
-            System.out.println("NEED TO SET THE FUNCTION FIRST");
+            singleton = new FunctionMaker(function);
         }
         return singleton;
     }
 
-    /**
-     * FunctionMaker : makes a function that returns operations entered upon creation of Object
-     *	op1: addition soustraction (lowest priority)
-     *	op2: multiplication division (higher priority)
-     *	op3: power (highest priority)
-     *	sp: cos, acos, log...: treat as function whatever is on the right?
-     */
-
-    private String function = " sin (x) + y ^ 2"; //initial String
     private ArrayList<String> arguments; // translation into seperate arguments
     private ArrayList<String> type; //type of arguments (operators, numerical value,etc...)
     private static HashMap<String, Function> map=null; // map all functions that could be use
@@ -427,9 +418,9 @@ public class FunctionMaker implements Function2d {
     }
 
     public static void setFunction(String function) {
-
         FunctionMaker.singleton.function = function.toLowerCase().replace(" ","");
         FunctionMaker.singleton.transfer();
+        //TODO we will have to re-render the course here also
     }
 }
 

@@ -7,9 +7,6 @@ public class VerletSolver extends Solver {
     double vy =0;
     int x =0;
     //update so that the only fields that reference velocity and directions are in solvers not menu classes
-    public VerletSolver(String ab) {
-        super(ab);
-    }
 
     @Override
     public void nextStep(){

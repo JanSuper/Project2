@@ -90,13 +90,13 @@ public class PuttingSimulator extends Game implements Screen{
     boolean shot = false;
 
 
-    public PuttingSimulator(PuttingCourse course, PhysicsEngine euler){
+    public PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
         this.course=course;
-        this.physicsEngine =euler;
+        this.physicsEngine =solver;
     }
-    public PuttingSimulator(PuttingCourse course, PhysicsEngine euler,  OptionMenu menu){
+    public PuttingSimulator(PuttingCourse course, PhysicsEngine solver,  OptionMenu menu){
         this.course=course;
-        this.physicsEngine =euler;
+        this.physicsEngine =solver;
 
         this.menu=menu;
 
@@ -274,8 +274,6 @@ public class PuttingSimulator extends Game implements Screen{
         stage.addActor(textFieldAngle);
         stage.addActor(shotLabelSpeed);
         stage.addActor(shotLabelAngle);
-        
-        physicsEngine.setGoalPosition(course.get_flag_position());
     }
 
     @Override
@@ -318,8 +316,7 @@ public class PuttingSimulator extends Game implements Screen{
                     }
                 });
             }else{
-                ai.setStartPos(ballPosition);
-                Vector2d shot = ai.search2();
+                Vector2d shot = ai.search();
                 take_shot(shot);
             }
         }
@@ -451,20 +448,6 @@ public class PuttingSimulator extends Game implements Screen{
     @Override
     public void hide() {
 
-    }
-    
-    public void setOption(OptionMenu option) {
-    	this.menu = option;
-    }
-    
-    public void setCourse(OptionMenu menu) {
-    	//this.course.set_Func2d(shape);
-    	physicsEngine = new RKSolver(menu.course);
-    	physicsEngine.setMu(menu.mu);
-    	physicsEngine.setVMax(menu.vMax);
-    	course.set_flag_positon(menu.finish);
-    	course.set_start_position(menu.start);
-    	course.set_hole_tolerance((double)menu.goalRadius);
     }
     
     public void play(float speed, float angle){

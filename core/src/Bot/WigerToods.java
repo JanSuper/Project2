@@ -1,13 +1,12 @@
 package Bot;
 
 import Model.*;
-//mynamejeff
+import com.mygdx.game.PuttingCourse;
 
 public class WigerToods {
+
     private static WigerToods ai=null;
-    Vector2d startPos;
-    static Solver solver = new RKSolver(" sin (x) + y ^ 2");
-    double tol = 0.02;
+    static Solver solver = new RKSolver();
 
     /**
      * Before using AI, be sure to set the current solver
@@ -19,82 +18,34 @@ public class WigerToods {
     }
 
     /**
-     * mutator method to change the tolerance
-     * @param t
-     */
-    public void setTol(double t){
-        tol =t;
-    }
-
-    /**
-     * Before using solver be sure to set the start position
-     * @param pos
-     */
-    public void setStartPos(Vector2d pos){
-        startPos=pos;
-    }
-
-    public Vector2d search(){
-        Vector2d testFin = startPos.clone();
-        Vector2d testVelocity = solver.getGoalPosition().subtract(startPos);
-        testFin = solver.takeShot(startPos, testVelocity);
-
-        while((testFin.getX()<solver.getGoalPosition().getX()+tol)||(testFin.getX()>solver.getGoalPosition().getX()-tol)||
-                (testFin.getY()<solver.getGoalPosition().getY()+tol)||(testFin.getY()>solver.getGoalPosition().getY()-tol))
-        {//difference within a tolerance from the goalPosition
-            testVelocity = calibrateVel(testVelocity, testFin);
-            testFin= solver.takeShot(startPos, testVelocity);
-        }
-        return testFin;
-    }
-    public Vector2d calibrateVel(Vector2d prevVel, Vector2d prevFin){
-        // newVel= prevVel+(prevVel*((goal-prevFin)/abs(goal-startPos)))
-
-
-        return   prevVel.add(prevVel.multiplyBy ((solver.getGoalPosition().subtract(prevFin) ).divideBy(  (  solver.getGoalPosition().absDifference(startPos) )  )  )) ;//need to make vector multiply and add methods
-    }
-
-    /**
      * Search method return the Vector2d of shot to make a hole in one
      * @return Vector2d vector of shot(x and y strength)
      */
-    public Vector2d search2(){
+    public Vector2d search(){
         boolean recalibrateY=true;
         boolean recalibrateX=true;
-        double scaler = 0.9;
-        Vector2d testFin = startPos.clone();
-        Vector2d testVelocity = (solver.getGoalPosition().subtract(startPos)).multiplyBy(new Vector2d(.5,.5));
-        Vector2d distanceToFlag = startPos.absDifference(solver.getGoalPosition());
+        double scalar = 0.9;
+        Vector2d testFin;
+        Vector2d testVelocity = (PuttingCourse.getInstance().get_flag_position().subtract(PuttingCourse.getInstance().get_start_position())).multiplyBy(new Vector2d(.5,.5));
+        Vector2d distanceToFlag = PuttingCourse.getInstance().get_start_position().absDifference(PuttingCourse.getInstance().get_flag_position());
         while(recalibrateX||recalibrateY){
-            testFin = solver.takeShot(startPos, testVelocity);
-            Vector2d shotDistance = startPos.absDifference(testFin);
+            testFin = solver.takeShot(PuttingCourse.getInstance().get_start_position(), testVelocity);
+            Vector2d shotDistance = PuttingCourse.getInstance().get_start_position().absDifference(testFin);
 
 
-            if(Math.abs(testFin.subtract(solver.getGoalPosition()).getX())<tol){
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()){
                 recalibrateX=false;
             }else{
-                scaler = distanceToFlag.getX()/shotDistance.getX();
-                testVelocity.setX(testVelocity.getX()*Math.cbrt(scaler));
-//                if(shotDistance.getX()>distanceToFlag.getX()){//Overshoot
-//                    testVelocity.setX(testVelocity.getX()*scaler);
-//                }else{
-//                    testVelocity.setX(testVelocity.getX()/scaler);
-//                }
+                scalar = distanceToFlag.getX()/shotDistance.getX();
+                testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
             }
-            if(Math.abs(testFin.subtract(solver.getGoalPosition()).getY())<tol) {
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()) {
                 recalibrateY = false;
             }else{
-                scaler = distanceToFlag.getY()/shotDistance.getY();
-                testVelocity.setY(testVelocity.getY()*Math.cbrt(scaler));
-//                if(shotDistance.getY()>distanceToFlag.getY()){//Overshoot
-//                    testVelocity.setY(testVelocity.getY()*scaler);
-//                }else{
-//                    testVelocity.setY(testVelocity.getY()/scaler);
-//                }
+                scalar = distanceToFlag.getY()/shotDistance.getY();
+                testVelocity.setY(testVelocity.getY()*Math.cbrt(scalar));
             }
-
         }
-
         return testVelocity;
     }
 
@@ -102,7 +53,7 @@ public class WigerToods {
      * Singleton
      * @return return the AI
      */
-    public static WigerToods get(){
+    public static WigerToods getInstance(){
         if (ai==null) ai=new WigerToods();
         return ai;
     }
@@ -112,13 +63,9 @@ public class WigerToods {
      * @param arg
      */
     public static void main (String [] arg){
-        System.out.print(" wohoo " );
-
         WigerToods blah = new WigerToods();
-        blah.solver.setGoalPosition(new Vector2d((Math.PI*9.0)/2.0,0));//z should be -1 here the ball just needs to stop at the bottom of a hump
-        blah.startPos= new Vector2d(0.0,0.0);
-        Vector2d result = blah.search2();
-        System.out.print(result.getX() + " wohoo " +result.getY());
+        Vector2d result = blah.search();
+        System.out.print("finish X co-ordinate: "+ result.getX() + "\n finish Y co-ordinate: " +result.getY());
     }
 
 }

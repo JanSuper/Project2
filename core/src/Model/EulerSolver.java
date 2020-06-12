@@ -2,9 +2,6 @@ package Model;
 
 public class EulerSolver extends Solver{
 
-    public EulerSolver(String ab) {
-        super(ab);
-    }
     @Override
     public void nextStep() {
         position = nextPosition(position, velocity, solverStepSize);

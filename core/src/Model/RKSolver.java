@@ -2,13 +2,9 @@ package Model;
 
 import com.mygdx.game.FunctionMaker;
 
-import static java.lang.Math.sqrt;
 
 public class RKSolver extends Solver {
 
-    public RKSolver(String ab) {
-        super(ab);
-    }
     @Override
     public void nextStep() {
         currentPosZ = get_height(position);
