@@ -47,9 +47,7 @@ public class PuttingSimulator extends Game implements Screen{
 
 	String decimalPattern = "([0-9]*)\\.([0-9]*)";
     String naturalPattern = "([0-9]*)";
-	
-    private PuttingCourse course;
-    private PhysicsEngine physicsEngine;
+
 
     private Vector2d ballPosition;
 
@@ -86,34 +84,32 @@ public class PuttingSimulator extends Game implements Screen{
 
     private PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
         PuttingCourse.getInstance().setCourse(course);
-        this.physicsEngine =solver;
+        Main.getInstance().setSolver(solver);
     }
-    public PuttingSimulator( PhysicsEngine solver,  OptionMenu menu){
-        this.physicsEngine =solver;
-        this.menu=menu;
+    private PuttingSimulator(){
 
     }
+
     public static PuttingSimulator getInstance(){
-        if(singleton==null) singleton = new PuttingSimulator(Main.getInstance().getEngine(), Menu.getInstance());
+        if(singleton==null) singleton = new PuttingSimulator();
         return singleton;
     }
 
     public void set_ball_position(Vector2d v){
-        this.ballPosition=v;
+        Main.getInstance().getSolver().setPosition(v);
     }
 
-    //has to be Vector2d i think
-    public void get_ball_position(){
-       // return this.ballPosition;
+    public Vector2d get_ball_position(){
+        return Main.getInstance().getSolver().getPosition();
     }
 
     public void take_shot(Vector2d initial_ball_velocity){
-   /** 	physicsEngine.setVelX((float)initial_ball_velocity.getX());
-    	physicsEngine.setVelY((float)initial_ball_velocity.getY());
+   /** 	Main.getInstance(.getSolver().setVelX((float)initial_ball_velocity.getX());
+    	Main.getInstance(.getSolver().setVelY((float)initial_ball_velocity.getY());
     *///changes to
        // if(initial_ball_velocity.evaluateVector()> menu.vMax) initial_ball_velocity.scaleDown(menu.vMax);
 
-        physicsEngine.setVelocity(initial_ball_velocity);
+        Main.getInstance().getSolver().setVelocity(initial_ball_velocity);
     }
 
     @Override
@@ -183,11 +179,11 @@ public class PuttingSimulator extends Game implements Screen{
         instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
 
         flagPole = new ModelInstance(model, "flagpole");
-        flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), course.get_flag_position().getY())), (float)course.get_flag_position().getY());
+        flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())), (float)PuttingCourse.getInstance().get_flag_position().getY());
         instances.add(flagPole);
         
         flag = new ModelInstance(model, "flag");
-        flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), course.get_flag_position().getY())) + 4.5f, (float)course.get_flag_position().getY()- .5f);
+        flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())) + 4.5f, (float)PuttingCourse.getInstance().get_flag_position().getY()- .5f);
         instances.add(flag);
         
         // give the object a collision shape if you want it to have collision
@@ -211,11 +207,11 @@ public class PuttingSimulator extends Game implements Screen{
 //        collisionConfig = new btDefaultCollisionConfiguration();
 //        dispatcher = new btCollisionDispatcher(collisionConfig);
 
-/**        physicsEngine.setPosX((float)ballPosition.getX());
-        physicsEngine.setPosY((float)ballPosition.getY());
-        physicsEngine.setPosZ(physicsEngine.get_height((float)ballPosition.getX(), (float)ballPosition.getY()) + 1f);
+/**        Main.getInstance(.getSolver().setPosX((float)ballPosition.getX());
+        Main.getInstance(.getSolver().setPosY((float)ballPosition.getY());
+        Main.getInstance(.getSolver().setPosZ(Main.getInstance(.getSolver().get_height((float)ballPosition.getX(), (float)ballPosition.getY()) + 1f);
 *///changing these lines to make use of RKM
-        physicsEngine.setPosition(ballPosition);
+        Main.getInstance().getSolver().setPosition(ballPosition);
 
         take_shot(calcInit());
         //System.out.println(course.get_flag_position().getX() + " " + course.get_flag_position().getY());
@@ -277,7 +273,7 @@ public class PuttingSimulator extends Game implements Screen{
     public void render (float delta) {
 
         //TODO: add game over
-        if ( physicsEngine.finish()) {
+        if ( Main.getInstance().getSolver().finish()) {
            
         	Menu holdMenu = new Menu(Main.getInstance());
         	holdMenu.newLVL = true;
@@ -318,18 +314,18 @@ public class PuttingSimulator extends Game implements Screen{
             }
         }
         else {
-        	physicsEngine.nextStep();
-        	physicsEngine.setPosZ(physicsEngine.get_height(physicsEngine.getPosition().getX(), physicsEngine.getPosition().getY()));
+        	Main.getInstance().getSolver().nextStep();
+        	Main.getInstance().getSolver().setPosZ(Main.getInstance().getSolver().get_height(Main.getInstance().getSolver().getPosition().getX(), Main.getInstance().getSolver().getPosition().getY()));
 
-   /**     	this.ballPosition.setX(physicsEngine.getPosX());
-        	this.ballPosition.setY(physicsEngine.getPosY());
+   /**     	this.ballPosition.setX(Main.getInstance(.getSolver().getPosX());
+        	this.ballPosition.setY(Main.getInstance(.getSolver().getPosY());
      */  // changes to..
-            this.ballPosition= physicsEngine.getPosition();
+            this.ballPosition= Main.getInstance().getSolver().getPosition();
 
-            ball.transform.setToTranslation((float)ballPosition.getX(), (float) physicsEngine.getPosZ()+.5f,(float) ballPosition.getY());
+            ball.transform.setToTranslation((float)ballPosition.getX(), (float) Main.getInstance().getSolver().getPosZ()+.5f,(float) ballPosition.getY());
             ballObject.setWorldTransform(ball.transform);
 
-            cam.position.set((float) ballPosition.getX() - 5f, (float)Math.max(5f, physicsEngine.getPosZ()+3f),(float) ballPosition.getY());
+            cam.position.set((float) ballPosition.getX() - 5f, (float)Math.max(5f, Main.getInstance().getSolver().getPosZ()+3f),(float) ballPosition.getY());
             cam.update();
             camController.update();
 
@@ -341,7 +337,7 @@ public class PuttingSimulator extends Game implements Screen{
             for(ModelInstance instance : instances)  modelBatch.render(instance, environment);
             modelBatch.end();
             
-            if (Math.abs(physicsEngine.getVelocity().getX()) <= 0.2f &&  Math.abs(physicsEngine.getVelocity().getY()) <= 0.2f) {
+              if (Math.abs(Main.getInstance().getSolver().getVelocity().getX()) <= 0.2f &&  Math.abs(Main.getInstance().getSolver().getVelocity().getY()) <= 0.2f) {
             	count++;
             }
             else {
@@ -459,16 +455,8 @@ public class PuttingSimulator extends Game implements Screen{
     	double holdxv = (speed*(Math.cos(angle/180*Math.PI)));
     	double holdyv = (speed*(Math.sin(angle/180*Math.PI)));
     	Vector2d shot = new Vector2d(holdxv, holdyv);
-        this.physicsEngine.setVelocity(shot);
+        Main.getInstance().getSolver().setVelocity(shot);
         take_shot(shot);
-        physicsEngine.nextStep();
-    }
-
-    public PhysicsEngine getSolver() {
-        return physicsEngine;
-    }
-
-    public void setSolver(PhysicsEngine physicsEngine) {
-        this.physicsEngine = physicsEngine;
+        Main.getInstance().getSolver().nextStep();
     }
 }

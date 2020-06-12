@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class OptionMenu implements Screen {
+    private static OptionMenu singleton=null;
+
     String decimalPattern = "([0-9]*)\\.([0-9]*)";
     String naturalPattern = "([0-9]*)";
 
@@ -61,15 +63,14 @@ public class OptionMenu implements Screen {
     TextButton aiButton;
     
     public String course;
-    public float mu;
-    public float vMax;
-    public float goalRadius;
-    public Vector2d start;
-    public Vector2d finish;
-    
     public int count;
 
-    public OptionMenu(){
+    public static OptionMenu getInstance(){
+        if(singleton==null) singleton = new OptionMenu();
+        return  singleton;
+    }
+
+    private OptionMenu(){
 
         //TODO i dont think we need to do this here anymore #refactor
         PuttingSimulator.getInstance().create();
@@ -213,7 +214,7 @@ public class OptionMenu implements Screen {
     }
 
     public void aiShot(){
-        WigerToods.getInstance().setSolver((Solver)Main.getInstance().getEngine());
+        WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
 
         PuttingSimulator.getInstance().create();
         PuttingSimulator.getInstance().setOption(this);
@@ -273,19 +274,18 @@ public class OptionMenu implements Screen {
     
     	String[] holdarray = new String[14];
     	holdarray = path.split(" ");
-    	mu = Float.parseFloat(holdarray[7]);
-    	vMax = Float.parseFloat(holdarray[8]);
-    	start = new Vector2d(Float.parseFloat(holdarray[9]), Float.parseFloat(holdarray[10]));
-    	finish = new Vector2d(Float.parseFloat(holdarray[11]), Float.parseFloat(holdarray[12]));
-    	goalRadius = Float.parseFloat(holdarray[13]);
+    	PuttingCourse.getInstance().set_friction_coefficient(Float.parseFloat(holdarray[7]));
+    	PuttingCourse.getInstance().setMaxVel(Float.parseFloat(holdarray[8]));
+    	PuttingCourse.getInstance().set_start_position(new Vector2d(Float.parseFloat(holdarray[9]), Float.parseFloat(holdarray[10])));
+    	PuttingCourse.getInstance().set_flag_position(new Vector2d(Float.parseFloat(holdarray[11]), Float.parseFloat(holdarray[12])));
+    	PuttingCourse.getInstance().set_hole_tolerance(Float.parseFloat(holdarray[13]));
     	
     	path = holdarray[0];
     	for (int i = 1; i <= 6; i++) {
     		path += " ";
     		path += holdarray[i];
     	}
-    	
-    	course = path;
+
     	Menu menu = new Menu(Main.getInstance());
         menu.setOptionMenu(this);
         menu.newLVL = true;

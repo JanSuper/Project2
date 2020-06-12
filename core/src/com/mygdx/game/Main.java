@@ -8,10 +8,6 @@ public class Main extends Game {
 
     private static Main singleton;
     private PhysicsEngine solver = new RKSolver();
-
-	//Adding the function2d??
-    //OK we don't need this instance variable but we still need to set the function
-    private Function2d height ;
 	
     public SpriteBatch batch;
 
@@ -20,15 +16,10 @@ public class Main extends Game {
     
     public int count = 0;
 
-
-
     @Override
     public void create() {
         batch = new SpriteBatch();
-        solver = new RKSolver();
-        Vector2d start = new Vector2d(0,0);
-        Vector2d flag =  new Vector2d((Math.PI*9.0)/2.0,0);
-        this.setScreen(new OptionMenu(this));
+        this.setScreen(OptionMenu.getInstance());
     }
 
     @Override
@@ -36,10 +27,10 @@ public class Main extends Game {
         super.render();
     }
 
-    public void setEngine(PhysicsEngine engine){
+    public void setSolver(PhysicsEngine engine){
         this.solver = engine;
     }
-    public PhysicsEngine getEngine(){
+    public PhysicsEngine getSolver(){
         return this.solver;
     }
 

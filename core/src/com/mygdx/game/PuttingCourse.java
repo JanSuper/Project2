@@ -146,7 +146,10 @@ public class PuttingCourse{
         }
         return new Vector2d[]{new Vector2d(minX,minY), new Vector2d(maxX,maxY)};
     }
-
+    //TODO recreate the course?
+    public void set_flag_position(Vector2d vector2d) {
+        this.flag = vector2d;
+    }
 
     /**
      * accessor
@@ -187,6 +190,9 @@ public class PuttingCourse{
     public double get_friction_coefficient(){
         return this.friction;
     }
+    public void set_friction_coefficient(float parseFloat) {
+        this.friction=parseFloat;
+    }
 
     /**
      * accessor
@@ -219,7 +225,11 @@ public class PuttingCourse{
     public Function2d get_height(){
         return this.height;
     }
-    
+
+
+    public void setMaxVel(float parseFloat) {
+        this.maximumVelocity = parseFloat;
+    }
 
     /**
      * Deprecated code used to change Meshes into Model and therefor Model Instances
@@ -262,4 +272,6 @@ public class PuttingCourse{
         result.manageDisposable(mesh);
         return result;
     }
+
+
 }
