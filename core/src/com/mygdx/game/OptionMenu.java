@@ -206,7 +206,7 @@ public class OptionMenu implements Screen {
                 && Gdx.input.getY()>Main.HEIGHT-(EXIT_HEIGHT+BUTTON_HEIGHT) && Gdx.input.getY()<Main.HEIGHT-EXIT_HEIGHT) {
             Main.getInstance().batch.draw(exitButtonInactive, Main.WIDTH - BUTTON_WIDTH -10 , EXIT_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
             if(Gdx.input.isTouched()) {
-                Main.getInstance().setScreen(new Menu(Main.getInstance()));
+                Main.getInstance().setScreen(Menu.getInstance());
             }
         }else
             Main.getInstance().batch.draw(exitButtonActive,Main.WIDTH-BUTTON_WIDTH-10,EXIT_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -286,13 +286,12 @@ public class OptionMenu implements Screen {
     		path += holdarray[i];
     	}
 
-    	Menu menu = new Menu(Main.getInstance());
-        menu.setOptionMenu(this);
-        menu.newLVL = true;
+        Menu.getInstance().setOptionMenu(this);
+        Menu.getInstance().newLVL = true;
         WigerToods.getInstance().setSolver(new RKSolver());
         PuttingSimulator.getInstance().setOption(this);
-        menu.puttingSImulator.create();
-        Main.getInstance().setScreen(menu);
+        PuttingSimulator.getInstance().create();
+        Main.getInstance().setScreen(Menu.getInstance());
 
     }
 
@@ -314,9 +313,8 @@ public class OptionMenu implements Screen {
             
             fr.close();
             Main.getInstance().count++;
-            Menu hold = new Menu(Main.getInstance());
-            hold.setOptionMenu(this);
-            Main.getInstance().setScreen(hold);
+            Menu.getInstance().setOptionMenu(this);
+            Main.getInstance().setScreen(Menu.getInstance());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch(IOException e){

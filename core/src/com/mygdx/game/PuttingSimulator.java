@@ -82,7 +82,7 @@ public class PuttingSimulator extends Game implements Screen{
     boolean shot = false;
 
 
-    private PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
+    public PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
         PuttingCourse.getInstance().setCourse(course);
         Main.getInstance().setSolver(solver);
     }
@@ -91,7 +91,7 @@ public class PuttingSimulator extends Game implements Screen{
     }
 
     public static PuttingSimulator getInstance(){
-        if(singleton==null) singleton = new PuttingSimulator();
+        if(singleton==null) singleton = new PuttingSimulator(PuttingCourse.getInstance(), Main.getInstance().getSolver());
         return singleton;
     }
 
@@ -275,9 +275,9 @@ public class PuttingSimulator extends Game implements Screen{
         //TODO: add game over
         if ( Main.getInstance().getSolver().finish()) {
            
-        	Menu holdMenu = new Menu(Main.getInstance());
-        	holdMenu.newLVL = true;
-            Main.getInstance().setScreen(holdMenu);
+//        	Menu holdMenu = new Menu(Main.getInstance());
+//        	holdMenu.newLVL = true;
+            Main.getInstance().setScreen(Menu.getInstance());
         }
         else if (shot) {
         	stage.act(delta);

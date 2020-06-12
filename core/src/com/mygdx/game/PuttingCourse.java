@@ -27,7 +27,8 @@ public class PuttingCourse{
 
     public static PuttingCourse getInstance(){
         if(singleton==null){
-            return new PuttingCourse();
+            singleton = new PuttingCourse();
+            singleton.setFunction(new FunctionMaker(FunctionMaker.getFunction()));
         }
         return singleton;
     }
@@ -41,6 +42,10 @@ public class PuttingCourse{
     public void setCourse(PuttingCourse course) {
         this.singleton = course;
 
+    }
+
+    public void setFunction(Function2d height) {
+        this.height = height;
     }
 
     /**

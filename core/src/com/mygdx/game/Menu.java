@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.*;
 
 public class Menu implements Screen {
 
-
+    private static Menu singleton = null;
     private final int BUTTON_WIDTH = 300;
     private final int BUTTON_HEIGHT = 100;
 
@@ -35,11 +35,16 @@ public class Menu implements Screen {
     
     public int count;
 
-    public Menu(Main main){
-        this.main = main;
-        menu = new OptionMenu(main);
-        puttingSImulator = new PuttingSimulator( main.getSolver(), menu);
-        puttingSImulator.create();
+    public static Menu getInstance(){
+        if(singleton == null) singleton = new Menu();
+        return singleton;
+    }
+
+    public Menu(){
+//        this.main = main;
+//        menu = new OptionMenu(main);
+//        puttingSImulator = new PuttingSimulator( main.getSolver(), OptionMenu.getInstance());
+        PuttingSimulator.getInstance().create();
         
         newLVL = false;
         //TODO:Golf becomes PuttingSimulator
@@ -91,7 +96,7 @@ public class Menu implements Screen {
             main.batch.draw(optionButtonInactive, Main.WIDTH / 2 - BUTTON_WIDTH / 2, OPTION_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
             if(Gdx.input.isTouched()) {
                 this.dispose();
-                main.setScreen(new OptionMenu(main));
+                main.setScreen(OptionMenu.getInstance());
                 //TODO options
             }
         }else

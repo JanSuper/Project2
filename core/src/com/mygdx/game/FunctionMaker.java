@@ -15,7 +15,8 @@ import java.util.regex.Pattern;
  */
 
 public class FunctionMaker implements Function2d {
-    private String function = " sin (x) + y ^ 2";
+    private String function;
+    private static String basicfunction = " sin (x) + y ^ 2";
 
 
     private  ArrayList<String> arguments; // translation into seperate arguments
@@ -81,7 +82,7 @@ public class FunctionMaker implements Function2d {
      * CONSTRUCTOR
      * @param function : String to translate into a function
      */
-    private FunctionMaker(String function){
+    public FunctionMaker(String function){
         if(map == null) new FunctionMaker();
         this.function = function.toLowerCase().replace(" ","");
         transfer();
@@ -408,8 +409,8 @@ public class FunctionMaker implements Function2d {
         }return -1;
     }
 
-    public String getFunction() {
-        return function;
+    public static String getFunction() {
+        return basicfunction;
     }
 
     public void setFunction(String function) {
