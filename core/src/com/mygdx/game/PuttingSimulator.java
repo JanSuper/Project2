@@ -427,8 +427,8 @@ public class PuttingSimulator extends Game implements Screen{
      */
     public Vector2d calcInit() {
             //max velocity
-        if (OptionMenu.getInstance().velocity>Solver.vmax){
-            OptionMenu.getInstance().velocity=(float)Solver.vmax;
+        if (OptionMenu.getInstance().velocity>PuttingCourse.getInstance().get_maximum_velocity()){
+            OptionMenu.getInstance().velocity=(float)PuttingCourse.getInstance().get_maximum_velocity();
         }
     	return new Vector2d(Math.cos(OptionMenu.getInstance().angle/360*2*Math.PI)*OptionMenu.getInstance().velocity, Math.sin(OptionMenu.getInstance().angle/360*2*Math.PI)*OptionMenu.getInstance().velocity);
 
@@ -448,8 +448,8 @@ public class PuttingSimulator extends Game implements Screen{
     	if (speed == 0) {
     		speed = 0.00001f;
     	}
-        if (speed>(float) Solver.vmax){
-            speed=(float)Solver.vmax;
+        if (speed>(float) PuttingCourse.getInstance().get_maximum_velocity()){
+            speed=(float) PuttingCourse.getInstance().get_maximum_velocity();
         }
     	double holdxv = (speed*(Math.cos(angle/180*Math.PI)));
     	double holdyv = (speed*(Math.sin(angle/180*Math.PI)));

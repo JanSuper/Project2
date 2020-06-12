@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 
-
 public class Menu implements Screen {
 
     private static  Menu singleton = null;

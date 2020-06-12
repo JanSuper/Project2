@@ -33,7 +33,7 @@ public class OptionMenu implements Screen {
     private final int BUTTON_HEIGHT = 100;
     private final int EXIT_HEIGHT = 75;
 
-    public float velocity =10;
+    public float velocity = 10;
     public float angle = 15;
 
     Texture exitButtonActive;
@@ -235,8 +235,8 @@ public class OptionMenu implements Screen {
 
     	
         this.velocity=speed;
-        if (this.velocity>(float) Solver.vmax){
-            this.velocity=(float)Solver.vmax;
+        if (this.velocity>(float) PuttingCourse.getInstance().get_maximum_velocity()){
+            this.velocity=(float) PuttingCourse.getInstance().get_maximum_velocity();
         }
         this.angle=angle;
 //        Menu hold = new Menu(Main.getInstance());

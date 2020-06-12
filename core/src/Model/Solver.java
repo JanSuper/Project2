@@ -1,8 +1,6 @@
 package Model;
 
-import com.mygdx.game.FunctionMaker;
 import com.mygdx.game.PuttingCourse;
-
 import java.util.LinkedList;
 import static java.lang.Math.sqrt;
 
@@ -27,10 +25,6 @@ public abstract class Solver implements PhysicsEngine{
     protected Vector2d velocity;
     protected Vector2d acceleration;
     protected double g = 9.81;
-    protected double m = 45.93;
-    protected double mu = 0.3;
-    public static double vmax= 15.0;
-
 
     /**
      * This is what the different solvers need to implement
@@ -58,8 +52,8 @@ public abstract class Solver implements PhysicsEngine{
         double velY = velocity.getY();
         double velX = velocity.getX();
         double sqrtSpeeds = sqrt((velX * velX) + (velY * velY));
-        return new Vector2d( (-1)*(g*slopes.getX()) - (mu*g*(velX/ sqrtSpeeds)),
-                (-1)*(g*slopes.getY()) - (mu*g*(velY/ sqrtSpeeds)));
+        return new Vector2d( (-1)*(g*slopes.getX()) - (PuttingCourse.getInstance().get_friction_coefficient()*g*(velX/ sqrtSpeeds)),
+                (-1)*(g*slopes.getY()) - (PuttingCourse.getInstance().get_friction_coefficient()*g*(velY/ sqrtSpeeds)));
     }
     @Override
     public void setPosZ(double d) { //do we need this method?
@@ -69,16 +63,6 @@ public abstract class Solver implements PhysicsEngine{
     @Override
     public void setPosition(Vector2d v){
         this.position = v;
-    }
-
-    @Override
-    public void setMu(double mu) {
-        this.mu=mu;
-    }
-
-    @Override
-    public void setVMax(double vMax) {
-        vmax=vMax;
     }
 
     @Override

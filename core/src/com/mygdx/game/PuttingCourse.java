@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 public class PuttingCourse{
 
     private static PuttingCourse singleton = null;
+
     private Vector2d flag = new Vector2d(10,0);
     private Vector2d start = new Vector2d( 0,0);
     private double friction = 0.3;
