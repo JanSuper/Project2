@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Main extends Game {
 
     private static Main singleton;
-    private PhysicsEngine solver;
+    private PhysicsEngine solver = new RKSolver();
 
 	//Adding the function2d??
     //OK we don't need this instance variable but we still need to set the function

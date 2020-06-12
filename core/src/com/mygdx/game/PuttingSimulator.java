@@ -94,7 +94,7 @@ public class PuttingSimulator extends Game implements Screen{
 
     }
     public static PuttingSimulator getInstance(){
-       // if(singleton==null) singleton = new PuttingSimulator(Main.getInstance().getEngine(), Menu.getInstance());
+        if(singleton==null) singleton = new PuttingSimulator(Main.getInstance().getEngine(), Menu.getInstance());
         return singleton;
     }
 

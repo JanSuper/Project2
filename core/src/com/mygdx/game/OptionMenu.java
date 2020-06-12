@@ -23,15 +23,11 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class OptionMenu implements Screen {
-	
-	public PuttingSimulator puttingSimulator;
-
     String decimalPattern = "([0-9]*)\\.([0-9]*)";
     String naturalPattern = "([0-9]*)";
 
     private final int BUTTON_WIDTH = 300;
     private final int BUTTON_HEIGHT = 100;
-
     private final int EXIT_HEIGHT = 75;
 
     public float velocity =10;
@@ -40,7 +36,6 @@ public class OptionMenu implements Screen {
     Texture exitButtonActive;
     Texture exitButtonInactive;
 
-    private Main main;
     private Stage stage;
 
     TextField textFieldSpeed;
@@ -74,39 +69,38 @@ public class OptionMenu implements Screen {
     
     public int count;
 
-    public OptionMenu(Main main){
-        this.main = main;
-        
-        puttingSimulator = new PuttingSimulator( main.getEngine(),  this);
-        puttingSimulator.create();
+    public OptionMenu(){
+
+        //TODO i dont think we need to do this here anymore #refactor
+        PuttingSimulator.getInstance().create();
         
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         
         mode2 = new Label("enter file here for mode 2", skin);
-        mode2.setPosition(150, main.HEIGHT-540);
+        mode2.setPosition(150, Main.getInstance().HEIGHT-540);
 
         aiLabel=new Label("Wiger Toods:", skin);
-        aiLabel.setPosition(150, main.HEIGHT-300);
+        aiLabel.setPosition(150, Main.getInstance().HEIGHT-300);
 
         shotLabelSpeed= new Label("Speed:", skin);
         shotLabelAngle = new Label("Angle:", skin);
 
         shotLabelSpeed.setSize(100, 60);
-        shotLabelSpeed.setPosition(50,main.HEIGHT-100);
+        shotLabelSpeed.setPosition(50,Main.getInstance().HEIGHT-100);
         shotLabelAngle.setSize(100, 60);
-        shotLabelAngle.setPosition(50,main.HEIGHT-170);
+        shotLabelAngle.setPosition(50,Main.getInstance().HEIGHT-170);
 
         textFieldSpeed = new TextField("", skin);
-        textFieldSpeed.setPosition(150, main.HEIGHT-100);
+        textFieldSpeed.setPosition(150, Main.getInstance().HEIGHT-100);
         textFieldSpeed.setSize(300,60);
         textFieldAngle = new TextField("", skin);
-        textFieldAngle.setPosition(150, main.HEIGHT-170);
+        textFieldAngle.setPosition(150, Main.getInstance().HEIGHT-170);
         textFieldAngle.setSize(300,60);
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         buttonShot = new TextButton("Take a shot!",skin);
-        buttonShot.setPosition(470,main.HEIGHT-170);
+        buttonShot.setPosition(470,Main.getInstance().HEIGHT-170);
         buttonShot.setSize(100,30);
         buttonShot.addListener(new ClickListener(){
             @Override
@@ -124,7 +118,7 @@ public class OptionMenu implements Screen {
         });
 
         aiButton = new TextButton("Play", skin);
-        aiButton.setPosition(350, main.HEIGHT-300);
+        aiButton.setPosition(350, Main.getInstance().HEIGHT-300);
         aiButton.setSize(100,30);
         aiButton.addListener(new ClickListener(){
             @Override
@@ -136,14 +130,14 @@ public class OptionMenu implements Screen {
         loadMap=new Label("Load a Map:",skin);
         loadSpeed = new Label("Load speeds:", skin);
 
-        loadMap.setPosition(50, main.HEIGHT-430);
-        loadSpeed.setPosition(50, main.HEIGHT-500);
+        loadMap.setPosition(50, Main.getInstance().HEIGHT-430);
+        loadSpeed.setPosition(50, Main.getInstance().HEIGHT-500);
 
         loadMapTF = new TextField("", skin);
         loadSpeedTF = new TextField("", skin);
 
-        loadMapTF.setPosition(150, main.HEIGHT-430);
-        loadSpeedTF.setPosition(150, main.HEIGHT-500);
+        loadMapTF.setPosition(150, Main.getInstance().HEIGHT-430);
+        loadSpeedTF.setPosition(150, Main.getInstance().HEIGHT-500);
 
         loadMapTF.setSize(300, 60);
         loadSpeedTF.setSize(300, 60);
@@ -151,7 +145,7 @@ public class OptionMenu implements Screen {
         loadMapB=new TextButton("Load", skin);
         loadSpeedB = new TextButton("Load", skin);
 
-        loadMapB.setPosition(470,main.HEIGHT-415);
+        loadMapB.setPosition(470,Main.getInstance().HEIGHT-415);
         loadMapB.setSize(100,30);
         loadMapB.addListener(new ClickListener(){
             @Override
@@ -160,7 +154,7 @@ public class OptionMenu implements Screen {
             }
         });
 
-        loadSpeedB.setPosition(470,main.HEIGHT-485);
+        loadSpeedB.setPosition(470,Main.getInstance().HEIGHT-485);
         loadSpeedB.setSize(100,30);
         loadSpeedB.addListener(new ClickListener(){
             @Override
@@ -206,28 +200,28 @@ public class OptionMenu implements Screen {
         stage.act(delta);
         stage.draw();
 
-        main.batch.begin();
+        Main.getInstance().batch.begin();
         if(Gdx.input.getX()<Main.WIDTH-BUTTON_WIDTH-10+BUTTON_WIDTH && Gdx.input.getX() > Main.WIDTH-BUTTON_WIDTH-10
                 && Gdx.input.getY()>Main.HEIGHT-(EXIT_HEIGHT+BUTTON_HEIGHT) && Gdx.input.getY()<Main.HEIGHT-EXIT_HEIGHT) {
-            main.batch.draw(exitButtonInactive, Main.WIDTH - BUTTON_WIDTH -10 , EXIT_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+            Main.getInstance().batch.draw(exitButtonInactive, Main.WIDTH - BUTTON_WIDTH -10 , EXIT_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
             if(Gdx.input.isTouched()) {
-                main.setScreen(new Menu(main));
+                Main.getInstance().setScreen(new Menu(Main.getInstance()));
             }
         }else
-            main.batch.draw(exitButtonActive,Main.WIDTH-BUTTON_WIDTH-10,EXIT_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
-        main.batch.end();
+            Main.getInstance().batch.draw(exitButtonActive,Main.WIDTH-BUTTON_WIDTH-10,EXIT_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Main.getInstance().batch.end();
     }
 
     public void aiShot(){
-        WigerToods.getInstance().setSolver((Solver)main.getEngine());
+        WigerToods.getInstance().setSolver((Solver)Main.getInstance().getEngine());
 
-        puttingSimulator.create();
-        puttingSimulator.setOption(this);
-        puttingSimulator.setAi(WigerToods.getInstance());
+        PuttingSimulator.getInstance().create();
+        PuttingSimulator.getInstance().setOption(this);
+        PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
         Vector2d shot = WigerToods.getInstance().search();
 //        play((float)shot.getX(), (float)shot.getY());
-        puttingSimulator.take_shot(shot);
-        main.setScreen(puttingSimulator);
+        PuttingSimulator.getInstance().take_shot(shot);
+        Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
 
     /**
@@ -248,13 +242,13 @@ public class OptionMenu implements Screen {
             this.velocity=(float)Solver.vmax;
         }
         this.angle=angle;
-//        Menu hold = new Menu(main);
+//        Menu hold = new Menu(Main.getInstance());
 //        hold.setOptionMenu(this);
-//        main.setScreen(hold);
-        puttingSimulator.create();
-        puttingSimulator.setOption(this);
-        puttingSimulator.take_shot(puttingSimulator.calcInit());
-        main.setScreen(puttingSimulator);
+//        Main.getInstance().setScreen(hold);
+        PuttingSimulator.getInstance().create();
+        PuttingSimulator.getInstance().setOption(this);
+        PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
+        Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
 
     public void loadMap(String path){
@@ -296,14 +290,14 @@ public class OptionMenu implements Screen {
         menu.setOptionMenu(this);
         menu.newLVL = true;
         WigerToods.getInstance().setSolver(new RKSolver());
-        PuttingSimulator.getInstance().setCourse(this);
+        PuttingSimulator.getInstance().setOption(this);
         menu.puttingSImulator.create();
-        main.setScreen(menu);
+        Main.getInstance().setScreen(menu);
 
     }
 
     public void loadSpeed(String path){
-    	count = main.count;
+    	count = Main.getInstance().count;
         try{
             FileReader fr = new FileReader("C:\\Users\\Jan Super\\git\\Project2\\core\\assets/" + path);
             BufferedReader br = new BufferedReader(fr);
@@ -319,10 +313,10 @@ public class OptionMenu implements Screen {
             
             
             fr.close();
-            main.count++;
-            Menu hold = new Menu(main);
+            Main.getInstance().count++;
+            Menu hold = new Menu(Main.getInstance());
             hold.setOptionMenu(this);
-            main.setScreen(hold);
+            Main.getInstance().setScreen(hold);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch(IOException e){

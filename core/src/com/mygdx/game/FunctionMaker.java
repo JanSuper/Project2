@@ -15,11 +15,10 @@ import java.util.regex.Pattern;
  */
 
 public class FunctionMaker implements Function2d {
-    private Function2d apiFunction = null;
-    private static FunctionMaker singleton = null;
+    private static Function2d singleton = null;
     private static String function = " sin (x) + y ^ 2";
 
-    public static FunctionMaker getInstance(){
+    public static Function2d getInstance(){
         if(singleton == null){
             singleton = new FunctionMaker(function);
         }
@@ -106,7 +105,7 @@ public class FunctionMaker implements Function2d {
     /**
      * transfer the string into arguments and keep in memory the type
      */
-    private void transfer(){
+    private  void transfer(){
         arguments = new ArrayList<>();
         type = new ArrayList<>();
         int counter = 0;
@@ -420,8 +419,9 @@ public class FunctionMaker implements Function2d {
         return function;
     }
 
-    public static void setFunction(String function) {
-        FunctionMaker.singleton.function = function.toLowerCase().replace(" ","");
+    public void setFunction(String function) {
+
+        this.function = function.toLowerCase().replace(" ","");
         FunctionMaker.singleton.transfer();
         //TODO we will have to re-render the course here also
         PuttingSimulator.getInstance().create();
