@@ -438,7 +438,9 @@ public class PuttingSimulator extends Game implements Screen{
     	return new Vector2d(Math.cos(menu.angle/360*2*Math.PI)*menu.velocity, Math.sin(menu.angle/360*2*Math.PI)*menu.velocity);
 
     }
-
+    public void setOption(OptionMenu option) {
+        this.menu = option;
+    }
     @Override
     public void show() {
 
