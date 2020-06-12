@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.*;
 
 public class Menu implements Screen {
 
-    private static Menu singleton = null;
+    private static  Menu singleton = null;
     private final int BUTTON_WIDTH = 300;
     private final int BUTTON_HEIGHT = 100;
 
@@ -83,8 +83,7 @@ public class Menu implements Screen {
                 if (newLVL) {
                 	puttingSImulator.create();
                 }
-                
-                puttingSImulator.setOption(menu);
+
                 puttingSImulator.take_shot(puttingSImulator.calcInit());
                 main.setScreen(puttingSImulator);
                 

@@ -64,8 +64,6 @@ public class PuttingSimulator extends Game implements Screen{
     ModelInstance flagPole;
     ModelInstance flag;
 
-    OptionMenu menu;
-
     btCollisionShape groundShape;
     btCollisionShape ballShape;
     btCollisionShape wallShape;
@@ -81,7 +79,11 @@ public class PuttingSimulator extends Game implements Screen{
     int count;
     boolean shot = false;
 
-
+    /**
+     * API Required
+     * @param course
+     * @param solver
+     */
     public PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
         PuttingCourse.getInstance().setCourse(course);
         Main.getInstance().setSolver(solver);
@@ -91,7 +93,7 @@ public class PuttingSimulator extends Game implements Screen{
     }
 
     public static PuttingSimulator getInstance(){
-        if(singleton==null) singleton = new PuttingSimulator(PuttingCourse.getInstance(), Main.getInstance().getSolver());
+        if(singleton==null) singleton = new PuttingSimulator();
         return singleton;
     }
 
@@ -425,14 +427,11 @@ public class PuttingSimulator extends Game implements Screen{
      */
     public Vector2d calcInit() {
             //max velocity
-        if (menu.velocity>Solver.vmax){
-            menu.velocity=(float)Solver.vmax;
+        if (OptionMenu.getInstance().velocity>Solver.vmax){
+            OptionMenu.getInstance().velocity=(float)Solver.vmax;
         }
-    	return new Vector2d(Math.cos(menu.angle/360*2*Math.PI)*menu.velocity, Math.sin(menu.angle/360*2*Math.PI)*menu.velocity);
+    	return new Vector2d(Math.cos(OptionMenu.getInstance().angle/360*2*Math.PI)*OptionMenu.getInstance().velocity, Math.sin(OptionMenu.getInstance().angle/360*2*Math.PI)*OptionMenu.getInstance().velocity);
 
-    }
-    public void setOption(OptionMenu option) {
-        this.menu = option;
     }
     @Override
     public void show() {

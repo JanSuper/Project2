@@ -61,8 +61,7 @@ public class OptionMenu implements Screen {
     TextButton loadSpeedB;
 
     TextButton aiButton;
-    
-    public String course;
+
     public int count;
 
     public static OptionMenu getInstance(){
@@ -217,7 +216,6 @@ public class OptionMenu implements Screen {
         WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
 
         PuttingSimulator.getInstance().create();
-        PuttingSimulator.getInstance().setOption(this);
         PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
         Vector2d shot = WigerToods.getInstance().search();
 //        play((float)shot.getX(), (float)shot.getY());
@@ -247,7 +245,6 @@ public class OptionMenu implements Screen {
 //        hold.setOptionMenu(this);
 //        Main.getInstance().setScreen(hold);
         PuttingSimulator.getInstance().create();
-        PuttingSimulator.getInstance().setOption(this);
         PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
         Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
@@ -289,7 +286,6 @@ public class OptionMenu implements Screen {
         Menu.getInstance().setOptionMenu(this);
         Menu.getInstance().newLVL = true;
         WigerToods.getInstance().setSolver(new RKSolver());
-        PuttingSimulator.getInstance().setOption(this);
         PuttingSimulator.getInstance().create();
         Main.getInstance().setScreen(Menu.getInstance());
 
