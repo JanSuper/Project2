@@ -71,9 +71,6 @@ public class OptionMenu implements Screen {
 
     private OptionMenu(){
 
-        //TODO i dont think we need to do this here anymore #refactor
-        PuttingSimulator.getInstance().create();
-        
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         
         mode2 = new Label("enter file here for mode 2", skin);
