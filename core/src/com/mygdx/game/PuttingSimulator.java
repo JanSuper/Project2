@@ -43,6 +43,8 @@ import Model.*;
 
 
 public class PuttingSimulator extends Game implements Screen{
+    private static PuttingSimulator singleton = null;
+
 	String decimalPattern = "([0-9]*)\\.([0-9]*)";
     String naturalPattern = "([0-9]*)";
 	
@@ -69,35 +71,26 @@ public class PuttingSimulator extends Game implements Screen{
     btCollisionShape groundShape;
     btCollisionShape ballShape;
     btCollisionShape wallShape;
-
     btCollisionObject groundObject;
     btCollisionObject ballObject;
     btCollisionObject wallObject;
-    
     TextField textFieldSpeed;
     TextField textFieldAngle;
-    
     TextButton buttonShot;
-    
     Label shotLabelSpeed;
     Label shotLabelAngle;
-    
     private Stage stage;
-
-    
     int count;
-    
     boolean shot = false;
 
 
     public PuttingSimulator(PuttingCourse course, PhysicsEngine solver){
-        this.course=course;
+        PuttingCourse.getInstance().setCourse(course);
         this.physicsEngine =solver;
     }
     public PuttingSimulator(PuttingCourse course, PhysicsEngine solver,  OptionMenu menu){
         this.course=course;
         this.physicsEngine =solver;
-
         this.menu=menu;
 
     }
@@ -122,7 +115,7 @@ public class PuttingSimulator extends Game implements Screen{
     @Override
     public void create() {
         Bullet.init();
-        this.ballPosition=this.course.get_start_position();
+        this.ballPosition=PuttingCourse.getInstance().get_start_position();
 
 
         modelBatch = new ModelBatch();
@@ -168,9 +161,9 @@ public class PuttingSimulator extends Game implements Screen{
       //TODO: double check variables
         // translate is to a certain position if wanted
         // remember that the middle of the object is 0.0.0
-        ball.transform.setToTranslation((float)course.get_start_position().getX(),
-                (float)FunctionMaker.getInstance().evaluate(new Vector2d(course.get_start_position().getX(),course.get_start_position().getY())) + 1f,
-                (float)course.get_start_position().getY());
+        ball.transform.setToTranslation((float)PuttingCourse.getInstance().get_start_position().getX(),
+                (float)FunctionMaker.getInstance().evaluate(new Vector2d(PuttingCourse.getInstance().get_start_position().getX(),course.get_start_position().getY())) + 1f,
+                (float)PuttingCourse.getInstance().get_start_position().getY());
         // add the modelinstance of the object to the array of objects that has to be rendered
         instances = new Array<ModelInstance>();
         instances.add(ball);
@@ -183,14 +176,14 @@ public class PuttingSimulator extends Game implements Screen{
                 instances.add(groundBall);
             }
         }*/
-        instances.addAll(course.getCourseModel(model));
+        instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
 
         flagPole = new ModelInstance(model, "flagpole");
-        flagPole.transform.setToTranslation((float)course.get_flag_position().getX(), 2.5f + (float)FunctionMaker.getInstance().evaluate(new Vector2d(course.get_flag_position().getX(), course.get_flag_position().getY())), (float)course.get_flag_position().getY());
+        flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)FunctionMaker.getInstance().evaluate(new Vector2d(course.get_flag_position().getX(), course.get_flag_position().getY())), (float)course.get_flag_position().getY());
         instances.add(flagPole);
         
         flag = new ModelInstance(model, "flag");
-        flag.transform.setToTranslation((float)course.get_flag_position().getX(),(float)FunctionMaker.getInstance().evaluate(new Vector2d(course.get_flag_position().getX(), course.get_flag_position().getY())) + 4.5f, (float)course.get_flag_position().getY()- .5f);
+        flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)FunctionMaker.getInstance().evaluate(new Vector2d(course.get_flag_position().getX(), course.get_flag_position().getY())) + 4.5f, (float)course.get_flag_position().getY()- .5f);
         instances.add(flag);
         
         // give the object a collision shape if you want it to have collision
@@ -465,5 +458,13 @@ public class PuttingSimulator extends Game implements Screen{
         this.physicsEngine.setVelocity(shot);
         take_shot(shot);
         physicsEngine.nextStep();
+    }
+
+    public PhysicsEngine getSolver() {
+        return physicsEngine;
+    }
+
+    public void setSolver(PhysicsEngine physicsEngine) {
+        this.physicsEngine = physicsEngine;
     }
 }

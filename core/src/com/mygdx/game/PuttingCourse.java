@@ -18,6 +18,8 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Vector;
+
 public class PuttingCourse{
 
     private static PuttingCourse singleton = null;
@@ -37,13 +39,23 @@ public class PuttingCourse{
         return singleton;
     }
 
+    public PuttingCourse(Function2d height, Vector2d flag, Vector2d start){
+        this.flag = flag;
+        this.start = start;
+        FunctionMaker.getInstance().setInstance(height);
+    }
+
+    public void setCourse(PuttingCourse course) {
+        this.singleton = course;
+        FunctionMaker.getInstance().setInstance(course.get_height());
+    }
+
     /**
      * accessor get the instance model for the terrain
      * @param model
      * @return
      */
     public Array<ModelInstance> getCourseModel(Model model){
-
         ModelBuilder mb = new ModelBuilder();
         mb.begin();
         Array<ModelInstance> instances = new Array<>();

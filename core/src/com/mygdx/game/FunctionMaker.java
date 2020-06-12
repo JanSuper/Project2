@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
  */
 
 public class FunctionMaker implements Function2d {
+    private Function2d apiFunction = null;
     private static FunctionMaker singleton = null;
     private static String function = " sin (x) + y ^ 2";
 
@@ -101,6 +102,7 @@ public class FunctionMaker implements Function2d {
         }
     }
 
+
     /**
      * transfer the string into arguments and keep in memory the type
      */
@@ -183,6 +185,9 @@ public class FunctionMaker implements Function2d {
      * @return z coordinate
      */
     public double evaluate(Vector2d vector2d){
+        if(apiFunction!=null){
+            return apiFunction.evaluate(vector2d);
+        }
         //new calc -> no functions was used yet and nothing is computed
         double x = vector2d.getX(), y = vector2d.getY();
         funcounter=0;
@@ -204,6 +209,7 @@ public class FunctionMaker implements Function2d {
      * @param x :  x and y coordinates
      * @param y : x and y coordinates
      * @return z coordinate
+     * TODO REMOVE THIS METHOD
      */
     public double evaluate(double x, double y ){
         //new calc -> no functions was used yet and nothing is computed
@@ -224,6 +230,9 @@ public class FunctionMaker implements Function2d {
 
     @Override
     public Vector2d gradient(Vector2d p) {
+        if(apiFunction!= null){
+            return apiFunction.gradient(p);
+        }
        return new Vector2d((evaluate(p.getX()+step, p.getY()) - evaluate(p.getX()-step, p.getY()))/(2*step),
                (evaluate(p.getX(), p.getY()+step) - evaluate(p.getX(), p.getY()-step))/(2*step));
     }
@@ -421,6 +430,12 @@ public class FunctionMaker implements Function2d {
         FunctionMaker.singleton.function = function.toLowerCase().replace(" ","");
         FunctionMaker.singleton.transfer();
         //TODO we will have to re-render the course here also
+        PuttingSimulator.getInstance().create();
+    }
+
+    public void setInstance(Function2d height) {
+        this.singleton =(FunctionMaker) height;
+        PuttingSimulator.getInstance().create();
     }
 }
 
