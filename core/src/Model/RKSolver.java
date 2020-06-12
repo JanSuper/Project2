@@ -1,6 +1,7 @@
 package Model;
 
 import com.mygdx.game.FunctionMaker;
+import com.mygdx.game.PuttingCourse;
 
 
 public class RKSolver extends Solver {
@@ -93,7 +94,7 @@ public class RKSolver extends Solver {
 
     @Override
     public double getPosZ(){
-        return FunctionMaker.getInstance().evaluate(position);
+        return PuttingCourse.getInstance().get_height().evaluate(position);
     }
 
 
@@ -110,5 +111,11 @@ public class RKSolver extends Solver {
     public Vector2d getVelocity() {
         return velocity;
     }
+
+    @Override
+    public void set_step_size(double h){
+        this.solverStepSize=h;
+    }
+
 
 }

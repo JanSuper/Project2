@@ -24,4 +24,7 @@ public interface PhysicsEngine {
 	
 //	public void setGoalPosition (Vector2d newGoal);
 	public boolean finish();
+
+	public abstract void set_step_size(double h);
+
 }

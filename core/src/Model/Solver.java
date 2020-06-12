@@ -41,20 +41,20 @@ public abstract class Solver implements PhysicsEngine{
     public void nextStep() {   }
 
     public double get_height(double x, double y){
-        return FunctionMaker.getInstance().evaluate(new Vector2d(x,y));
+        return PuttingCourse.getInstance().get_height().evaluate(new Vector2d(x,y));
     }
     public double get_height(Vector2d position){
-        return FunctionMaker.getInstance().evaluate(position);
+        return PuttingCourse.getInstance().get_height().evaluate(position);
     }
     public Vector2d getSlopes (double currentPosX, double currentPosY){
-       return  FunctionMaker.getInstance().gradient(new Vector2d(currentPosX,currentPosY));
+       return  PuttingCourse.getInstance().get_height().gradient(new Vector2d(currentPosX,currentPosY));
     }
     public Vector2d getSlopes (Vector2d position){
-        return FunctionMaker.getInstance().gradient(position);
+        return PuttingCourse.getInstance().get_height().gradient(position);
     }
 
     protected Vector2d  getNextAcceleration (Vector2d position, Vector2d velocity){
-        Vector2d slopes = FunctionMaker.getInstance().gradient(position);
+        Vector2d slopes = PuttingCourse.getInstance().get_height().gradient(position);
         double velY = velocity.getY();
         double velX = velocity.getX();
         double sqrtSpeeds = sqrt((velX * velX) + (velY * velY));
@@ -129,4 +129,8 @@ public abstract class Solver implements PhysicsEngine{
     			&& (Math.abs(velocity.getX())<= 0.01 && Math.abs(velocity.getY())<= 0.01)));
 
     }
+
+
+       public abstract void set_step_size(double h);
+
 }

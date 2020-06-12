@@ -15,18 +15,11 @@ import java.util.regex.Pattern;
  */
 
 public class FunctionMaker implements Function2d {
-    private static Function2d singleton = null;
-    private static String function = " sin (x) + y ^ 2";
+    private String function = " sin (x) + y ^ 2";
 
-    public static Function2d getInstance(){
-        if(singleton == null){
-            singleton = new FunctionMaker(function);
-        }
-        return singleton;
-    }
 
-    private ArrayList<String> arguments; // translation into seperate arguments
-    private ArrayList<String> type; //type of arguments (operators, numerical value,etc...)
+    private  ArrayList<String> arguments; // translation into seperate arguments
+    private  ArrayList<String> type; //type of arguments (operators, numerical value,etc...)
     private static HashMap<String, Function> map=null; // map all functions that could be use
     //Pattern of decimal, natural numbers
     private static final String decimalPattern = "([0-9]*)\\.([0-9]*)";
@@ -105,32 +98,32 @@ public class FunctionMaker implements Function2d {
     /**
      * transfer the string into arguments and keep in memory the type
      */
-    private  void transfer(){
+    private void transfer(){
         arguments = new ArrayList<>();
         type = new ArrayList<>();
         int counter = 0;
         int end = counter+1;
-        while(counter < this.function.length()){
+        while(counter < function.length()){
             //IF NUMBER
-            if(Pattern.matches(naturalPattern,this.function.substring(counter, counter+1))){
+            if(Pattern.matches(naturalPattern,function.substring(counter, counter+1))){
                 end=counter;
-                while(end <= this.function.length()&&
-                        (Pattern.matches(naturalPattern,this.function.substring(counter, end))||
-                        Pattern.matches(decimalPattern,this.function.substring(counter, end))||
-                        Pattern.matches(semiDecimalPattern,this.function.substring(counter, end))))
+                while(end <= function.length()&&
+                        (Pattern.matches(naturalPattern,function.substring(counter, end))||
+                        Pattern.matches(decimalPattern,function.substring(counter, end))||
+                        Pattern.matches(semiDecimalPattern,function.substring(counter, end))))
                     end++;
-                arguments.add(this.function.substring(counter, end-1));
+                arguments.add(function.substring(counter, end-1));
                 type.add("NUM");
                 counter = Math.max(end-1, counter+1);
                 //IF OPERATION
-            }else if(Pattern.matches("[*/+-^]", this.function.substring(counter, counter+1))){
+            }else if(Pattern.matches("[*/+-^]", function.substring(counter, counter+1))){
                 end = counter+1;
-                arguments.add(this.function.substring(counter, counter+1));
-                if(Pattern.matches("[+-]", this.function.substring(counter, counter+1))){
-                    if(this.function.substring(counter, end).equals("+")){
+                arguments.add(function.substring(counter, counter+1));
+                if(Pattern.matches("[+-]", function.substring(counter, counter+1))){
+                    if(function.substring(counter, end).equals("+")){
                         type.add("OP1");
                     }else{//IF minus is not OPERATOR but (-1)*... :
-                        if(counter-1<0 || this.function.charAt(counter-1)=='('){
+                        if(counter-1<0 || function.charAt(counter-1)=='('){
                             arguments.remove(arguments.size()-1);
                             arguments.add("(-1)");
                             type.add("MIN");
@@ -140,36 +133,36 @@ public class FunctionMaker implements Function2d {
                         }
                     }
                 }
-                else if(Pattern.matches("[*/]", this.function.substring(counter, counter+1))) type.add("OP2");
+                else if(Pattern.matches("[*/]",function.substring(counter, counter+1))) type.add("OP2");
                 else type.add("OP3");
                 counter++;
                 // IF SPECIAL OPERATION
-            }else if(Pattern.matches("[asclt]", this.function.substring(counter, counter+1))){
+            }else if(Pattern.matches("[asclt]", function.substring(counter, counter+1))){
                 end = counter+1;
-                while(Pattern.matches("[a-w]*", this.function.substring(counter, end)))end++;
-                arguments.add(this.function.substring(counter, end-1));
+                while(Pattern.matches("[a-w]*", function.substring(counter, end)))end++;
+                arguments.add(function.substring(counter, end-1));
                 type.add("SP");
                 counter = end-1;
                 // TODO: verify the next thing is a function
-            }else if(this.function.charAt(counter) =='('){
+            }else if(function.charAt(counter) =='('){
                 int n =0;
                 end = counter+1;
-                while(this.function.charAt(end)!=')' || n!=0){
-                    if(this.function.charAt(end) == '(') n ++;
+                while(function.charAt(end)!=')' || n!=0){
+                    if(function.charAt(end) == '(') n ++;
                     else if(n>0 && function.charAt(end) == ')') n--;
                     end++;
                 }
-                arguments.add(this.function.substring(counter, end+1));
+                arguments.add(function.substring(counter, end+1));
                 type.add("FUN");
                 counter = end+1;
                 //IF VARIABLE
-            }else if(this.function.charAt(counter)=='x'||this.function.charAt(counter)=='y'){
+            }else if(function.charAt(counter)=='x'||function.charAt(counter)=='y'){
                 if(type.size()>0 && ( type.get(type.size()-1).equals("VAR") ||
                         type.get(type.size()-1).equals("FUN") || type.get(type.size()-1).equals("NUM")) ){
                     arguments.add("*");
                     type.add("OP2");
                 }
-                arguments.add(this.function.substring(counter, counter+1));
+                arguments.add(function.substring(counter, counter+1));
                 type.add("VAR");
                 counter++;
             }else{
@@ -422,15 +415,14 @@ public class FunctionMaker implements Function2d {
     public void setFunction(String function) {
 
         this.function = function.toLowerCase().replace(" ","");
-        FunctionMaker.singleton.transfer();
+        transfer();
+
+
         //TODO we will have to re-render the course here also
         PuttingSimulator.getInstance().create();
     }
 
-    public void setInstance(Function2d height) {
-        this.singleton =(FunctionMaker) height;
-        PuttingSimulator.getInstance().create();
-    }
+
 }
 
 

@@ -49,4 +49,9 @@ public class EulerSolver extends Solver{
     public Vector2d getVelocity() {
         return velocity;
     }
+
+    @Override
+    public void set_step_size(double h){
+        this.solverStepSize=h;
+    }
 }

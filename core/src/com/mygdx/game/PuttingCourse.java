@@ -1,24 +1,17 @@
 package com.mygdx.game;
 import Model.Function2d;
 import Model.Vector2d;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelMesh;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelMeshPart;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
-
-import java.util.Vector;
 
 public class PuttingCourse{
 
@@ -28,7 +21,7 @@ public class PuttingCourse{
     private double friction = 0.3;
     private double holeTolerance = 0.02;
     private double maximumVelocity =15.0;
-
+    private Function2d height;
 
     private PuttingCourse(){ }
 
@@ -42,12 +35,12 @@ public class PuttingCourse{
     public PuttingCourse(Function2d height, Vector2d flag, Vector2d start){
         this.flag = flag;
         this.start = start;
-        FunctionMaker.getInstance().setInstance(height);
+        this.height = height;
     }
 
     public void setCourse(PuttingCourse course) {
         this.singleton = course;
-        FunctionMaker.getInstance().setInstance(course.get_height());
+
     }
 
     /**
@@ -70,7 +63,7 @@ public class PuttingCourse{
         TerrainChunk[][] terrainChunks = new TerrainChunk[numChunkX][numChunkY];//array of chunks of the terrain
         TerrainChunk chunk;//current terrain chunk
         Vector2d currentChunkPosition;//position of the current terrainchunk
-        TerrainChunk.setFunction(FunctionMaker.getInstance());
+        TerrainChunk.setFunction(PuttingCourse.getInstance().get_height());
         float scale = 1;//of later use?
         int print = 0;//debugging purpose
         int chunkNum=0;
@@ -79,7 +72,7 @@ public class PuttingCourse{
                 //Create Chunk
                 currentChunkPosition=new Vector2d(coverage[0].getX()+chunkSize*x,coverage[0].getY()+chunkSize*y );
                 chunk = new TerrainChunk(currentChunkPosition, chunkSize);
-                chunk.setLocation((float)FunctionMaker.getInstance().evaluate(new Vector2d(x*chunkSize, y*chunkSize)));
+                chunk.setLocation((float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(x*chunkSize, y*chunkSize)));
                 terrainChunks[x][y] = chunk;
 
                 //Create Mesh
@@ -224,7 +217,7 @@ public class PuttingCourse{
      * @return FunctionMaker which implements the Function2d interface
      */
     public Function2d get_height(){
-        return FunctionMaker.getInstance();
+        return this.height;
     }
     
 
