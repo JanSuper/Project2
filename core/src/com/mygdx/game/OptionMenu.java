@@ -33,8 +33,8 @@ public class OptionMenu implements Screen {
     private final int BUTTON_HEIGHT = 100;
     private final int EXIT_HEIGHT = 75;
 
-    public float velocity = 10;
-    public float angle = 15;
+    public float velocity = 0.0001f;
+    public float angle = 0;
 
     Texture exitButtonActive;
     Texture exitButtonInactive;
@@ -244,6 +244,8 @@ public class OptionMenu implements Screen {
 //        Main.getInstance().setScreen(hold);
         PuttingSimulator.getInstance().create();
         PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
+        PuttingSimulator.getInstance().look = false;
+        PuttingSimulator.getInstance().canCount = true;
         Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
 

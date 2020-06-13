@@ -19,7 +19,7 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        this.setScreen(OptionMenu.getInstance());
+        this.setScreen(Menu.getInstance());
     }
 
     @Override

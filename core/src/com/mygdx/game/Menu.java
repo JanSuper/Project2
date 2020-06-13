@@ -64,10 +64,11 @@ public class Menu implements Screen {
             if(Gdx.input.isTouched()){ // need to talk?
                 this.dispose();
 
-                if (newLVL) {
-                	PuttingSimulator.getInstance().create();
-                }
-
+//                if (newLVL) {
+//                	play(0,0);
+//                	PuttingSimulator.getInstance().create();
+//                }
+                play(0,0);
                 PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
                 Main.getInstance().setScreen(PuttingSimulator.getInstance());
                 
@@ -119,5 +120,22 @@ public class Menu implements Screen {
     @Override
     public void dispose() {
 
+    }
+    
+    public void play(float speed, float angle){
+    	if (speed == 0) {
+    		speed = 0.00001f;
+    	}
+//
+//    	
+//        this.velocity=speed;
+//        if (this.velocity>(float) PuttingCourse.getInstance().get_maximum_velocity()){
+//            this.velocity=(float) PuttingCourse.getInstance().get_maximum_velocity();
+//        }
+//        this.angle=angle;
+
+        PuttingSimulator.getInstance().create();
+//        PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
+        Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
 }

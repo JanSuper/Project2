@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 import Bot.WigerToods;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -78,6 +81,8 @@ public class PuttingSimulator extends Game implements Screen{
     private Stage stage;
     int count;
     boolean shot = false;
+    boolean look = true;
+    boolean canCount = false;
 
     /**
      * API Required
@@ -215,7 +220,7 @@ public class PuttingSimulator extends Game implements Screen{
 *///changing these lines to make use of RKM
         Main.getInstance().getSolver().setPosition(ballPosition);
 
-        take_shot(calcInit());
+//        take_shot(calcInit());
         //System.out.println(course.get_flag_position().getX() + " " + course.get_flag_position().getY());
         
         count = 0;
@@ -249,7 +254,7 @@ public class PuttingSimulator extends Game implements Screen{
                 if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
                         (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern))) {
                 	
-                	
+                	look = false;
                     play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
                 }
                 else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
@@ -273,7 +278,15 @@ public class PuttingSimulator extends Game implements Screen{
 
     @Override
     public void render (float delta) {
-
+    	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
+    		canCount = true;
+    		count = 120;
+    	}
+    	
+    	
+    	if(!shot) {
+    	Gdx.input.setInputProcessor(camController);
+    	}
         //TODO: add game over
         if ( Main.getInstance().getSolver().finish()) {
            
@@ -287,7 +300,9 @@ public class PuttingSimulator extends Game implements Screen{
         }
         else if (count == 2*60) {
             if(ai==null) {
-                Gdx.input.setInputProcessor(stage);
+            	      	
+            	
+            	Gdx.input.setInputProcessor(stage);
                 shot = true;
 //        	Menu holdMenu = new Menu(main);
 //        	main.setScreen(holdMenu);
@@ -316,6 +331,7 @@ public class PuttingSimulator extends Game implements Screen{
             }
         }
         else {
+        	if (!look)
         	Main.getInstance().getSolver().nextStep();
         	Main.getInstance().getSolver().setPosZ(Main.getInstance().getSolver().get_height(Main.getInstance().getSolver().getPosition().getX(), Main.getInstance().getSolver().getPosition().getY()));
 
@@ -339,7 +355,7 @@ public class PuttingSimulator extends Game implements Screen{
             for(ModelInstance instance : instances)  modelBatch.render(instance, environment);
             modelBatch.end();
             
-              if (Math.abs(Main.getInstance().getSolver().getVelocity().getX()) <= 0.2f &&  Math.abs(Main.getInstance().getSolver().getVelocity().getY()) <= 0.2f) {
+              if ((Math.abs(Main.getInstance().getSolver().getVelocity().getX()) <= 0.2f &&  Math.abs(Main.getInstance().getSolver().getVelocity().getY()) <= 0.2f)&&canCount) {
             	count++;
             }
             else {
