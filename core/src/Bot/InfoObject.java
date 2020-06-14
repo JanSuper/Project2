@@ -8,6 +8,7 @@ public class InfoObject {
 	BlockInfo[][] maze;
 	ArrayList<BlockInfo> steps;
 	ArrayList<String> strings;
+	boolean delete = false;
 	
 	public InfoObject() {
 		maze = new BlockInfo[17][17];
@@ -52,7 +53,8 @@ public class InfoObject {
 		BlockInfo hold = maze[1][1];
 		maze[15][15].finish = true;
 		steps = recursion(hold);
-		
+		System.out.println(steps.size());
+		System.out.println(strings.size());
 		return steps;
 	}
 	
@@ -60,6 +62,11 @@ public class InfoObject {
 //		System.out.println(step.i + " " + step.j);
 		if(step.up) {
 //			System.out.println("up");
+			if(delete) {
+				steps.remove(steps.size()-1);
+				strings.remove(strings.size()-1);
+				delete = false;
+			}
 			maze[step.i][step.j].up=false; 					// checking off step
 			BlockInfo hold = new BlockInfo(step.i, step.j);	// temporary object
 			hold.left=false;								// saving only one step
@@ -81,6 +88,11 @@ public class InfoObject {
 		
 		
 		else if(step.right) {
+			if(delete) {
+				steps.remove(steps.size()-1);
+				strings.remove(strings.size()-1);
+				delete = false;
+			}
 //			System.out.println("right");
 			maze[step.i][step.j].right=false; 				// checking off step
 			BlockInfo hold = new BlockInfo(step.i, step.j);	// temporary object
@@ -102,6 +114,11 @@ public class InfoObject {
 		}
 		
 		else if(step.down) {
+			if(delete) {
+				steps.remove(steps.size()-1);
+				strings.remove(strings.size()-1);
+				delete = false;
+			}
 //			System.out.println("down");
 			maze[step.i][step.j].down=false; 				// checking off step
 			BlockInfo hold = new BlockInfo(step.i, step.j);	// temporary object
@@ -123,6 +140,11 @@ public class InfoObject {
 		}
 		
 		else if(step.left) { 
+			if(delete) {
+				steps.remove(steps.size()-1);
+				strings.remove(strings.size()-1);
+				delete = false;
+			}
 //			System.out.println("left");
 			maze[step.i][step.j].left=false; 				// checking off step
 			BlockInfo hold = new BlockInfo(step.i, step.j);	// temporary object
@@ -143,6 +165,7 @@ public class InfoObject {
 			}
 		}
 //		System.out.println("nope");
+		delete = true;
 		steps.remove(steps.size()-1);
 		strings.remove(strings.size()-1);
 		BlockInfo hold = steps.get(steps.size()-1);
