@@ -59,11 +59,11 @@ public class PuttingSimulator extends Game implements Screen{
     Array<ModelInstance> instances;
     Environment environment;
     Model model;
+
     ModelInstance groundBall;
     ModelInstance ball;
     ModelInstance flagPole;
     ModelInstance flag;
-
     btCollisionShape groundShape;
     btCollisionShape ballShape;
     btCollisionShape wallShape;
@@ -80,7 +80,7 @@ public class PuttingSimulator extends Game implements Screen{
     boolean shot = false;
 
     /**
-     * API Required
+     * Required for API on course manual
      * @param course
      * @param solver
      */
@@ -97,10 +97,18 @@ public class PuttingSimulator extends Game implements Screen{
         return singleton;
     }
 
+    /**
+     * Required for API
+     * @param v
+     */
     public void set_ball_position(Vector2d v){
         Main.getInstance().getSolver().setPosition(v);
     }
 
+    /**
+     * Required for API
+     * @return Ball Position
+     */
     public Vector2d get_ball_position(){
         return Main.getInstance().getSolver().getPosition();
     }
