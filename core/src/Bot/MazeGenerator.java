@@ -65,6 +65,7 @@ public class MazeGenerator {
 		
 		
 		mazeBlocks.getSteps();
+		mazeBlocks.getBotSteps();
 		mazeBlocks.printSteps();
 	}
  

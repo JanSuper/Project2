@@ -1,6 +1,7 @@
 package Bot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class InfoObject {
 	int i;
@@ -8,12 +9,14 @@ public class InfoObject {
 	BlockInfo[][] maze;
 	ArrayList<BlockInfo> steps;
 	ArrayList<String> strings;
+	ArrayList<int[]> botSteps;
 	boolean delete = false;
 	
 	public InfoObject() {
 		maze = new BlockInfo[17][17];
 		steps = new ArrayList();
 		strings = new ArrayList();
+		botSteps = new ArrayList();
 		i = 0;
 		j = 0;
 	}
@@ -176,6 +179,9 @@ public class InfoObject {
 		for (int i = 0; i <= strings.size()-1; i++) {
 			System.out.println(strings.get(i));
 		}
+		for (int i = 0; i <= botSteps.size()-1; i++) {
+			System.out.println(Arrays.toString(botSteps.get(i)));
+		}
 	}
 	
 	private void nextStep() {
@@ -187,5 +193,44 @@ public class InfoObject {
 			i++;
 		}
 	}
-
+	
+	public ArrayList<int[]> getBotSteps(){
+		int count = 0;
+		boolean newStep = true;
+		boolean[] hold = {};
+		for(int i = 0; i <= steps.size()-2; i++) {
+			if (newStep) {
+				System.out.println("new");
+				hold = steps.get(i).getSteplist();
+				count = 1;
+				newStep = false;
+			}
+			if (Arrays.equals(hold, steps.get(i+1).getSteplist())) {
+				System.out.println("same");
+				count++;
+			}
+			else {
+				System.out.println("diff");
+				if (hold[0]) {
+					int[] holdStep = {0,0,count,0};
+					botSteps.add(holdStep);
+				}
+				else if (hold[1]) {
+					int[] holdStep = {0,0,-count,0};
+					botSteps.add(holdStep);
+				}
+				else if (hold[2]) {
+					int[] holdStep = {0,0,0,-count};
+					botSteps.add(holdStep);
+				}
+				else {
+					int[] holdStep = {0,0,0,count};
+					botSteps.add(holdStep);
+				}
+				newStep = true;
+			}	
+		}
+		return botSteps;
+		
+	}
 }

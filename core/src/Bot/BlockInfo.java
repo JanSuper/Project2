@@ -24,5 +24,10 @@ public class BlockInfo {
 		this.i = i;
 		this.j = j;
 	}
+	
+	public boolean[] getSteplist() {
+		boolean[] hold = {up, down, left, right};
+		return hold;
+	}
 
 }
