@@ -47,15 +47,15 @@ public class ObstacleBuilder {
      * @param width length of the side along the y axis
      */
     public static ModelInstance makeBox(Vector2 startPos, float length, float width, ModelBuilder mb){
-        Vector2 v1 = new Vector2(startPos.x+ length, startPos.y);
+        Vector2 v1 = new Vector2(startPos.x + length, startPos.y);
         Vector2 v2 = new Vector2(startPos.x, startPos.y+width);
         Vector2 v3 = new Vector2(startPos.x+length, startPos.y+width);
 
         Obstacle tmp = new Obstacle();
         tmp.addVertex(startPos);
         tmp.addVertex(v1);
-        tmp.addVertex(v2);
         tmp.addVertex(v3);
+        tmp.addVertex(v2);
 
         Side s1 = new VerticalSide(startPos, v2);
         Side s2 = new VerticalSide(v1,v3);
@@ -66,6 +66,8 @@ public class ObstacleBuilder {
         tmp.addSide(s2);
         tmp.addSide(s3);
         tmp.addSide(s4);
+
+        PuttingCourse.getInstance().obstacles.add(tmp);
 
         ModelInstance mi = new ModelInstance(mb.createBox(length,OBSTACLE_HEIGHT, width, new Material(ColorAttribute.createDiffuse(Color.GRAY)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal) );
         mi.transform.setToTranslation(startPos.x+length/2,0, startPos.y+width/2);

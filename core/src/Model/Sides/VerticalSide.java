@@ -30,7 +30,7 @@ public class VerticalSide extends Side {
      */
     @Override
     public void collide(int cur, int prev, Solver solver) {
-        solver.getPosition().setX(solver.getPosition().getX()*-1);
+        solver.getVelocity().setX(solver.getVelocity().getX()*-1);
     }
 
     /**

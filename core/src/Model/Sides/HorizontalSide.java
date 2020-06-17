@@ -26,7 +26,7 @@ public class HorizontalSide extends Side {
      */
     @Override
     public void collide(int cur, int prev, Solver solver) {
-        solver.getPosition().setY(solver.getPosition().getY()*-1);
+        solver.getVelocity().setY(solver.getVelocity().getY()*-1);
     }
 
     /**
