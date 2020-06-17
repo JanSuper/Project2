@@ -20,31 +20,6 @@ public class ObstacleBuilder {
     }
 
     /**
-     * -Creates the Model instance and everything needed to render
-     * -Creates the Obstacle for collision
-     * width is negligible
-     * @param startPos
-     * @param endPos
-     */
-    public static void makeSolidVerticalPlane(Vector2 startPos, Vector2 endPos){
-
-        Vector2 v1 = new Vector2(startPos.x + MAX_DIS_STEP, startPos.y) ;
-        Vector2 v2 =new Vector2(endPos.x + MAX_DIS_STEP, endPos.y);
-
-        Obstacle tmp = new Obstacle();
-        tmp.addVertex(startPos);
-        tmp.addVertex(endPos);
-        tmp.addVertex(v1);
-        tmp.addVertex(v2);
-
-        Side side1 = new VerticalSide( startPos, endPos);
-        tmp.addSide(side1);
-        PuttingCourse.getInstance().obstacles.add(tmp);
-
-
-    }
-
-    /**
      * Creates the Model for rendering the lake
      * Creates the Obstacle with Lake logic implemented for collision
      * @param middle
@@ -59,10 +34,25 @@ public class ObstacleBuilder {
      * Creates the Model for rendering a Box obstacle
      * Creates the Box Object with collision logic implemented
      * @param startPos front left corner
-     * @param length length of the face
-     * @param width
+     * @param length length of the face, always along x axis
+     * @param width length of the side along the y axis
      */
-    public static void makeBox(Vector2d startPos, double length, double width){
+    public static void makeBox(Vector2 startPos, float length, float width){
+        Vector2 v1 = new Vector2(startPos.x+ length, startPos.y);
+        Vector2 v2 = new Vector2(startPos.x, startPos.y+width);
+        Vector2 v3 = new Vector2(startPos.x+length, startPos.y+width);
+
+        Obstacle tmp = new Obstacle();
+        tmp.addVertex(startPos);
+        tmp.addVertex(v1);
+        tmp.addVertex(v2);
+        tmp.addVertex(v3);
+
+        Side s1 = new VerticalSide(startPos, v2);
+        Side s2 = new VerticalSide(v1,v3);
+        Side s3 = new
+
+
 
     }
 
