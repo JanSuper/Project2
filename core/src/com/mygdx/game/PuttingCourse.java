@@ -1,6 +1,5 @@
 package com.mygdx.game;
-import Model.Function2d;
-import Model.Vector2d;
+import Model.Sides.Side;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -11,7 +10,12 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import java.util.LinkedList;
+import com.badlogic.gdx.math.Intersector;
+import Model.*;
+
 
 public class PuttingCourse{
 
@@ -23,6 +27,9 @@ public class PuttingCourse{
     private double holeTolerance = 0.02;
     private double maximumVelocity =15.0;
     private Function2d height;
+
+    public LinkedList<Obstacle> obstacles = new LinkedList<Obstacle>();
+
 
     private PuttingCourse(){ }
 
@@ -279,5 +286,24 @@ public class PuttingCourse{
         return result;
     }
 
+    public void checkCollision (Solver solver){
 
+       Array<Vector2> polygon;
+       LinkedList<Side> sides;
+       boolean stop;
+
+        for(Obstacle obstacle : obstacles){
+            polygon=obstacle.getPolygon();
+            if(Intersector.isPointInPolygon(polygon ,new Vector2((float)solver.getPosition().getX(),(float)solver.getPosition().getY()))){
+                sides = obstacle.getSides();
+                for(Side side: sides){
+                    stop = side.collideIfCollision(solver);
+                    if(stop){
+                        return;
+                    }
+
+                }
+            }
+        }
+    }
 }

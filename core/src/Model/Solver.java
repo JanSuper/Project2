@@ -22,6 +22,7 @@ public abstract class Solver implements PhysicsEngine{
 
     protected double currentPosZ;
     protected Vector2d position;
+    protected Vector2d prevPos;
     protected Vector2d velocity;
     protected Vector2d acceleration;
     protected double g = 9.81;
@@ -55,6 +56,16 @@ public abstract class Solver implements PhysicsEngine{
         return new Vector2d( (-1)*(g*slopes.getX()) - (PuttingCourse.getInstance().get_friction_coefficient()*g*(velX/ sqrtSpeeds)),
                 (-1)*(g*slopes.getY()) - (PuttingCourse.getInstance().get_friction_coefficient()*g*(velY/ sqrtSpeeds)));
     }
+
+
+    public Vector2d getPrevPos() {
+        return prevPos;
+    }
+
+    public void setPrevPos(Vector2d prevPos) {
+        this.prevPos = prevPos;
+    }
+
     @Override
     public void setPosZ(double d) { //do we need this method?
         currentPosZ=d;
@@ -74,11 +85,21 @@ public abstract class Solver implements PhysicsEngine{
         return velocity;
     }
 
+    /**
+     * A couple of things going on here that could cause bugs
+     * -we need previous position to always be updated every step, should this be done in the next Step implementations
+     * - we are setting the position back to where we started before we entered the loop, this was for the benefit of the search Ai.
+     * @param position
+     * @param velocity
+     * @return
+     */
     public Vector2d takeShot(Vector2d position, Vector2d velocity){
         this.velocity=velocity;
         this.position=position;
         int count =0;
+        prevPos = position;
         while(count<300){
+
             nextStep();
             if((this.velocity.getX()<0.2)&&(this.velocity.getY()<0.2)){
                 count++;

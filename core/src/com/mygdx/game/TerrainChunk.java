@@ -22,7 +22,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class TerrainChunk {
 
     float[] vertices; // The verticies which create elevation
-    short[] indices; // Indinces are the same ideas as above
+    short[] indices; // Indices are the same ideas as above
 
     int vertexSize;
     int positionSize = 3;

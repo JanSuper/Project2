@@ -8,6 +8,8 @@ public class RKSolver extends Solver {
 
     @Override
     public void nextStep() {
+        PuttingCourse.getInstance().checkCollision(this);
+        prevPos = position;
         currentPosZ = get_height(position);
         Vector2d[] posAndVel = getNextPositionsAndVelocities(this.position, this.velocity, this.solverStepSize);
         this.position = posAndVel[0];

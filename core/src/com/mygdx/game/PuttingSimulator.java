@@ -1,8 +1,11 @@
 package com.mygdx.game;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import Bot.WigerToods;
+import Model.Sides.Side;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -22,6 +25,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
@@ -62,11 +66,11 @@ public class PuttingSimulator extends Game implements Screen{
     Array<ModelInstance> instances;
     Environment environment;
     Model model;
+
     ModelInstance groundBall;
     ModelInstance ball;
     ModelInstance flagPole;
     ModelInstance flag;
-
     btCollisionShape groundShape;
     btCollisionShape ballShape;
     btCollisionShape wallShape;
@@ -85,7 +89,7 @@ public class PuttingSimulator extends Game implements Screen{
     boolean canCount = false;
 
     /**
-     * API Required
+     * Required for API on course manual
      * @param course
      * @param solver
      */
@@ -102,10 +106,18 @@ public class PuttingSimulator extends Game implements Screen{
         return singleton;
     }
 
+    /**
+     * Required for API
+     * @param v
+     */
     public void set_ball_position(Vector2d v){
         Main.getInstance().getSolver().setPosition(v);
     }
 
+    /**
+     * Required for API
+     * @return Ball Position
+     */
     public Vector2d get_ball_position(){
         return Main.getInstance().getSolver().getPosition();
     }
@@ -188,11 +200,13 @@ public class PuttingSimulator extends Game implements Screen{
         flagPole = new ModelInstance(model, "flagpole");
         flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())), (float)PuttingCourse.getInstance().get_flag_position().getY());
         instances.add(flagPole);
-        
         flag = new ModelInstance(model, "flag");
         flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())) + 4.5f, (float)PuttingCourse.getInstance().get_flag_position().getY()- .5f);
         instances.add(flag);
-        
+
+        instances.add(ObstacleBuilder.makeBox(new Vector2(5f,-3f),1f,6f, mb));
+
+
         // give the object a collision shape if you want it to have collision
         ballShape = new btSphereShape(0.5f);
         groundShape = new btBoxShape(new Vector3(2.5f, 0.5f, 2.5f));
@@ -275,6 +289,7 @@ public class PuttingSimulator extends Game implements Screen{
         stage.addActor(shotLabelSpeed);
         stage.addActor(shotLabelAngle);
     }
+
 
     @Override
     public void render (float delta) {
@@ -474,4 +489,5 @@ public class PuttingSimulator extends Game implements Screen{
         take_shot(shot);
         Main.getInstance().getSolver().nextStep();
     }
+
 }
