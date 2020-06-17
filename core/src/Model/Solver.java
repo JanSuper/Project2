@@ -56,6 +56,16 @@ public abstract class Solver implements PhysicsEngine{
         return new Vector2d( (-1)*(g*slopes.getX()) - (PuttingCourse.getInstance().get_friction_coefficient()*g*(velX/ sqrtSpeeds)),
                 (-1)*(g*slopes.getY()) - (PuttingCourse.getInstance().get_friction_coefficient()*g*(velY/ sqrtSpeeds)));
     }
+
+
+    public Vector2d getPrevPos() {
+        return prevPos;
+    }
+
+    public void setPrevPos(Vector2d prevPos) {
+        this.prevPos = prevPos;
+    }
+
     @Override
     public void setPosZ(double d) { //do we need this method?
         currentPosZ=d;
@@ -86,10 +96,10 @@ public abstract class Solver implements PhysicsEngine{
     public Vector2d takeShot(Vector2d position, Vector2d velocity){
         this.velocity=velocity;
         this.position=position;
-        prevPos = position;
         int count =0;
+        prevPos = position;
         while(count<300){
-            prevPos = position;
+
             nextStep();
             if((this.velocity.getX()<0.2)&&(this.velocity.getY()<0.2)){
                 count++;

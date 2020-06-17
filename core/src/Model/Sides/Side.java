@@ -29,7 +29,7 @@ public abstract class Side implements Collide{
     public boolean collideIfCollision(Solver solver) {
         boolean result = false;
         int currentPosSide = Intersector.pointLineSide(vertices[0], vertices[1], new Vector2((float) solver.getPosition().getX(), (float) solver.getPosition().getY()));
-        int prevPosSide = Intersector.pointLineSide(vertices[0], vertices[1], new Vector2((float) solver.getPosition().getX(), (float) solver.getPosition().getY()));
+        int prevPosSide = Intersector.pointLineSide(vertices[0], vertices[1], new Vector2((float) solver.getPrevPos().getX(), (float) solver.getPrevPos().getY()));
         if (currentPosSide != prevPosSide) {
             result = true;
             collide(currentPosSide, prevPosSide, solver);

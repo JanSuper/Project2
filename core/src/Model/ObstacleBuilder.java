@@ -61,6 +61,7 @@ public class ObstacleBuilder {
         Side s2 = new VerticalSide(v1,v3);
         Side s3 = new HorizontalSide(startPos, v1);
         Side s4 = new HorizontalSide(v2,v3);
+
         tmp.addSide(s1);
         tmp.addSide(s2);
         tmp.addSide(s3);
