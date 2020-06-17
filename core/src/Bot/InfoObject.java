@@ -11,6 +11,8 @@ public class InfoObject {
 	ArrayList<String> strings;
 	ArrayList<int[]> botSteps;
 	boolean delete = false;
+	int lasti;
+	int lastj;
 	
 	public InfoObject() {
 		maze = new BlockInfo[17][17];
@@ -19,6 +21,8 @@ public class InfoObject {
 		botSteps = new ArrayList();
 		i = 0;
 		j = 0;
+		lasti = 1;
+		lastj = 1;
 	}
 	
 	public void addTopWall() {
@@ -212,19 +216,23 @@ public class InfoObject {
 			else {
 				System.out.println("diff");
 				if (hold[0]) {
-					int[] holdStep = {0,0,count,0};
+					int[] holdStep = {lasti,lastj,lasti-count,lastj};
+					lasti-=count;
 					botSteps.add(holdStep);
 				}
 				else if (hold[1]) {
-					int[] holdStep = {0,0,-count,0};
+					int[] holdStep = {lasti,lastj,lasti+count,lastj};
+					lasti+=count;
 					botSteps.add(holdStep);
 				}
 				else if (hold[2]) {
-					int[] holdStep = {0,0,0,-count};
+					int[] holdStep = {lasti,lastj,lasti,lastj-count};
+					lastj-=count;
 					botSteps.add(holdStep);
 				}
 				else {
-					int[] holdStep = {0,0,0,count};
+					int[] holdStep = {lasti,lastj,lasti,lastj+count};
+					lastj+=count;
 					botSteps.add(holdStep);
 				}
 				newStep = true;
