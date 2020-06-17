@@ -1,8 +1,11 @@
 package com.mygdx.game;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import Bot.WigerToods;
+import Model.Sides.Side;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -19,6 +22,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
@@ -191,7 +195,6 @@ public class PuttingSimulator extends Game implements Screen{
         flagPole = new ModelInstance(model, "flagpole");
         flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())), (float)PuttingCourse.getInstance().get_flag_position().getY());
         instances.add(flagPole);
-        
         flag = new ModelInstance(model, "flag");
         flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())) + 4.5f, (float)PuttingCourse.getInstance().get_flag_position().getY()- .5f);
         instances.add(flag);
@@ -278,6 +281,7 @@ public class PuttingSimulator extends Game implements Screen{
         stage.addActor(shotLabelSpeed);
         stage.addActor(shotLabelAngle);
     }
+
 
     @Override
     public void render (float delta) {
@@ -466,4 +470,5 @@ public class PuttingSimulator extends Game implements Screen{
         take_shot(shot);
         Main.getInstance().getSolver().nextStep();
     }
+
 }

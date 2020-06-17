@@ -6,11 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelMesh;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,17 +17,12 @@ import static com.badlogic.gdx.math.MathUtils.random;
  * Original code :
  * Terrain chunk taken from
  * https://stackoverflow.com/questions/20337797/libgdx-mesh-heightmap-normals-and-lights
+ *
  */
 public class TerrainChunk {
-    btCollisionObject blah;
-    btBoxShape;
-    CollisionObjectWrapper;
-    Intersector.MinimumTranslationVector;
-    BaseActor blah = new BaseActor();
-    Polygon
 
     float[] vertices; // The verticies which create elevation
-    short[] indices; // Indinces are the same ideas as above
+    short[] indices; // Indices are the same ideas as above
 
     int vertexSize;
     int positionSize = 3;
@@ -48,7 +38,7 @@ public class TerrainChunk {
 
     boolean sand;
 
-    public int[][] sandInfo;
+    public int [][] sandInfo;
     // * @param function represents what the actual function will look like and is determined in settings by the user
 
     /**
@@ -61,15 +51,15 @@ public class TerrainChunk {
                     "Chunk size too big, (width + 1)*(height+1) must be <= 32767");
         }
 
-        this.positionX = (float) position.getX();
-        this.positionY = (float) position.getY();
+        this.positionX=(float)position.getX();
+        this.positionY=(float)position.getY();
         // position, normal, color, texture
         int vertexSize = 3 + 3 + 1 + 2;
 
         this.vertices = new float[(size + 1) * (size + 1) * vertexSize];
         this.indices = new short[size * size * 6];
         this.vertexSize = vertexSize;
-        this.size = size;
+        this.size=size;
 
 //        sandInfo = Settings.getSandInfo();
 
@@ -81,9 +71,7 @@ public class TerrainChunk {
 
     }
 
-    public static void setFunction(Function2d fun) {
-        mapFunction = fun;
-    }
+    public static void setFunction(Function2d fun){mapFunction=fun;}
 
     /**
      * This builds the vertices which pretty much means the elevation on the map
@@ -99,13 +87,13 @@ public class TerrainChunk {
         for (int x = 0; x < heightPitch; x++) {
             for (int y = 0; y < widthPitch; y++) {
                 // POSITION
-                vertices[idx++] = x;//x position
+                vertices[idx++] =  x;//x position
 
 
-                vertices[idx++] = (float) (mapFunction.evaluate(new Vector2d(positionX + x, positionY + y)));//height = y
+                    vertices[idx++] = (float) (mapFunction.evaluate(new Vector2d(positionX+x,positionY+y)));//height = y
 
 
-                vertices[idx++] = y;//z position
+                vertices[idx++] = y ;//z position
 
                 // NORMAL, skip these for now
                 idx += 3;
@@ -160,7 +148,6 @@ public class TerrainChunk {
 
     /**
      * Gets the index of the first float of a normal for a specific vertex
-     *
      * @param vertIndex represents the iterator for the vertices
      */
     private int getNormalStart(int vertIndex) {
@@ -169,7 +156,6 @@ public class TerrainChunk {
 
     /**
      * Gets the index of the first float of a specific vertex
-     *
      * @param vertIndex receives the iterator for the vertices
      * @return returns the total size, means the index multiplied by the total size
      */
@@ -180,12 +166,11 @@ public class TerrainChunk {
 
     /**
      * This method aims to add the provided value to the normal
-     *
      * @param vertIndex receives the iterator
-     * @param verts     the array of vertices
-     * @param x         coordinate
-     * @param y         coordinate
-     * @param z         coordinate
+     * @param verts the array of vertices
+     * @param x coordinate
+     * @param y coordinate
+     * @param z coordinate
      */
     private void addNormal(int vertIndex, float[] verts, float x, float y, float z) {
 
@@ -198,9 +183,8 @@ public class TerrainChunk {
 
     /**
      * This method serves to create the normals to vertices
-     *
      * @param vertIndex the iterator
-     * @param verts     receives the array
+     * @param verts receives the array
      */
     private void normalizeNormal(int vertIndex, float[] verts) {
 
@@ -223,9 +207,8 @@ public class TerrainChunk {
 
     /**
      * This method aims to calculate the normals to the field
-     *
      * @param indices and the bases
-     * @param verts   array
+     * @param verts array
      */
     private void calcNormals(short[] indices, float[] verts) {
 
@@ -281,12 +264,12 @@ public class TerrainChunk {
         }
     }
 
-    public void setLocation(float y) {
-        this.positionY = (y - size);
+    public void setLocation( float y){
+        this.positionY=(y-size);
 
     }
 
-    public void setModelInstance(ModelInstance instance) {
+    public void setModelInstance(ModelInstance instance){
         this.modelInstance = instance;
         this.modelInstance.transform.translate(this.positionX, this.positionY, this.positionZ);
     }

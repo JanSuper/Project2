@@ -1,19 +1,29 @@
 package Model;
 
-public interface Obstacle {
-    /**
-     * Checks if the ball is after colliding with the Obstacle
-     * @param ballPosition
-     * @return
-     */
-    public boolean contains(Vector2d ballPosition);
+import Model.Sides.Side;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-    /**
-     * Obstacle needs to implement collision logic
-     *The Solver positions/velocities need changing And/Or the game needs to stop/reset
-     * Game is not needed as a parameter because of the usage of the singleton creational pattern so we can act directly
-     * on the game here if the implementation requires
-     * @param solver
-     */
-    public void collide(Solver solver);
+import java.util.LinkedList;
+
+public class Obstacle {
+    private LinkedList<Side> sides = new LinkedList<Side>();
+    private Array<Vector2> polygon = new Array<Vector2>();
+
+    public Array<Vector2> getPolygon() {
+        return polygon;
+    }
+
+    public void addVertex(Vector2 vertex) {
+        polygon.add(vertex);
+    }
+
+    public LinkedList<Side> getSides() {
+        return sides;
+    }
+
+    public void addSide(Side side) {
+        sides.add(side);
+    }
+
 }
