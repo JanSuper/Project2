@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class FunctionMaker implements Function2d {
     private String function;
-    private static String basicfunction = " sin (x) + y ^ 2";
+    private static String basicfunction = "0";//"" sin (x) + y ^ 2";
 
 
     private  ArrayList<String> arguments; // translation into seperate arguments

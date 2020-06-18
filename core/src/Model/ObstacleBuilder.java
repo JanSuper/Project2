@@ -1,5 +1,6 @@
 package Model;
 
+import Model.Sides.AngleSide;
 import Model.Sides.HorizontalSide;
 import Model.Sides.Side;
 import Model.Sides.VerticalSide;
@@ -71,6 +72,47 @@ public class ObstacleBuilder {
 
         ModelInstance mi = new ModelInstance(mb.createBox(length,OBSTACLE_HEIGHT, width, new Material(ColorAttribute.createDiffuse(Color.GRAY)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal) );
         mi.transform.setToTranslation(startPos.x+length/2,0, startPos.y+width/2);
+        return mi;
+
+    }
+
+    /**
+     * Creates the Model for rendering a Box obstacle
+     * Creates the Box Object with collision logic implemented
+     * @param centerGrav Center of gravity
+     * @param length length of the face, always along x axis
+     * @param width length of the side along the y axis
+     * @param angle angle of rotation around CG
+     * @param mb modelBuilder
+     * @return model instance to render
+     */
+    public static ModelInstance makeTiltedBox(Vector2 centerGrav, float length, float width,float angle, ModelBuilder mb){
+        Vector2 v1 = new Vector2(-length/2,-width/2).rotate(angle).add(centerGrav);
+        Vector2 v2 = new Vector2(length/2,-width/2).rotate(angle).add(centerGrav);
+        Vector2 v3 = new Vector2(length/2,width/2).rotate(angle).add(centerGrav);
+        Vector2 v4 = new Vector2(-length/2,width/2).rotate(angle).add(centerGrav);
+
+        Obstacle tmp = new Obstacle();
+        tmp.addVertex(v1);
+        tmp.addVertex(v2);
+        tmp.addVertex(v3);
+        tmp.addVertex(v4);
+
+        Side s1 = new AngleSide(v1, v2);
+        Side s2 = new AngleSide(v2,v3);
+        Side s3 = new AngleSide(v3,v4);
+        Side s4 = new AngleSide(v4,v1);
+
+        tmp.addSide(s1);
+        tmp.addSide(s2);
+        tmp.addSide(s3);
+        tmp.addSide(s4);
+
+        PuttingCourse.getInstance().obstacles.add(tmp);
+
+        ModelInstance mi = new ModelInstance(mb.createBox(length,OBSTACLE_HEIGHT, width, new Material(ColorAttribute.createDiffuse(Color.GRAY)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal) );
+        mi.transform.setToTranslation(centerGrav.x,0, centerGrav.y);
+        mi.transform.rotate(0,1,0,angle);
         return mi;
 
     }
