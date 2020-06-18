@@ -204,7 +204,7 @@ public class PuttingSimulator extends Game implements Screen{
         flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())) + 4.5f, (float)PuttingCourse.getInstance().get_flag_position().getY()- .5f);
         instances.add(flag);
 
-        instances.add(ObstacleBuilder.makeBox(new Vector2(5f,-3f),1f,6f, mb));
+        instances.add(ObstacleBuilder.makeTiltedBox(new Vector2(5f,0f),1f,6f,60 ,mb));
 
 
         // give the object a collision shape if you want it to have collision
