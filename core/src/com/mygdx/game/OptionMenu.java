@@ -54,6 +54,8 @@ public class OptionMenu implements Screen {
     Label mode2;
 
     Label aiLabel;
+    
+    Label mazeLabel;
 
     TextField loadMapTF;
     TextField loadSpeedTF;
@@ -62,6 +64,8 @@ public class OptionMenu implements Screen {
     TextButton loadSpeedB;
 
     TextButton aiButton;
+    
+    TextButton mazeButton;
 
     public int count;
 
@@ -78,7 +82,10 @@ public class OptionMenu implements Screen {
         mode2.setPosition(150, Main.getInstance().HEIGHT-540);
 
         aiLabel=new Label("Wiger Toods:", skin);
-        aiLabel.setPosition(150, Main.getInstance().HEIGHT-300);
+        aiLabel.setPosition(150, Main.getInstance().HEIGHT-250);
+        
+        mazeLabel=new Label("Create a random maze:", skin);
+        mazeLabel.setPosition(150, Main.getInstance().HEIGHT-350);
 
         shotLabelSpeed= new Label("Speed:", skin);
         shotLabelAngle = new Label("Angle:", skin);
@@ -116,12 +123,22 @@ public class OptionMenu implements Screen {
         });
 
         aiButton = new TextButton("Play", skin);
-        aiButton.setPosition(350, Main.getInstance().HEIGHT-300);
+        aiButton.setPosition(350, Main.getInstance().HEIGHT-250);
         aiButton.setSize(100,30);
         aiButton.addListener(new ClickListener(){
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button){
                 aiShot();
+            }
+        });
+        
+        mazeButton = new TextButton("Maze", skin);
+        mazeButton.setPosition(350, Main.getInstance().HEIGHT-350);
+        mazeButton.setSize(100,30);
+        mazeButton.addListener(new ClickListener(){
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button){
+                mazeGame();
             }
         });
 
@@ -175,6 +192,8 @@ public class OptionMenu implements Screen {
         stage.addActor(mode2);
         stage.addActor(aiLabel);
         stage.addActor(aiButton);
+        stage.addActor(mazeLabel);
+        stage.addActor(mazeButton);
         exitButtonActive=new Texture("ExitButtonActive.jpg");
         exitButtonInactive=new Texture("ExitButtonInactive.jpg");
         //TODO: make possible to edit settings and such...
@@ -219,6 +238,10 @@ public class OptionMenu implements Screen {
 //        play((float)shot.getX(), (float)shot.getY());
         PuttingSimulator.getInstance().take_shot(shot);
         Main.getInstance().setScreen(PuttingSimulator.getInstance());
+    }
+    
+    public void mazeGame() {
+    	
     }
 
     /**
