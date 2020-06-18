@@ -6,11 +6,15 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.PuttingCourse;
+import com.mygdx.game.*;
 
 import javax.sound.sampled.Line;
 import java.util.Collections;
 import java.util.Arrays;
+import java.util.LinkedList;
+
+import static com.mygdx.game.PuttingCourse.*;
+import static com.mygdx.game.PuttingCourse.*;
 
 public class MazeGenerator {
 	private final int x;
@@ -121,6 +125,7 @@ public class MazeGenerator {
 
 	public static Array<ModelInstance> createMaze(ModelBuilder modelBuilder){
 		Array<ModelInstance> result = new Array<ModelInstance>();
+		PuttingCourse.getInstance().obstacles=new LinkedList<>();
 		final int BLOCK_SIZE =3;
 		MazeGenerator maze = new MazeGenerator(8, 8);
 		maze.display();
@@ -128,6 +133,8 @@ public class MazeGenerator {
 			for(int j=0; j< InfoObject.maze[0].length; j++){
 				if(InfoObject.maze[i][j].wall){
 					result.add(ObstacleBuilder.makeBox(new Vector2(i*BLOCK_SIZE,j*BLOCK_SIZE),BLOCK_SIZE,BLOCK_SIZE, modelBuilder));
+					PuttingCourse.getInstance().obstacles.getLast().i=i;
+					PuttingCourse.getInstance().obstacles.getLast().j=j;
 				}
 			}
 		}

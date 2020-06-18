@@ -72,6 +72,7 @@ public class ObstacleBuilder {
 
         ModelInstance mi = new ModelInstance(mb.createBox(length,OBSTACLE_HEIGHT, width, new Material(ColorAttribute.createDiffuse(Color.GRAY)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal) );
         mi.transform.setToTranslation(startPos.x+length/2,0, startPos.y+width/2);
+        tmp.mi=mi;
         return mi;
 
     }
@@ -114,6 +115,7 @@ public class ObstacleBuilder {
         mi.transform.setToTranslation(centerGrav.x,0, centerGrav.y);
         mi.transform.rotate(0,1,0,angle);
         //for(float f: mi.transform.getValues())System.out.println(f);
+
         return mi;
 
     }

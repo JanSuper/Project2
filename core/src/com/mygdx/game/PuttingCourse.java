@@ -1,4 +1,5 @@
 package com.mygdx.game;
+
 import Model.Sides.Side;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -11,8 +12,11 @@ import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import java.util.LinkedList;
+import java.util.Random;
+
 import com.badlogic.gdx.math.Intersector;
 import Model.*;
 
@@ -29,6 +33,8 @@ public class PuttingCourse{
     private Function2d height;
 
     public LinkedList<Obstacle> obstacles = new LinkedList<Obstacle>();
+
+    private Random r = new Random();
 
 
     private PuttingCourse(){ }
@@ -48,7 +54,7 @@ public class PuttingCourse{
     }
 
     public void setCourse(PuttingCourse course) {
-        this.singleton = course;
+        singleton = course;
 
     }
 
@@ -76,7 +82,7 @@ public class PuttingCourse{
         TerrainChunk[][] terrainChunks = new TerrainChunk[numChunkX][numChunkY];//array of chunks of the terrain
         TerrainChunk chunk;//current terrain chunk
         Vector2d currentChunkPosition;//position of the current terrainchunk
-        TerrainChunk.setFunction(PuttingCourse.getInstance().get_height());
+        TerrainChunk.setFunction(get_height());
         float scale = 1;//of later use?
         int print = 0;//debugging purpose
         int chunkNum=0;
@@ -299,11 +305,18 @@ public class PuttingCourse{
                 for(Side side: sides){
                     stop = side.collideIfCollision(solver);
                     if(stop){
+                        //make the obstacle rise on contact !
+                        if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) scale(obstacle);
+                        else scale(obstacles.get(r.nextInt(obstacles.size())));
                         return;
                     }
 
                 }
             }
         }
+    }
+
+    private void scale(Obstacle obstacle){
+        if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) obstacle.mi.transform.scale(1,5,1);
     }
 }
