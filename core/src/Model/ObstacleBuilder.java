@@ -20,7 +20,7 @@ public class ObstacleBuilder {
 
     private static final float MAX_DIS_STEP= .01f;
 
-    private static final float OBSTACLE_HEIGHT = 5;
+    private static final float OBSTACLE_HEIGHT = 1;
 
     /**
      * Sets the flag pole object in the course and ready to render

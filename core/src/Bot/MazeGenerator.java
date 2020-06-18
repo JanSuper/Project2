@@ -1,5 +1,14 @@
 package Bot;
 
+import Model.ObstacleBuilder;
+import Model.Vector2d;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.PuttingCourse;
+
+import javax.sound.sampled.Line;
 import java.util.Collections;
 import java.util.Arrays;
 
@@ -62,8 +71,7 @@ public class MazeGenerator {
 //			}
 //			System.out.println(mazeBlocks.maze[i][16].wall);
 //		}
-		
-		
+
 		mazeBlocks.getSteps();
 		mazeBlocks.getBotSteps();
 		mazeBlocks.printSteps();
@@ -110,11 +118,29 @@ public class MazeGenerator {
 			this.dy = dy;
 		}
 	};
+
+	public static Array<ModelInstance> createMaze(ModelBuilder modelBuilder){
+		Array<ModelInstance> result = new Array<ModelInstance>();
+		final int BLOCK_SIZE =3;
+		MazeGenerator maze = new MazeGenerator(8, 8);
+		maze.display();
+		for(int i = 0; i<InfoObject.maze.length; i++){
+			for(int j=0; j< InfoObject.maze[0].length; j++){
+				if(InfoObject.maze[i][j].wall){
+					result.add(ObstacleBuilder.makeBox(new Vector2(i*BLOCK_SIZE,j*BLOCK_SIZE),BLOCK_SIZE,BLOCK_SIZE, modelBuilder));
+				}
+			}
+		}
+		PuttingCourse.getInstance().set_start_position(new Vector2d(BLOCK_SIZE+BLOCK_SIZE/2,BLOCK_SIZE+BLOCK_SIZE/2));
+		PuttingCourse.getInstance().set_flag_position(new Vector2d(InfoObject.maze.length*BLOCK_SIZE-1.5*BLOCK_SIZE,InfoObject.maze[0].length*BLOCK_SIZE-1.5*BLOCK_SIZE));
+		return result;
+	}
  
 	public static void main(String[] args) {
 		int x = args.length >= 1 ? (Integer.parseInt(args[0])) : 8;
 		int y = args.length == 2 ? (Integer.parseInt(args[1])) : 8;
-		MazeGenerator maze = new MazeGenerator(x, y);
+
+		MazeGenerator maze = new MazeGenerator(8,8);
 		maze.display();
 
 	}

@@ -35,7 +35,7 @@ public class Main extends Game {
     }
 
     /**
-     * Singeleton get instance method
+     * Singleton get instance method
      * @return
      */
     public static Main getInstance(){

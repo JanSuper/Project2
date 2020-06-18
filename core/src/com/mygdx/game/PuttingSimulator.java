@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import Bot.MazeGenerator;
 import Bot.WigerToods;
 import Model.Sides.Side;
 import com.badlogic.gdx.Game;
@@ -196,7 +197,7 @@ public class PuttingSimulator extends Game implements Screen{
             }
         }*/
         instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
-
+        instances.addAll(MazeGenerator.createMaze(mb));
         flagPole = new ModelInstance(model, "flagpole");
         flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())), (float)PuttingCourse.getInstance().get_flag_position().getY());
         instances.add(flagPole);
@@ -204,7 +205,7 @@ public class PuttingSimulator extends Game implements Screen{
         flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())) + 4.5f, (float)PuttingCourse.getInstance().get_flag_position().getY()- .5f);
         instances.add(flag);
 
-        instances.add(ObstacleBuilder.makeTiltedBox(new Vector2(5f,0f),1f,6f,60 ,mb));
+        //instances.add(ObstacleBuilder.makeTiltedBox(new Vector2(5f,0f),1f,6f,60 ,mb));
 
 
         // give the object a collision shape if you want it to have collision

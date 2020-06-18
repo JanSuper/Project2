@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class InfoObject {
 	int i;
 	int j;
-	BlockInfo[][] maze;
+	static BlockInfo[][] maze;
 	ArrayList<BlockInfo> steps;
 	ArrayList<String> strings;
 	ArrayList<int[]> botSteps;
