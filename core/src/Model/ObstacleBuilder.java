@@ -17,7 +17,7 @@ import com.mygdx.game.PuttingCourse;
  * A class for quickly building objects/obstacles to add to the course
  */
 public class ObstacleBuilder {
-
+    private static final float BALL_RADIUS = 0.5f;
     private static final float MAX_DIS_STEP= .01f;
 
     private static final float OBSTACLE_HEIGHT = 1;
@@ -48,19 +48,20 @@ public class ObstacleBuilder {
      * @param width length of the side along the y axis
      */
     public static ModelInstance makeBox(Vector2 startPos, float length, float width, ModelBuilder mb){
-        Vector2 v1 = new Vector2(startPos.x + length, startPos.y);
-        Vector2 v2 = new Vector2(startPos.x, startPos.y+width);
-        Vector2 v3 = new Vector2(startPos.x+length, startPos.y+width);
+        Vector2 vstartPos = new Vector2(startPos.x-BALL_RADIUS,startPos.y-BALL_RADIUS);
+        Vector2 v1 = new Vector2(startPos.x + length+BALL_RADIUS, startPos.y-BALL_RADIUS);
+        Vector2 v2 = new Vector2(startPos.x-BALL_RADIUS, startPos.y+width+BALL_RADIUS);
+        Vector2 v3 = new Vector2(startPos.x+length+BALL_RADIUS, startPos.y+width+BALL_RADIUS);
 
         Obstacle tmp = new Obstacle();
-        tmp.addVertex(startPos);
+        tmp.addVertex(vstartPos);
         tmp.addVertex(v1);
         tmp.addVertex(v3);
         tmp.addVertex(v2);
 
-        Side s1 = new VerticalSide(startPos, v2);
+        Side s1 = new VerticalSide(vstartPos, v2);
         Side s2 = new VerticalSide(v1,v3);
-        Side s3 = new HorizontalSide(startPos, v1);
+        Side s3 = new HorizontalSide(vstartPos, v1);
         Side s4 = new HorizontalSide(v2,v3);
 
         tmp.addSide(s1);

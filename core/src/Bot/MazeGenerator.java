@@ -127,7 +127,9 @@ public class MazeGenerator {
 	public static Array<ModelInstance> createMaze(ModelBuilder modelBuilder){
 		Array<ModelInstance> result = new Array<ModelInstance>();
 		PuttingCourse.getInstance().obstacles=new LinkedList<>();
-		final int BLOCK_SIZE =3;
+
+		final int BLOCK_SIZE = 3;
+
 		MazeGenerator maze = new MazeGenerator(8, 8);
 		maze.display();
 		for(int i = 0; i<InfoObject.maze.length; i++){

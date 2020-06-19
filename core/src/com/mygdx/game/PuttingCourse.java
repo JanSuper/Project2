@@ -297,7 +297,7 @@ public class PuttingCourse{
        Array<Vector2> polygon;
        LinkedList<Side> sides;
        boolean stop;
-
+        Array<ModelInstance> instances = PuttingSimulator.getInstance().instances;
         for(Obstacle obstacle : obstacles){
             polygon=obstacle.getPolygon();
             if(Intersector.isPointInPolygon(polygon ,new Vector2((float)solver.getPosition().getX(),(float)solver.getPosition().getY()))){
