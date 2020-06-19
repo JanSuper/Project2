@@ -199,6 +199,10 @@ public class InfoObject {
 	}
 	
 	public ArrayList<int[]> getBotSteps(){
+		if(botSteps.size() != 0) {
+			return botSteps;
+		}
+		
 		int count = 0;
 		boolean newStep = true;
 		boolean[] hold = {};
