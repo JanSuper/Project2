@@ -49,23 +49,23 @@ public class RKSolver extends Solver {
         Vector2d acceleration = getNextAcceleration(position, velocity);
         double vkx1 = solverStepSize*acceleration.getX(),
                 vky1 = solverStepSize*acceleration.getY(),
-                pkx1 = (velocity.getX() + vkx1)*solverStepSize,
-                pky1 = (velocity.getY()+vky1)*solverStepSize;
+                pkx1 = (velocity.getX() + vkx1*solverStepSize)*solverStepSize,
+                pky1 = (velocity.getY()+vky1*solverStepSize)*solverStepSize;
         acceleration = getNextAcceleration(position.cloneAndAdd(pkx1/2, pky1/2), velocity.cloneAndAdd(vkx1/2, vky1/2));
         double vkx2 = solverStepSize*acceleration.getX(),
                 vky2=solverStepSize*acceleration.getY(),
-                pkx2 = (velocity.getX()+vkx2)*solverStepSize,
-                pky2=(velocity.getY()+vky2)*solverStepSize;
+                pkx2 = (velocity.getX()+vkx2*solverStepSize)*solverStepSize,
+                pky2=(velocity.getY()+vky2*solverStepSize)*solverStepSize;
         acceleration = getNextAcceleration(position.cloneAndAdd(pkx2/2, pky2/2), velocity.cloneAndAdd(vkx2/2, vky2/2));
         double vkx3 = solverStepSize*acceleration.getX(),
                 vky3=solverStepSize*acceleration.getY(),
-                pkx3 = (velocity.getX()+vkx2)*solverStepSize,
-                pky3=(velocity.getY()+vky2)*solverStepSize;
+                pkx3 = (velocity.getX()+vkx2*solverStepSize)*solverStepSize,
+                pky3=(velocity.getY()+vky2*solverStepSize)*solverStepSize;
         acceleration = getNextAcceleration(position.cloneAndAdd(pkx3, pky3), velocity.cloneAndAdd(vkx3, vky3));
         double vkx4 = solverStepSize*acceleration.getX(),
                 vky4=solverStepSize*acceleration.getY(),
-                pkx4 = (velocity.getX()+vkx2)*solverStepSize,
-                pky4=(velocity.getY()+vky2)*solverStepSize;
+                pkx4 = (velocity.getX()+vkx2*solverStepSize)*solverStepSize,
+                pky4=(velocity.getY()+vky2*solverStepSize)*solverStepSize;
         return new Vector2d[]{position.cloneAndAdd((pkx1+2*pkx2+2*pkx3+pkx4)/6,(pky1+2*pky2+2*pky3+pky4)/6),
                 velocity.cloneAndAdd((vkx1+2*vkx2+2*vkx3+vkx4)/6,(vky1+2*vky2+2*vky3+vky4)/6)};
     }
