@@ -12,6 +12,7 @@ public class WigerToods {
     private static WigerToods ai=null;
     static Solver solver = new RKSolver();
     public ArrayList<int[]> botSteps;
+    static int stepcount;
 
     /**
      * Before using AI, be sure to set the current solver
@@ -28,7 +29,7 @@ public class WigerToods {
      */
     public Vector2d search(){
     	// TODO new method allowing for multiple shots
-        boolean recalibrateY=true;
+    	boolean recalibrateY=true;
         boolean recalibrateX=true;
         double scalar = 0.9; 
         Vector2d testFin;
@@ -56,7 +57,38 @@ public class WigerToods {
     }
     
     public Vector2d mazeSearch() {
-    	return null;
+    	int[] currentStep = nextStep();
+    	PuttingCourse copyCourse = PuttingCourse.getInstance();
+    	copyCourse.set_flag_positon(new Vector2d(currentStep[2], currentStep[3]));
+    	boolean recalibrateY=true;
+        boolean recalibrateX=true;
+    	double scalar = 0.9; 
+        Vector2d testFin;
+        Vector2d testVelocity = (copyCourse.get_flag_position().subtract(PuttingSimulator.getInstance().get_ball_position())).multiplyBy(new Vector2d(.5,.5));
+        Vector2d distanceToFlag = PuttingSimulator.getInstance().get_ball_position().absDifference(copyCourse.get_flag_position());
+        while(recalibrateX||recalibrateY){
+            testFin = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), testVelocity);
+            Vector2d shotDistance = PuttingSimulator.getInstance().get_ball_position().absDifference(testFin);
+
+
+            if(Math.abs(testFin.subtract(copyCourse.get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()/10){
+                recalibrateX=false;
+            }else{
+                scalar = distanceToFlag.getX()/shotDistance.getX();
+                testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
+            }
+            if(Math.abs(testFin.subtract(copyCourse.get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()/10) {
+                recalibrateY = false;
+            }else{
+                scalar = distanceToFlag.getY()/shotDistance.getY();
+                testVelocity.setY(testVelocity.getY()*Math.cbrt(scalar));
+            }
+        }
+        return testVelocity;
+    }
+    
+    public int[] nextStep() {
+    	return botSteps.get(stepcount++);
     }
 
     /**

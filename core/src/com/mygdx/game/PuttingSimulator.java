@@ -297,7 +297,11 @@ public class PuttingSimulator extends Game implements Screen{
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
             		System.out.println("heregiveupmaze");
             		WigerToods.getInstance().botSteps = MazeGenerator.mazeBlocks.getBotSteps();
-                
+            		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
+            		Vector2d nextShot = WigerToods.getInstance().mazeSearch();
+            		take_shot(nextShot);
+            		shot = false;
+                    Gdx.input.setInputProcessor(camController);
             	}
        		});
         }
@@ -389,7 +393,10 @@ public class PuttingSimulator extends Game implements Screen{
             		// only reaches here if the bot doesnt make it on the first try on a normal course
             	}
             	else { //mazeLevel
-            		// only reaches here if the bot doesnt make it on the first try on a maze course
+            		Vector2d nextShot = ai.mazeSearch();
+            		take_shot(nextShot);
+            		shot = false;
+                    Gdx.input.setInputProcessor(camController);
             	}
             }
         }

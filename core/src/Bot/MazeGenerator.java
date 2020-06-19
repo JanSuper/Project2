@@ -21,6 +21,9 @@ public class MazeGenerator {
 	private final int y;
 	private final int[][] maze;
 	public static InfoObject mazeBlocks;
+	public static final int BLOCK_SIZE =3;
+	
+	static Array<ModelInstance> createMaze = null;
  
 	public MazeGenerator(int x, int y) {
 		this.x = x;
@@ -125,11 +128,11 @@ public class MazeGenerator {
 	};
 
 	public static Array<ModelInstance> createMaze(ModelBuilder modelBuilder){
+		if(createMaze != null) {
+			return createMaze;
+		}
 		Array<ModelInstance> result = new Array<ModelInstance>();
 		PuttingCourse.getInstance().obstacles=new LinkedList<>();
-
-		final int BLOCK_SIZE = 3;
-
 		MazeGenerator maze = new MazeGenerator(8, 8);
 		maze.display();
 		for(int i = 0; i<InfoObject.maze.length; i++){
@@ -143,6 +146,7 @@ public class MazeGenerator {
 		}
 		PuttingCourse.getInstance().set_start_position(new Vector2d(BLOCK_SIZE+BLOCK_SIZE/2,BLOCK_SIZE+BLOCK_SIZE/2));
 		PuttingCourse.getInstance().set_flag_position(new Vector2d(InfoObject.maze.length*BLOCK_SIZE-1.5*BLOCK_SIZE,InfoObject.maze[0].length*BLOCK_SIZE-1.5*BLOCK_SIZE));
+		createMaze = result;
 		return result;
 	}
  
