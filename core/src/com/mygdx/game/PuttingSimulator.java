@@ -81,6 +81,7 @@ public class PuttingSimulator extends Game implements Screen{
     TextField textFieldSpeed;
     TextField textFieldAngle;
     TextButton buttonShot;
+    TextButton giveUp;
     Label shotLabelSpeed;
     Label shotLabelAngle;
     private Stage stage;
@@ -88,6 +89,7 @@ public class PuttingSimulator extends Game implements Screen{
     boolean shot = false;
     boolean look = true;
     boolean canCount = false;
+    boolean mazeLevel = false;
 
     /**
      * Required for API on course manual
@@ -197,7 +199,11 @@ public class PuttingSimulator extends Game implements Screen{
             }
         }*/
         instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
+        
+        if (mazeLevel)
         instances.addAll(MazeGenerator.createMaze(mb));
+        
+        
         flagPole = new ModelInstance(model, "flagpole");
         flagPole.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(), 2.5f + (float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())), (float)PuttingCourse.getInstance().get_flag_position().getY());
         instances.add(flagPole);
@@ -282,9 +288,39 @@ public class PuttingSimulator extends Game implements Screen{
             }
         });
         
+        giveUp = new TextButton("I give up",skin);
+        giveUp.setPosition(470,Main.getInstance().HEIGHT-230);
+        giveUp.setSize(100,30);
+        if (mazeLevel) {
+        	giveUp.addListener(new ClickListener(){
+        		@Override
+            	public void touchUp(InputEvent e, float x, float y, int point, int button){
+            		System.out.println("heregiveupmaze");
+            		WigerToods.getInstance().botSteps = MazeGenerator.mazeBlocks.getBotSteps();
+                
+            	}
+       		});
+        }
+        else {
+        	giveUp.addListener(new ClickListener(){
+        		@Override
+            	public void touchUp(InputEvent e, float x, float y, int point, int button){
+            		System.out.println("heregiveup");
+            		WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+            		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
+            		Vector2d holdshot = WigerToods.getInstance().search();
+            		look=false;
+            		shot = false;
+            		count = 0;
+            		take_shot(holdshot);
+            	}
+       		});
+        }
+        
         stage = new Stage();
         
         stage.addActor(buttonShot);
+        stage.addActor(giveUp);
         stage.addActor(textFieldSpeed);
         stage.addActor(textFieldAngle);
         stage.addActor(shotLabelSpeed);
@@ -308,6 +344,12 @@ public class PuttingSimulator extends Game implements Screen{
            
 //        	Menu holdMenu = new Menu(Main.getInstance());
 //        	holdMenu.newLVL = true;
+        	setAi(null);
+        	 	shot = false;
+        	    look = true;
+        	    canCount = false;
+        	    mazeLevel = false;
+        	    count = 0;
             Main.getInstance().setScreen(Menu.getInstance());
         }
         else if (shot) {
@@ -341,9 +383,14 @@ public class PuttingSimulator extends Game implements Screen{
 
                     }
                 });
+                
             }else{
-                Vector2d shot = ai.search();
-                take_shot(shot);
+            	if(!mazeLevel) {
+            		// only reaches here if the bot doesnt make it on the first try on a normal course
+            	}
+            	else { //mazeLevel
+            		// only reaches here if the bot doesnt make it on the first try on a maze course
+            	}
             }
         }
         else {

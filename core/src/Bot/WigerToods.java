@@ -1,12 +1,17 @@
 package Bot;
 
 import Model.*;
+
+import java.util.ArrayList;
+
 import com.mygdx.game.PuttingCourse;
+import com.mygdx.game.PuttingSimulator;
 
 public class WigerToods {
 
     private static WigerToods ai=null;
     static Solver solver = new RKSolver();
+    public ArrayList<int[]> botSteps;
 
     /**
      * Before using AI, be sure to set the current solver
@@ -22,24 +27,25 @@ public class WigerToods {
      * @return Vector2d vector of shot(x and y strength)
      */
     public Vector2d search(){
+    	// TODO new method allowing for multiple shots
         boolean recalibrateY=true;
         boolean recalibrateX=true;
-        double scalar = 0.9;
+        double scalar = 0.9; 
         Vector2d testFin;
-        Vector2d testVelocity = (PuttingCourse.getInstance().get_flag_position().subtract(PuttingCourse.getInstance().get_start_position())).multiplyBy(new Vector2d(.5,.5));
-        Vector2d distanceToFlag = PuttingCourse.getInstance().get_start_position().absDifference(PuttingCourse.getInstance().get_flag_position());
+        Vector2d testVelocity = (PuttingCourse.getInstance().get_flag_position().subtract(PuttingSimulator.getInstance().get_ball_position())).multiplyBy(new Vector2d(.5,.5));
+        Vector2d distanceToFlag = PuttingSimulator.getInstance().get_ball_position().absDifference(PuttingCourse.getInstance().get_flag_position());
         while(recalibrateX||recalibrateY){
-            testFin = solver.takeShot(PuttingCourse.getInstance().get_start_position(), testVelocity);
-            Vector2d shotDistance = PuttingCourse.getInstance().get_start_position().absDifference(testFin);
+            testFin = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), testVelocity);
+            Vector2d shotDistance = PuttingSimulator.getInstance().get_ball_position().absDifference(testFin);
 
 
-            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()){
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()/10){
                 recalibrateX=false;
             }else{
                 scalar = distanceToFlag.getX()/shotDistance.getX();
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
             }
-            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()) {
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()/10) {
                 recalibrateY = false;
             }else{
                 scalar = distanceToFlag.getY()/shotDistance.getY();
@@ -47,6 +53,10 @@ public class WigerToods {
             }
         }
         return testVelocity;
+    }
+    
+    public Vector2d mazeSearch() {
+    	return null;
     }
 
     /**

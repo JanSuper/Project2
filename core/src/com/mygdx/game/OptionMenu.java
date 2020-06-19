@@ -236,12 +236,18 @@ public class OptionMenu implements Screen {
         PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
         Vector2d shot = WigerToods.getInstance().search();
 //        play((float)shot.getX(), (float)shot.getY());
+        PuttingSimulator.getInstance().canCount = true;
         PuttingSimulator.getInstance().take_shot(shot);
         Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
     
     public void mazeGame() {
-    	
+    	WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+    	 PuttingSimulator.getInstance().mazeLevel = true;
+    	 PuttingSimulator.getInstance().create();
+    	 play(0,0);
+    	 PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
+    	 Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
 
     /**
@@ -268,7 +274,7 @@ public class OptionMenu implements Screen {
         PuttingSimulator.getInstance().create();
         PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
         PuttingSimulator.getInstance().look = false;
-        PuttingSimulator.getInstance().canCount = true;
+//        PuttingSimulator.getInstance().canCount = true;
         Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
 

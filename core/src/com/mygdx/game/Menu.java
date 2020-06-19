@@ -133,7 +133,7 @@ public class Menu implements Screen {
 //            this.velocity=(float) PuttingCourse.getInstance().get_maximum_velocity();
 //        }
 //        this.angle=angle;
-
+    	
         PuttingSimulator.getInstance().create();
 //        PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
         Main.getInstance().setScreen(PuttingSimulator.getInstance());

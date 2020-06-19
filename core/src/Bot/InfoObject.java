@@ -9,7 +9,7 @@ public class InfoObject {
 	static BlockInfo[][] maze;
 	ArrayList<BlockInfo> steps;
 	ArrayList<String> strings;
-	ArrayList<int[]> botSteps;
+	static ArrayList<int[]> botSteps;
 	boolean delete = false;
 	int lasti;
 	int lastj;

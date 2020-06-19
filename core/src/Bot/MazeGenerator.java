@@ -20,6 +20,7 @@ public class MazeGenerator {
 	private final int x;
 	private final int y;
 	private final int[][] maze;
+	public static InfoObject mazeBlocks;
  
 	public MazeGenerator(int x, int y) {
 		this.x = x;
@@ -29,7 +30,7 @@ public class MazeGenerator {
 	}
  
 	public void display() {
-		InfoObject mazeBlocks = new InfoObject();
+		mazeBlocks = new InfoObject();
 		for (int i = 0; i < y; i++) {
 			// draw the north edge
 			for (int j = 0; j < x; j++) {

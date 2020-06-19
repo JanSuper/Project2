@@ -28,7 +28,7 @@ public class PuttingCourse{
     private Vector2d flag = new Vector2d(10,0);
     private Vector2d start = new Vector2d( 0,0);
     private double friction = 0.3;
-    private double holeTolerance = 0.02;
+    private double holeTolerance = 0.02f;
     private double maximumVelocity =15.0;
     private Function2d height;
 
