@@ -3,6 +3,7 @@ package Bot;
 import Model.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.mygdx.game.PuttingCourse;
 import com.mygdx.game.PuttingSimulator;
@@ -12,7 +13,7 @@ public class WigerToods {
     private static WigerToods ai=null;
     static Solver solver = new RKSolver();
     public ArrayList<int[]> botSteps;
-    static int stepcount;
+    public static int stepcount;
 
     /**
      * Before using AI, be sure to set the current solver
@@ -40,13 +41,13 @@ public class WigerToods {
             Vector2d shotDistance = PuttingSimulator.getInstance().get_ball_position().absDifference(testFin);
 
 
-            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()/10){
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()/100){
                 recalibrateX=false;
             }else{
                 scalar = distanceToFlag.getX()/shotDistance.getX();
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
             }
-            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()/10) {
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()/100) {
                 recalibrateY = false;
             }else{
                 scalar = distanceToFlag.getY()/shotDistance.getY();
@@ -58,26 +59,27 @@ public class WigerToods {
     
     public Vector2d mazeSearch() {
     	int[] currentStep = nextStep();
-    	PuttingCourse copyCourse = PuttingCourse.getInstance();
-    	copyCourse.set_flag_positon(new Vector2d(currentStep[2], currentStep[3]));
+    	System.out.println(PuttingSimulator.getInstance().get_ball_position().toString());
+    	System.out.println(Arrays.toString(currentStep));
+    	Vector2d flag = new Vector2d(currentStep[2]*MazeGenerator.BLOCK_SIZE + 1, currentStep[3]*MazeGenerator.BLOCK_SIZE + 1);
     	boolean recalibrateY=true;
         boolean recalibrateX=true;
     	double scalar = 0.9; 
         Vector2d testFin;
-        Vector2d testVelocity = (copyCourse.get_flag_position().subtract(PuttingSimulator.getInstance().get_ball_position())).multiplyBy(new Vector2d(.5,.5));
-        Vector2d distanceToFlag = PuttingSimulator.getInstance().get_ball_position().absDifference(copyCourse.get_flag_position());
+        Vector2d testVelocity = (flag.subtract(PuttingSimulator.getInstance().get_ball_position())).multiplyBy(new Vector2d(.5,.5));
+        Vector2d distanceToFlag = PuttingSimulator.getInstance().get_ball_position().absDifference(flag);
         while(recalibrateX||recalibrateY){
             testFin = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), testVelocity);
             Vector2d shotDistance = PuttingSimulator.getInstance().get_ball_position().absDifference(testFin);
 
 
-            if(Math.abs(testFin.subtract(copyCourse.get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()/10){
+            if(Math.abs(testFin.subtract(flag).getX())<PuttingCourse.getInstance().get_hole_tolerance()/10){
                 recalibrateX=false;
             }else{
                 scalar = distanceToFlag.getX()/shotDistance.getX();
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
             }
-            if(Math.abs(testFin.subtract(copyCourse.get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()/10) {
+            if(Math.abs(testFin.subtract(flag).getY())<PuttingCourse.getInstance().get_hole_tolerance()/10) {
                 recalibrateY = false;
             }else{
                 scalar = distanceToFlag.getY()/shotDistance.getY();

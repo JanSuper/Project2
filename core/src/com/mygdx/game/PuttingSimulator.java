@@ -130,7 +130,8 @@ public class PuttingSimulator extends Game implements Screen{
     	Main.getInstance(.getSolver().setVelY((float)initial_ball_velocity.getY());
     *///changes to
        // if(initial_ball_velocity.evaluateVector()> menu.vMax) initial_ball_velocity.scaleDown(menu.vMax);
-
+    	if(initial_ball_velocity.evaluateVector() > PuttingCourse.getInstance().get_maximum_velocity())
+    	initial_ball_velocity.scaleDown(PuttingCourse.getInstance().get_maximum_velocity());
         Main.getInstance().getSolver().setVelocity(initial_ball_velocity);
     }
 
@@ -300,6 +301,7 @@ public class PuttingSimulator extends Game implements Screen{
             		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
             		Vector2d nextShot = WigerToods.getInstance().mazeSearch();
             		take_shot(nextShot);
+            		count = 0;
             		shot = false;
                     Gdx.input.setInputProcessor(camController);
             	}
@@ -393,10 +395,20 @@ public class PuttingSimulator extends Game implements Screen{
             		// only reaches here if the bot doesnt make it on the first try on a normal course
             	}
             	else { //mazeLevel
-            		Vector2d nextShot = ai.mazeSearch();
-            		take_shot(nextShot);
-            		shot = false;
-                    Gdx.input.setInputProcessor(camController);
+            		if (WigerToods.getInstance().stepcount < WigerToods.getInstance().botSteps.size()) {
+            			Vector2d nextShot = ai.mazeSearch();
+            			take_shot(nextShot);
+            			shot = false;
+            			count = 0;
+            			Gdx.input.setInputProcessor(camController);
+            		}
+            		else {
+            			Vector2d holdshot = WigerToods.getInstance().search();
+                		look=false;
+                		shot = false;
+                		count = 0;
+                		take_shot(holdshot);
+            		}
             	}
             }
         }
