@@ -295,7 +295,6 @@ public class PuttingCourse{
     }
 
     public void checkCollision (Solver solver){
-
        Array<Vector2> polygon;
        LinkedList<Side> sides;
        boolean stop;
