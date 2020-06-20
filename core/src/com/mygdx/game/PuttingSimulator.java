@@ -346,7 +346,7 @@ public class PuttingSimulator extends Game implements Screen{
     	Gdx.input.setInputProcessor(camController);
     	}
         //TODO: add game over
-        if ( Main.getInstance().getSolver().finish()) {
+        if (Main.getInstance().getSolver().finish(PuttingCourse.getInstance().get_flag_position(), PuttingCourse.getInstance().get_hole_tolerance())) {
            
 //        	Menu holdMenu = new Menu(Main.getInstance());
 //        	holdMenu.newLVL = true;
@@ -364,7 +364,7 @@ public class PuttingSimulator extends Game implements Screen{
         }
         else if (count == 2*60) {
 //        	Main.getInstance().getSolver().setVelocity(new Vector2d(0,0));
-            if(ai==null) {
+            if(ai==null) { // if a human is playing
             	      	
             	
             	Gdx.input.setInputProcessor(stage);
@@ -396,14 +396,14 @@ public class PuttingSimulator extends Game implements Screen{
             		// only reaches here if the bot doesnt make it on the first try on a normal course
             	}
             	else { //mazeLevel
-            		if (WigerToods.getInstance().stepcount < WigerToods.getInstance().botSteps.size()) {
+            		if (WigerToods.getInstance().stepcount < WigerToods.getInstance().botSteps.size()) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
             			Vector2d nextShot = ai.mazeSearch();
             			take_shot(nextShot);
             			shot = false;
             			count = 0;
             			Gdx.input.setInputProcessor(camController);
             		}
-            		else {
+            		else { // there are still steps to be taken to solve the maze
             			Vector2d holdshot = WigerToods.getInstance().search();
                 		look=false;
                 		shot = false;
@@ -438,13 +438,9 @@ public class PuttingSimulator extends Game implements Screen{
             for(ModelInstance instance : instances)  modelBatch.render(instance, environment);
             modelBatch.end();
             
-              if ((Math.abs(Main.getInstance().getSolver().getVelocity().getX()) <= 0.2f &&  Math.abs(Main.getInstance().getSolver().getVelocity().getY()) <= 0.2f)&&canCount) {
-            	count++;
-            }
-            else {
-            	count = 0;
-            }
-
+            System.out.println(count);
+            count = Main.getInstance().getSolver().isLayingStill(count, canCount);
+            
         }
     }
 
@@ -452,7 +448,7 @@ public class PuttingSimulator extends Game implements Screen{
 //        instance.transform.getTranslation(posTemp);
 //        return cam.frustum.pointInFrustum(posTemp);
 //    }
-
+    
     public void setAi(WigerToods wt){
         this.ai = wt;
     }

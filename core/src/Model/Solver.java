@@ -1,5 +1,6 @@
 package Model;
 
+import com.mygdx.game.Main;
 import com.mygdx.game.PuttingCourse;
 import java.util.LinkedList;
 import static java.lang.Math.sqrt;
@@ -127,13 +128,20 @@ public abstract class Solver implements PhysicsEngine{
         return positionList;
     }
 
-    public boolean finish() {
-    	return (((((PuttingCourse.getInstance().get_flag_position().getX() - PuttingCourse.getInstance().get_hole_tolerance() <= this.position.getX()) &&
-                (position.getX() <= PuttingCourse.getInstance().get_flag_position().getX()+ PuttingCourse.getInstance().get_hole_tolerance()))
-                &&((PuttingCourse.getInstance().get_flag_position().getY() - PuttingCourse.getInstance().get_hole_tolerance() <= this.position.getY())
-                && (this.position.getY() <= PuttingCourse.getInstance().get_flag_position().getY() + PuttingCourse.getInstance().get_hole_tolerance())))
+    public boolean finish(Vector2d flagPostion, double tolerance) {
+    	return (((((flagPostion.getX() - tolerance <= this.position.getX()) &&
+                (position.getX() <= flagPostion.getX()+ tolerance))
+                &&((flagPostion.getY() - tolerance <= this.position.getY())
+                && (this.position.getY() <= flagPostion.getY() + tolerance)))
     			&& (Math.abs(velocity.getX())<= 0.01 && Math.abs(velocity.getY())<= 0.01)));
 
+    }
+    
+    public int isLayingStill(int count, boolean canCount) {
+    	if ((Math.abs(getVelocity().getX()) <= 0.2f &&  Math.abs(getVelocity().getY()) <= 0.2f)&&canCount)
+    		return count++;
+    	else
+    		return 0;
     }
 
 

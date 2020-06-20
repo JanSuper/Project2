@@ -11,7 +11,8 @@ public interface PhysicsEngine {
 	public Vector2d getPosition();
 	public double getPosZ();
 	public Vector2d getVelocity();
-	public boolean finish();
+	public boolean finish(Vector2d v, double d);
 	public abstract void set_step_size(double h);
+	public int isLayingStill(int i, boolean b);
 
 }
