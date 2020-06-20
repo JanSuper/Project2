@@ -107,6 +107,7 @@ public abstract class Solver implements PhysicsEngine{
                 count = 0;
             }
         }
+        setVelocity(new Vector2d(0,0));
         Vector2d tmp = this.position;
         this.position = position;
         return tmp;

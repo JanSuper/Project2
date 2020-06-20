@@ -35,6 +35,8 @@ public class PuttingCourse{
     public LinkedList<Obstacle> obstacles = new LinkedList<Obstacle>();
 
     private Random r = new Random();
+    
+    public boolean botUse = false;
 
 
     private PuttingCourse(){ }
@@ -300,20 +302,48 @@ public class PuttingCourse{
         for(Obstacle obstacle : obstacles){
             polygon=obstacle.getPolygon();
             if(Intersector.isPointInPolygon(polygon ,new Vector2((float)solver.getPosition().getX(),(float)solver.getPosition().getY()))){
+            	System.out.println("need to talk");
                 sides = obstacle.getSides();
                 for(Side side: sides){
                     stop = side.collideIfCollision(solver);
-                    if(stop){
-                        //make the obstacle rise on contact !
-                        if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) scale(obstacle);
-                        else scale(obstacles.get(r.nextInt(obstacles.size())));
-                        return;
+                    if (stop) System.out.println("touchie");
+                    
+                    if(!botUse) {
+                    	if(stop){
+                        	//make the obstacle rise on contact !
+                        	if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) scale(obstacle);
+                        	else scale(obstacles.get(r.nextInt(obstacles.size())));
+                        	return;
+                    	}
                     }
 
                 }
             }
         }
     }
+    
+    public void checkCollisionBot (Solver solver){
+
+        Array<Vector2> polygon;
+        LinkedList<Side> sides;
+        boolean stop;
+         for(Obstacle obstacle : obstacles){
+             polygon=obstacle.getPolygon();
+             if(Intersector.isPointInPolygon(polygon ,new Vector2((float)solver.getPosition().getX(),(float)solver.getPosition().getY()))){
+                 sides = obstacle.getSides();
+                 for(Side side: sides){
+                     stop = side.collideIfCollision(solver);
+                     if(stop){
+                         //make the obstacle rise on contact !
+                         if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) scale(obstacle);
+                         else scale(obstacles.get(r.nextInt(obstacles.size())));
+                         return;
+                     }
+
+                 }
+             }
+         }
+     }
 
     private void scale(Obstacle obstacle){
         if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) obstacle.mi.transform.scale(1,5,1);

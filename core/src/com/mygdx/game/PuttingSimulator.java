@@ -338,7 +338,7 @@ public class PuttingSimulator extends Game implements Screen{
     public void render (float delta) {
     	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
     		canCount = true;
-    		count = 120;
+    		count = 300;
     	}
     	
     	
@@ -362,7 +362,8 @@ public class PuttingSimulator extends Game implements Screen{
         	stage.act(delta);
             stage.draw();
         }
-        else if (count == 2*60) {
+        else if (count == 5*60) {
+        	Main.getInstance().getSolver().setVelocity(new Vector2d(0,0));
             if(ai==null) {
             	      	
             	
