@@ -2,9 +2,11 @@ package com.mygdx.game;
 
 import Model.Sides.Side;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
@@ -72,6 +74,7 @@ public class PuttingCourse{
     public Array<ModelInstance> getCourseModel(Model model){
         ModelBuilder mb = new ModelBuilder();
         mb.begin();
+        
         Array<ModelInstance> instances = new Array<>();
 
         Texture grass = new Texture("grass.jpg");//doesn't work right now
@@ -137,7 +140,18 @@ public class PuttingCourse{
                 }*/
             }
         }
-
+        Vector2d corner1 = coverage[0];
+        Vector2d corner2 = coverage[1];
+        Vector2d boxDiagonal = corner1.absDifference(corner2);
+//        
+//        ModelInstance waterBlock = new ModelInstance(new ModelBuilder().createBox((float)boxDiagonal.getX(), 0, (float)boxDiagonal.getY(), new Material(ColorAttribute.createDiffuse(Color.BLUE)), Usage.Position | Usage.Normal), 0, 0, 0);
+//        instances.add(waterBlock);
+        
+        mb.node().id = "ground";
+        mb.part("box", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.BLUE)))
+                .box((float)boxDiagonal.getX(), -.25f, (float)boxDiagonal.getY());
+        Model ground = mb.end();
+        instances.add(new ModelInstance(ground, "ground"));
 
         return instances;
     }
