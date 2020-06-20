@@ -442,7 +442,6 @@ public class PuttingSimulator extends Game implements Screen{
             
             
             count = Main.getInstance().getSolver().isLayingStill(count, canCount);
-            System.out.println(count);
             
         }
     }

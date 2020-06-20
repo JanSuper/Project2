@@ -315,11 +315,11 @@ public class PuttingCourse{
         for(Obstacle obstacle : obstacles){
             polygon=obstacle.getPolygon();
             if(Intersector.isPointInPolygon(polygon ,new Vector2((float)solver.getPosition().getX(),(float)solver.getPosition().getY()))){
-            	System.out.println("need to talk");
+//            	System.out.println("need to talk");
                 sides = obstacle.getSides();
                 for(Side side: sides){
                     stop = side.collideIfCollision(solver);
-                    if (stop) System.out.println("touchie");
+//                    if (stop) System.out.println("touchie");
                     
                     if(!botUse) {
                     	if(stop){
