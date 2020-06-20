@@ -3,6 +3,8 @@ package Bot;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import Model.Vector2d;
+
 public class InfoObject {
 	int i;
 	int j;
@@ -56,9 +58,9 @@ public class InfoObject {
 		nextStep();
 	}
 	
-	public ArrayList<BlockInfo> getSteps(){
-		BlockInfo hold = maze[1][1];
-		maze[15][15].finish = true;
+	public ArrayList<BlockInfo> getSteps(Vector2d start, Vector2d finish){
+		BlockInfo hold = maze[(int)(start.getX()-1)/ 3][(int)(start.getY()-1)/ 3];
+		maze[(int)(finish.getX()-1)/ 3][(int)(finish.getY()-1)/ 3].finish = true;
 		steps = recursion(hold);
 		System.out.println(steps.size());
 		System.out.println(strings.size());

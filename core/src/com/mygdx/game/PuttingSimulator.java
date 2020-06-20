@@ -297,7 +297,9 @@ public class PuttingSimulator extends Game implements Screen{
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
             		System.out.println("heregiveupmaze");
-            		WigerToods.getInstance().botSteps = MazeGenerator.mazeBlocks.getBotSteps();
+            		
+            		MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
+            		WigerToods.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
             		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
             		Vector2d nextShot = WigerToods.getInstance().mazeSearch();
             		take_shot(nextShot);

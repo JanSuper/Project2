@@ -17,6 +17,7 @@ import static com.mygdx.game.PuttingCourse.*;
 import static com.mygdx.game.PuttingCourse.*;
 
 public class MazeGenerator {
+	private static MazeGenerator singleton;
 	private final int x;
 	private final int y;
 	private final int[][] maze;
@@ -30,6 +31,11 @@ public class MazeGenerator {
 		this.y = y;
 		maze = new int[this.x][this.y];
 		generateMaze(0, 0);
+		this.singleton = this;
+	}
+	
+	public static MazeGenerator getInstance() {
+		return singleton;
 	}
  
 	public void display() {
@@ -80,8 +86,8 @@ public class MazeGenerator {
 //			System.out.println(mazeBlocks.maze[i][16].wall);
 //		}
 
-		mazeBlocks.getSteps();
-		mazeBlocks.getBotSteps();
+//		mazeBlocks.getSteps();
+//		mazeBlocks.getBotSteps();
 		mazeBlocks.printSteps();
 	}
  
