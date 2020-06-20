@@ -63,9 +63,6 @@ public class InfoObject {
 		maze[(int)(finish.getX()-1)/ 3][(int)(finish.getY()-1)/ 3].finish = true;
 		this.lasti = (int)(start.getX()-1)/ 3;
 		this.lastj = (int)(start.getY()-1)/ 3;
-		
-		System.out.println("x; "+((int)(start.getX()-1)/ 3) + "y; " + ((int)(start.getY()-1)/ 3));
-		System.out.println("x; "+((int)(finish.getX()-1)/ 3) + "y; " + ((int)(finish.getY()-1)/ 3));
 		steps = recursion(hold);
 		System.out.println(steps.size());
 		System.out.println(strings.size());
