@@ -438,8 +438,9 @@ public class PuttingSimulator extends Game implements Screen{
             for(ModelInstance instance : instances)  modelBatch.render(instance, environment);
             modelBatch.end();
             
-            System.out.println(count);
+            
             count = Main.getInstance().getSolver().isLayingStill(count, canCount);
+            System.out.println(count);
             
         }
     }

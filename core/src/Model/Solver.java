@@ -138,8 +138,8 @@ public abstract class Solver implements PhysicsEngine{
     }
     
     public int isLayingStill(int count, boolean canCount) {
-    	if ((Math.abs(getVelocity().getX()) <= 0.2f &&  Math.abs(getVelocity().getY()) <= 0.2f)&&canCount)
-    		return count++;
+    	if ((Math.abs(velocity.getX()) <= 0.2f &&  Math.abs(velocity.getY()) <= 0.2f)&&canCount)
+    		return ++count;
     	else
     		return 0;
     }
