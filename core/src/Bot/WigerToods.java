@@ -65,7 +65,7 @@ public class WigerToods {
     	int[] currentStep = nextStep();
     	System.out.println(PuttingSimulator.getInstance().get_ball_position().toString());
     	System.out.println(Arrays.toString(currentStep));
-    	Vector2d currenStep = new Vector2d(currentStep[0]*MazeGenerator.BLOCK_SIZE + 1 + .5f, currentStep[1]*MazeGenerator.BLOCK_SIZE + 1 + .5f);
+    	Vector2d currenStep = PuttingSimulator.getInstance().get_ball_position();
     	Vector2d flag = new Vector2d(currentStep[2]*MazeGenerator.BLOCK_SIZE + 1 + .5f, currentStep[3]*MazeGenerator.BLOCK_SIZE + 1 + .5f);
     	boolean recalibrateY=true;
         boolean recalibrateX=true;
