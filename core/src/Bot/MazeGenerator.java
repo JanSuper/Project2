@@ -22,7 +22,7 @@ public class MazeGenerator {
 	private final int y;
 	private final int[][] maze;
 	public static InfoObject mazeBlocks;
-	public static final int BLOCK_SIZE =2;
+	public static final int BLOCK_SIZE = 3;
 	
 	static Array<ModelInstance> createMaze = null;
  

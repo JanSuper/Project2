@@ -208,21 +208,29 @@ public class InfoObject {
 			return botSteps;
 		}
 		
+		int maxTravel = 10;//(int)WigerToods.getInstance().maxDistance / 3;
+		boolean tooFar = false;
+		boolean startOver = false;
 		int count = 0;
 		boolean newStep = true;
 		boolean[] hold = {};
 		for(int i = 0; i <= steps.size()-2; i++) {
-			if (newStep) {
+			if ((newStep && !tooFar)|| startOver) {
 				System.out.println("new");
 				hold = steps.get(i).getSteplist();
 				count = 1;
 				newStep = false;
+				startOver = false;
 			}
-			if (Arrays.equals(hold, steps.get(i+1).getSteplist())) {
+			if ((Arrays.equals(hold, steps.get(i+1).getSteplist()))&& !tooFar) {
 				System.out.println("same");
 				count++;
+				if (count >= maxTravel) {
+					tooFar = true;
+				}
 			}
 			else {
+				if(tooFar) startOver = true;
 				System.out.println("diff");
 				if (hold[0]) {
 					int[] holdStep = {lasti,lastj,lasti-count,lastj};
@@ -245,6 +253,7 @@ public class InfoObject {
 					botSteps.add(holdStep);
 				}
 				newStep = true;
+				tooFar = false;
 			}	
 		}
 		return botSteps;
