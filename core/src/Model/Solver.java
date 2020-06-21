@@ -1,5 +1,6 @@
 package Model;
 
+import com.badlogic.gdx.math.Intersector;
 import com.mygdx.game.Main;
 import com.mygdx.game.PuttingCourse;
 import java.util.LinkedList;
@@ -27,6 +28,10 @@ public abstract class Solver implements PhysicsEngine{
     protected Vector2d velocity;
     protected Vector2d acceleration;
     protected double g = 9.81;
+
+
+    boolean stopShot = false;
+    boolean isAi = true;
 
     /**
      * This is what the different solvers need to implement
@@ -138,13 +143,30 @@ public abstract class Solver implements PhysicsEngine{
     }
     
     public int isLayingStill(int count, boolean canCount) {
-    	if ((Math.abs(velocity.getX()) <= 0.2f &&  Math.abs(velocity.getY()) <= 0.2f)&&canCount)
-    		return ++count;
-    	else
-    		return 0;
+
+        if (!stopShot) {//this is the variable used if in water and the ball needs to stop suddenly
+            if ((Math.abs(velocity.getX()) <= 0.2f && Math.abs(velocity.getY()) <= 0.2f) && canCount)
+                return ++count;
+            else
+                return 0;
+        }else{
+            stopShot = false;
+            return Integer.MAX_VALUE;
+        }
     }
 
 
        public abstract void set_step_size(double h);
+
+    public void setIsAi(boolean x){
+        this.isAi=x;
+    }
+    public void stopShot(){
+        //velocity = new Vector2d(0,0);
+        position = new Vector2d
+                (position.getX()+Math.signum(velocity.getX())*-2,
+                        position.getY()+Math.signum(velocity.getY())*-2);
+        stopShot=true;
+    }
 
 }

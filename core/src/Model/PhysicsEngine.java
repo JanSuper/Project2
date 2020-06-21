@@ -14,5 +14,6 @@ public interface PhysicsEngine {
 	public boolean finish(Vector2d v, double d);
 	public abstract void set_step_size(double h);
 	public int isLayingStill(int i, boolean b);
+	public void setIsAi(boolean x);
 
 }
