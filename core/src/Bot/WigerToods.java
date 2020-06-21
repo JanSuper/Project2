@@ -65,6 +65,7 @@ public class WigerToods {
     	int[] currentStep = nextStep();
     	System.out.println(PuttingSimulator.getInstance().get_ball_position().toString());
     	System.out.println(Arrays.toString(currentStep));
+    	Vector2d currenStep = new Vector2d(currentStep[0]*MazeGenerator.BLOCK_SIZE + 1 + .5f, currentStep[1]*MazeGenerator.BLOCK_SIZE + 1 + .5f);
     	Vector2d flag = new Vector2d(currentStep[2]*MazeGenerator.BLOCK_SIZE + 1 + .5f, currentStep[3]*MazeGenerator.BLOCK_SIZE + 1 + .5f);
     	boolean recalibrateY=true;
         boolean recalibrateX=true;
@@ -75,15 +76,15 @@ public class WigerToods {
         
     	double scalar = 0.9; 
         Vector2d testFin;
-        Vector2d testVelocity = (flag.subtract(PuttingSimulator.getInstance().get_ball_position())).multiplyBy(new Vector2d(.25,.25));
-        Vector2d distanceToFlag = PuttingSimulator.getInstance().get_ball_position().absDifference(flag);
+        Vector2d testVelocity = (flag.subtract(currenStep)).multiplyBy(new Vector2d(.25,.25));
+        Vector2d distanceToFlag = currenStep.absDifference(flag);
         
         if(distanceToFlag.evaluateVector() > maxDistance)
         	System.out.println("too far");
         
         while(recalibrateX||recalibrateY){
-            testFin = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), testVelocity);
-            Vector2d shotDistance = PuttingSimulator.getInstance().get_ball_position().absDifference(testFin);
+            testFin = solver.takeShot(currenStep, testVelocity);
+            Vector2d shotDistance = currenStep.absDifference(testFin);
             
             if ((lastX != 0)&&(Math.abs(lastX) < Math.abs(testFin.absDifference(flag).getX()))) {
             	otherwayX = true;
@@ -98,14 +99,17 @@ public class WigerToods {
             }
 
             if(testX(testFin, flag)){
+            	System.out.println("testX1");
                 recalibrateX=false;
             }else if (!otherwayX){
+            	System.out.println("testX2");
             	recalibrateX=true;
                 scalar = distanceToFlag.getX()/shotDistance.getX();
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
                 lastX = testFin.absDifference(flag).getX();
             }
             else {
+            	System.out.println("testX3");
             	recalibrateX=true;
             	scalar = distanceToFlag.getX()/(shotDistance.getX() + 2 * Math.abs(distanceToFlag.getX()-shotDistance.getX()));
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
@@ -113,14 +117,17 @@ public class WigerToods {
             }
             
             if(testY(testFin, flag)) {
+            	System.out.println("testY1");
                 recalibrateY = false;
             }else if(!otherwayY){
+            	System.out.println("testY2");
             	recalibrateY = true;
                 scalar = distanceToFlag.getY()/shotDistance.getY();
                 testVelocity.setY(testVelocity.getY()*Math.cbrt(scalar));
                 lastY = testFin.absDifference(flag).getY();
             }
             else {
+            	System.out.println("testY3");
             	recalibrateY = false;
             	scalar = distanceToFlag.getY()/(shotDistance.getY() + 2 * Math.abs(distanceToFlag.getY()-shotDistance.getY()));
                 testVelocity.setY(testVelocity.getY()*Math.cbrt(scalar));
@@ -151,11 +158,11 @@ public class WigerToods {
     }
     
     public boolean testX(Vector2d testFin, Vector2d flag) {
-    	return (Math.sqrt(Math.pow(Math.abs(testFin.absDifference(flag).getX()), 2) + Math.pow(Math.abs(testFin.absDifference(flag).getY()), 2))<PuttingCourse.getInstance().get_hole_tolerance());
+    	return testFin.absDifference(flag).getX()<Math.sqrt(PuttingCourse.getInstance().get_hole_tolerance());
     }
     
     public boolean testY(Vector2d testFin, Vector2d flag) {
-    	return (Math.sqrt(Math.pow(Math.abs(testFin.absDifference(flag).getX()), 2) + Math.pow(Math.abs(testFin.absDifference(flag).getY()), 2))<PuttingCourse.getInstance().get_hole_tolerance());
+    	return testFin.absDifference(flag).getY()<Math.sqrt(PuttingCourse.getInstance().get_hole_tolerance());
     }
 
     /**

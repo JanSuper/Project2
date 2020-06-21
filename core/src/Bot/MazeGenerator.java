@@ -88,7 +88,7 @@ public class MazeGenerator {
 
 //		mazeBlocks.getSteps();
 //		mazeBlocks.getBotSteps();
-		mazeBlocks.printSteps();
+//		mazeBlocks.printSteps();
 	}
  
 	private void generateMaze(int cx, int cy) {

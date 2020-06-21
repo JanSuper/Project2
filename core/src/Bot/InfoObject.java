@@ -19,9 +19,6 @@ public class InfoObject {
 	
 	public InfoObject() {
 		maze = new BlockInfo[17][17];
-		steps = new ArrayList();
-		strings = new ArrayList();
-		botSteps = new ArrayList();
 		i = 0;
 		j = 0;
 		lasti = 1;
@@ -60,6 +57,9 @@ public class InfoObject {
 	}
 	
 	public ArrayList<BlockInfo> getSteps(Vector2d start, Vector2d finish){
+		steps = new ArrayList();
+		strings = new ArrayList();
+		botSteps = new ArrayList();
 		int mynamejeff = MazeGenerator.getInstance().BLOCK_SIZE;
 		BlockInfo hold = maze[(int)(start.getX()-1)/ mynamejeff][(int)(start.getY()-1)/ mynamejeff];
 		maze[(int)(finish.getX()-1)/ mynamejeff][(int)(finish.getY()-1)/ mynamejeff].finish = true;
