@@ -15,5 +15,6 @@ public interface PhysicsEngine {
 	public abstract void set_step_size(double h);
 	public int isLayingStill(int i, boolean b);
 	public void setIsAi(boolean x);
+	public void stopShot();
 
 }

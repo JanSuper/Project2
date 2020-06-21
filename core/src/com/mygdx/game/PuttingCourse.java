@@ -311,7 +311,7 @@ public class PuttingCourse{
     public void checkCollision (Solver solver){
 
         if (solver.get_height(solver.getPosition())<0){
-            solver.stopShot();
+        	Main.getInstance().getSolver().stopShot();
             PuttingSimulator.getInstance().look=true;
             return;
         }

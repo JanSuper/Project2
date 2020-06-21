@@ -366,9 +366,7 @@ public class PuttingSimulator extends Game implements Screen{
         }
         else if (count >= 2*60) {
 //        	Main.getInstance().getSolver().setVelocity(new Vector2d(0,0));
-            if(ai==null) { // if a human is playing
-            	      	
-            	
+            if(ai==null) { // if a human is playing     	
             	Gdx.input.setInputProcessor(stage);
                 shot = true;
                 buttonShot.addListener(new ClickListener() {
@@ -427,9 +425,9 @@ public class PuttingSimulator extends Game implements Screen{
             ball.transform.setToTranslation((float)ballPosition.getX(), (float) Main.getInstance().getSolver().getPosZ()+.5f,(float) ballPosition.getY());
             ballObject.setWorldTransform(ball.transform);
 
-            cam.position.set((float) ballPosition.getX() - 5f, (float)Math.max(5f, Main.getInstance().getSolver().getPosZ()+3f),(float) ballPosition.getY());
-            cam.update();
-            camController.update();
+//            cam.position.set((float) ballPosition.getX() - 5f, (float)Math.max(5f, Main.getInstance().getSolver().getPosZ()+3f),(float) ballPosition.getY());
+//            cam.update();
+//            camController.update();
 
 
             Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1.f);
@@ -553,6 +551,7 @@ public class PuttingSimulator extends Game implements Screen{
         Main.getInstance().getSolver().setVelocity(shot);
         take_shot(shot);
         Main.getInstance().getSolver().nextStep();
+        look = false;
     }
 
 }
