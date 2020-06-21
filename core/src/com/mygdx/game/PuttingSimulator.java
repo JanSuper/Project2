@@ -425,9 +425,9 @@ public class PuttingSimulator extends Game implements Screen{
             ball.transform.setToTranslation((float)ballPosition.getX(), (float) Main.getInstance().getSolver().getPosZ()+.5f,(float) ballPosition.getY());
             ballObject.setWorldTransform(ball.transform);
 
-//            cam.position.set((float) ballPosition.getX() - 5f, (float)Math.max(5f, Main.getInstance().getSolver().getPosZ()+3f),(float) ballPosition.getY());
-//            cam.update();
-//            camController.update();
+            cam.position.set((float) ballPosition.getX() - 5f, (float)Math.max(5f, Main.getInstance().getSolver().getPosZ()+3f),(float) ballPosition.getY());
+            cam.update();
+            camController.update();
 
 
             Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1.f);
