@@ -1,5 +1,7 @@
 package Bot;
 
+import Model.Vector2d;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,15 +12,13 @@ public class InfoObject {
 	ArrayList<BlockInfo> steps;
 	ArrayList<String> strings;
 	static ArrayList<int[]> botSteps;
-	boolean delete = false;
+	boolean delete = false; // if the prior action was deleting a wrong step
 	int lasti;
 	int lastj;
 	
+	
 	public InfoObject() {
 		maze = new BlockInfo[17][17];
-		steps = new ArrayList();
-		strings = new ArrayList();
-		botSteps = new ArrayList();
 		i = 0;
 		j = 0;
 		lasti = 1;
@@ -56,9 +56,15 @@ public class InfoObject {
 		nextStep();
 	}
 	
-	public ArrayList<BlockInfo> getSteps(){
-		BlockInfo hold = maze[1][1];
-		maze[15][15].finish = true;
+	public ArrayList<BlockInfo> getSteps(Vector2d start, Vector2d finish){
+		steps = new ArrayList();
+		strings = new ArrayList();
+		botSteps = new ArrayList();
+		int mynamejeff = MazeGenerator.getInstance().BLOCK_SIZE;
+		BlockInfo hold = maze[(int)(start.getX()-1)/ mynamejeff][(int)(start.getY()-1)/ mynamejeff];
+		maze[(int)(finish.getX()-1)/ mynamejeff][(int)(finish.getY()-1)/ mynamejeff].finish = true;
+		this.lasti = (int)(start.getX()-1)/ mynamejeff;
+		this.lastj = (int)(start.getY()-1)/ mynamejeff;
 		steps = recursion(hold);
 		System.out.println(steps.size());
 		System.out.println(strings.size());
@@ -202,23 +208,31 @@ public class InfoObject {
 		if(botSteps.size() != 0) {
 			return botSteps;
 		}
-		
+		int maxTravel = (int)WigerToods.getInstance().maxDistance / 3 - 1;
+		boolean tooFar = false;
+		boolean startOver = false;
 		int count = 0;
 		boolean newStep = true;
 		boolean[] hold = {};
 		for(int i = 0; i <= steps.size()-2; i++) {
-			if (newStep) {
-				System.out.println("new");
+			if ((newStep && !tooFar)|| startOver) {
+				//System.out.println("new");
+
 				hold = steps.get(i).getSteplist();
 				count = 1;
 				newStep = false;
+				startOver = false;
 			}
+
 			if (Arrays.equals(hold, steps.get(i+1).getSteplist())) {
-				System.out.println("same");
+		//		System.out.println("same");
 				count++;
+				if (count >= maxTravel) {
+					tooFar = true;
+				}
 			}
 			else {
-				System.out.println("diff");
+				if(tooFar) startOver = true;
 				if (hold[0]) {
 					int[] holdStep = {lasti,lastj,lasti-count,lastj};
 					lasti-=count;
@@ -240,6 +254,7 @@ public class InfoObject {
 					botSteps.add(holdStep);
 				}
 				newStep = true;
+				tooFar = false;
 			}	
 		}
 		return botSteps;

@@ -29,6 +29,7 @@ public class Main extends Game {
 
     public void setSolver(PhysicsEngine engine){
         this.solver = engine;
+        solver.setIsAi(false);
     }
     public PhysicsEngine getSolver(){
         return this.solver;
@@ -50,6 +51,7 @@ public class Main extends Game {
      * singleton implementation for main complete
      */
     private Main(){
+        solver.setIsAi(false);
     }
 
 }
