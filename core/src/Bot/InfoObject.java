@@ -1,9 +1,9 @@
 package Bot;
 
+import Model.Vector2d;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import Model.Vector2d;
 
 public class InfoObject {
 	int i;
@@ -12,9 +12,10 @@ public class InfoObject {
 	ArrayList<BlockInfo> steps;
 	ArrayList<String> strings;
 	static ArrayList<int[]> botSteps;
-	boolean delete = false;
+	boolean delete = false; // if the prior action was deleting a wrong step
 	int lasti;
 	int lastj;
+	
 	
 	public InfoObject() {
 		maze = new BlockInfo[17][17];
@@ -207,7 +208,6 @@ public class InfoObject {
 		if(botSteps.size() != 0) {
 			return botSteps;
 		}
-		
 		int maxTravel = 10;//(int)WigerToods.getInstance().maxDistance / 3;
 		boolean tooFar = false;
 		boolean startOver = false;
@@ -216,14 +216,16 @@ public class InfoObject {
 		boolean[] hold = {};
 		for(int i = 0; i <= steps.size()-2; i++) {
 			if ((newStep && !tooFar)|| startOver) {
-				System.out.println("new");
+				//System.out.println("new");
+
 				hold = steps.get(i).getSteplist();
 				count = 1;
 				newStep = false;
 				startOver = false;
 			}
-			if ((Arrays.equals(hold, steps.get(i+1).getSteplist()))&& !tooFar) {
-				System.out.println("same");
+
+			if (Arrays.equals(hold, steps.get(i+1).getSteplist())) {
+		//		System.out.println("same");
 				count++;
 				if (count >= maxTravel) {
 					tooFar = true;
@@ -231,7 +233,6 @@ public class InfoObject {
 			}
 			else {
 				if(tooFar) startOver = true;
-				System.out.println("diff");
 				if (hold[0]) {
 					int[] holdStep = {lasti,lastj,lasti-count,lastj};
 					lasti-=count;
