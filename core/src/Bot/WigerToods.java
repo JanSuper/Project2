@@ -75,7 +75,7 @@ public class WigerToods {
         
     	double scalar = 0.9; 
         Vector2d testFin;
-        Vector2d testVelocity = (flag.subtract(PuttingSimulator.getInstance().get_ball_position())).multiplyBy(new Vector2d(.5,.5));
+        Vector2d testVelocity = (flag.subtract(PuttingSimulator.getInstance().get_ball_position())).multiplyBy(new Vector2d(.25,.25));
         Vector2d distanceToFlag = PuttingSimulator.getInstance().get_ball_position().absDifference(flag);
         
         if(distanceToFlag.evaluateVector() > maxDistance)

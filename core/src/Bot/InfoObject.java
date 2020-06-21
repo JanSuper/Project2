@@ -208,7 +208,7 @@ public class InfoObject {
 		if(botSteps.size() != 0) {
 			return botSteps;
 		}
-		int maxTravel = 10;//(int)WigerToods.getInstance().maxDistance / 3;
+		int maxTravel = (int)WigerToods.getInstance().maxDistance / 3 - 1;
 		boolean tooFar = false;
 		boolean startOver = false;
 		int count = 0;
