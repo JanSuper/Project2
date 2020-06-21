@@ -371,8 +371,6 @@ public class PuttingSimulator extends Game implements Screen{
             	
             	Gdx.input.setInputProcessor(stage);
                 shot = true;
-//        	Menu holdMenu = new Menu(main);
-//        	main.setScreen(holdMenu);
                 buttonShot.addListener(new ClickListener() {
                     @Override
                     public void touchUp(InputEvent e, float x, float y, int point, int button) {
@@ -414,6 +412,7 @@ public class PuttingSimulator extends Game implements Screen{
             		}
             	}
             }
+            count = 0;
         }
         else {
         	if (!look)
