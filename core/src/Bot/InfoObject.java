@@ -1,9 +1,9 @@
 package Bot;
 
+import Model.Vector2d;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import Model.Vector2d;
 
 public class InfoObject {
 	int i;
@@ -213,17 +213,17 @@ public class InfoObject {
 		boolean[] hold = {};
 		for(int i = 0; i <= steps.size()-2; i++) {
 			if (newStep) {
-				System.out.println("new");
+			//	System.out.println("new");
 				hold = steps.get(i).getSteplist();
 				count = 1;
 				newStep = false;
 			}
 			if (Arrays.equals(hold, steps.get(i+1).getSteplist())) {
-				System.out.println("same");
+		//		System.out.println("same");
 				count++;
 			}
 			else {
-				System.out.println("diff");
+		//		System.out.println("diff");
 				if (hold[0]) {
 					int[] holdStep = {lasti,lastj,lasti-count,lastj};
 					lasti-=count;
