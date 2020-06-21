@@ -163,6 +163,7 @@ public class WigerToods {
     
     public boolean testY(Vector2d testFin, Vector2d flag) {
     	return testFin.absDifference(flag).getY()<Math.sqrt(PuttingCourse.getInstance().get_hole_tolerance());
+    	
     }
 
     /**
