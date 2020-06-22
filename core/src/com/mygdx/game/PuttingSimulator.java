@@ -60,7 +60,7 @@ public class PuttingSimulator extends Game implements Screen{
 
     private Vector2d ballPosition;
 
-    private Bot ai=null;
+    private Bot ai =null;
 
     PerspectiveCamera cam;
     CameraInputController camController;
@@ -320,9 +320,7 @@ public class PuttingSimulator extends Game implements Screen{
             	}
        		});
         }
-        
         stage = new Stage();
-        
         stage.addActor(buttonShot);
         stage.addActor(giveUp);
         stage.addActor(textFieldSpeed);

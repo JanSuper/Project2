@@ -16,7 +16,7 @@ public class RoughBot implements Bot {
 
     public Vector2d search(){
         WigerToods.getInstance().setSolver(solver);
-       Vector2d diff = PuttingCourse.getInstance().get_flag_position().absDifference(PuttingSimulator.getInstance().get_ball_position());
+        Vector2d diff = PuttingCourse.getInstance().get_flag_position().absDifference(PuttingSimulator.getInstance().get_ball_position());
         Vector2d shotVel;
         if(WigerToods.getInstance().maxDistance < PuttingSimulator.getInstance().get_ball_position().absDifference(PuttingCourse.getInstance().get_flag_position()).evaluateVector()){
         //max power shot

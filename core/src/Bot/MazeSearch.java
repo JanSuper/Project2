@@ -15,6 +15,18 @@ public class MazeSearch implements Bot {
     public ArrayList<int[]> botSteps;
     public static int stepcount;
     public double maxDistance;
+    private static MazeSearch singleton = null;
+
+    private MazeSearch(){
+
+    }
+
+    public static MazeSearch getInstance(){
+        if(singleton ==null){
+            singleton = new MazeSearch();
+        }
+        return singleton;
+    }
 
     public boolean testX(Vector2d testFin, Vector2d flag) {
         return testFin.absDifference(flag).getX()<Math.sqrt(PuttingCourse.getInstance().get_hole_tolerance());
