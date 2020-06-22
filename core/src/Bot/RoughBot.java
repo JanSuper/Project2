@@ -14,6 +14,18 @@ public class RoughBot implements Bot {
     Solver solver = new FrictionRKSolver(.3);
     RKSolver actualSolver = new RKSolver();
 
+    private static RoughBot  singleton = null;
+
+    private RoughBot(){
+
+    }
+    public static RoughBot getInstance(){
+        if(singleton == null){
+            singleton = new RoughBot();
+        }
+        return singleton;
+    }
+
     public Vector2d search(){
         WigerToods.getInstance().setSolver(solver);
         Vector2d diff = PuttingCourse.getInstance().get_flag_position().absDifference(PuttingSimulator.getInstance().get_ball_position());
