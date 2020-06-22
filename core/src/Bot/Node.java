@@ -1,5 +1,6 @@
 package Bot;
 
+import Model.RKSolver;
 import Model.Solver;
 import Model.Vector2d;
 import com.mygdx.game.Main;
@@ -22,7 +23,7 @@ public class Node {
      * @param shot hole position
      */
     public Node(Vector2d start, Vector2d shot, Node parent){
-        if(solver==null) solver = (Solver)Main.getInstance().getSolver();
+        if(solver==null) solver = (Solver)new RKSolver();
         this.coordBeforeShot = start;
         this.parent=parent;
         if(parent==null) this.costG=1;

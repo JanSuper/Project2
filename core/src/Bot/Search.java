@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.mygdx.game.Main;
 import com.mygdx.game.Menu;
 import com.mygdx.game.PuttingCourse;
+import com.mygdx.game.PuttingSimulator;
+import Model.RKSolver;
+
 import java.util.Random;
 
 import java.util.ArrayList;
@@ -21,15 +24,31 @@ public class Search {
     private PhysicsEngine engine;
     private double radius;
     private int[][] pathScore;
+    private static Search singleton = null;
+    private int count=0;
+    private LinkedList<Node> choosen = new LinkedList<>();;
 
     /**
      * Constructor
      * @param course terrain on which we need to do the research
      * @param engine phyisics engine to simulate shots
      */
-    public Search(PuttingCourse course, PhysicsEngine engine) {
+    private Search(PuttingCourse course, PhysicsEngine engine) {
         this.course = course;
         this.engine = engine;
+        Vector2d start = new Vector2d( BLOCK_SIZE + 1,  BLOCK_SIZE + 1);
+        Vector2d finish = new Vector2d(15 * BLOCK_SIZE + 1, 15*BLOCK_SIZE + 1);
+        ArrayList<BlockInfo> steps= MazeGenerator.getInstance().mazeBlocks.getSteps(start, finish);
+        pathScore = new int[MazeGenerator.getInstance().mazeBlocks.maze.length][MazeGenerator.getInstance().mazeBlocks.maze[0].length];
+        int score = steps.size();
+        for (int i = 0; i < pathScore.length; i++) {
+            for (int j = 0; j < pathScore[0].length; j++) {
+                pathScore[i][j]=score;
+            }
+        }
+        for (BlockInfo bi : steps){
+            pathScore = setScore(pathScore, bi.i,bi.j,--score);
+        }
     }
     /**
      * Constructor
@@ -79,24 +98,31 @@ public class Search {
      * @return score attributed to that coordinate
      */
     private int getScore(Vector2d currentPosition){
+        if(currentPosition.getY()<0||currentPosition.getX()<0) return 999;
         return pathScore[(int)currentPosition.getX()/BLOCK_SIZE][(int)currentPosition.getY()/BLOCK_SIZE];
     }
 
-    public LinkedList<Node> searchMaze(){
-        Node start = new Node(course.get_start_position(), new Vector2d(15,0) ,null);
-        start.setCosth(getScore(start.getCoordAfterShot()));
-    //    double standard = distanceToNext(start.getCoordAfterShot());
-        for (int i = 2; i < 360; i+=2) {
-            Vector2d firstShot = new Vector2d(15*Math.cos(i/180*Math.PI),15*Math.sin(i/180*Math.PI));
-            Node tmp = new Node(course.get_start_position(), firstShot, null);
-            tmp.setCosth(getScore(tmp.getCoordAfterShot()));
-            if(tmp.getCosth()<start.getCosth()) start=tmp;
-     //       else if(tmp.getCosth()==start.getCosth()&&distanceToNext(tmp.getCoordAfterShot())<standard) start = tmp;
+    public Node searchMaze(){
+        if(choosen.size()>0&&choosen.getLast().getCosth()<3){
+            return new Node(PuttingSimulator.getInstance().get_ball_position(),WigerToods.getInstance().search(), null);
+        }else {
+            Node start = new Node(PuttingSimulator.getInstance().get_ball_position(), new Vector2d(15, 0), null);
+            start.setCosth(getScore(start.getCoordAfterShot()));
+            //    double standard = distanceToNext(start.getCoordAfterShot());
+            for (int i = 2; i < 360; i += 2) {
+                Vector2d firstShot = new Vector2d(15 * Math.cos(i * 180 / Math.PI), 15 * Math.sin(i * 180 / Math.PI));
+                Node tmp = new Node(PuttingSimulator.getInstance().get_ball_position(), firstShot, null);
+                tmp.setCosth(getScore(tmp.getCoordAfterShot()));
+                if (tmp.getCosth() == 999) System.out.println(tmp.getLastShot() + " -- " + (i));
+                if (tmp.getCosth() < start.getCosth()) start = tmp;
+                //       else if(tmp.getCosth()==start.getCosth()&&distanceToNext(tmp.getCoordAfterShot())<standard) start = tmp;
 
+            }
+
+            choosen.add(start);
+            return start;
         }
-        LinkedList<Node> choosen = new LinkedList<>();
-        choosen.add(start);
-        Node current = null;
+  /*      Node current = null;
         do{
             if (current != null) choosen.add(current);
             current = new Node(choosen.getLast().getCoordAfterShot(), new Vector2d(15,0) ,choosen.getLast());
@@ -114,7 +140,8 @@ public class Search {
          * Needs last couple of shots because velocity may be too high
          */
 
-        return choosen;
+
+
     }
 
     private double distanceToNext(Vector2d position){
@@ -136,12 +163,13 @@ public class Search {
         Node start = new Node(course.get_start_position(), course.get_flag_position() ,null);
         start.setCosth(start.getCoordAfterShot().difference(course.get_flag_position()));
         for (int i = 2; i < 360; i++) {
-            Vector2d firstShot = new Vector2d(15*Math.cos(i/180*Math.PI),15*Math.sin(i/180*Math.PI));
+            Vector2d firstShot = new Vector2d(15*Math.cos(i*180/Math.PI),15*Math.sin(i*180/Math.PI));
             Node tmp = new Node(course.get_start_position(), firstShot, null);
             tmp.setCosth(tmp.getCoordAfterShot().difference(course.get_flag_position()));
+            System.out.println(tmp);
             if(tmp.getCosth()<start.getCosth()) start=tmp;
         }
-        LinkedList<Node> choosen = new LinkedList<>();
+
         choosen.add(start);
         Node current = null;
         do{
@@ -169,12 +197,21 @@ public class Search {
         return Math.sqrt(x*x+y*y);
     }
 
+    public static Search getInstance(){
+        if(singleton==null) singleton = new Search(PuttingCourse.getInstance(),new RKSolver());
+        return singleton;
+    }
 
+    public Vector2d nextShot(){
+        if( choosen.size()>0) return choosen.pop().getLastShot();
+        return null;
+    }
 
     public static void main(String[] args){
         ModelBuilder mb = new ModelBuilder();
         PuttingCourse.getInstance().get_height().setFunction("0", true);
         //new MazeGenerator(8,8);
+        System.out.println(mb);
         MazeGenerator.createMaze(mb);
         MazeGenerator.getInstance().display();
         Vector2d start = new Vector2d( BLOCK_SIZE + 1,  BLOCK_SIZE + 1);
@@ -205,8 +242,8 @@ public class Search {
 
         for(int[] arr : pathScore) System.out.println(Arrays.toString(arr));
 
-        LinkedList<Node> firstShots = search.searchMaze();
-        for(Node n: firstShots) System.out.println(n);
+//        LinkedList<Node> firstShots = search.searchMaze();
+//        for(Node n: firstShots) System.out.println(n);
 
     }
 }

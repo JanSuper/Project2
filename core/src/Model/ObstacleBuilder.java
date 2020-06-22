@@ -85,7 +85,7 @@ public class ObstacleBuilder {
      * @param length length of the face, always along x axis
      * @param width length of the side along the y axis
      */
-    public static void makeBox(Vector2 startPos, float length, float width){
+  /*  public static void makeBox(Vector2 startPos, float length, float width){
         Vector2 vstartPos = new Vector2(startPos.x-BALL_RADIUS,startPos.y-BALL_RADIUS);
         Vector2 v1 = new Vector2(startPos.x + length+BALL_RADIUS, startPos.y-BALL_RADIUS);
         Vector2 v2 = new Vector2(startPos.x-BALL_RADIUS, startPos.y+width+BALL_RADIUS);
@@ -110,7 +110,7 @@ public class ObstacleBuilder {
         PuttingCourse.getInstance().obstacles.add(tmp);
 
 
-    }
+    }*/
     /**
      * Creates the Model for rendering a Box obstacle
      * Creates the Box Object with collision logic implemented

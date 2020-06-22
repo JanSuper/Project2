@@ -166,7 +166,7 @@ public class MazeGenerator {
 	 * method used only when not playing
 	 * @param DEBUG
 	 */
-	public static void createMaze(Boolean DEBUG) {
+/*	public static void createMaze(Boolean DEBUG) {
 		if (createMaze != null) {
 			return;
 		}
@@ -191,7 +191,7 @@ public class MazeGenerator {
 		MazeGenerator maze = new MazeGenerator(8,8);
 		maze.display();
 
-	}
+	}*/
  
 }
 

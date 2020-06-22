@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import Bot.MazeGenerator;
+import Bot.Search;
 import Bot.WigerToods;
 import Model.Sides.Side;
 import com.badlogic.gdx.Game;
@@ -298,10 +299,11 @@ public class PuttingSimulator extends Game implements Screen{
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
             		System.out.println("heregiveupmaze");
             		
-            		MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
-            		WigerToods.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
+            		//MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
+            		//WigerToods.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
+
             		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
-            		Vector2d nextShot = WigerToods.getInstance().mazeSearch();
+            		Vector2d nextShot = Search.getInstance().searchMaze().getLastShot();
             		take_shot(nextShot);
             		count = 0;
             		shot = false;
@@ -396,8 +398,8 @@ public class PuttingSimulator extends Game implements Screen{
             		// only reaches here if the bot doesnt make it on the first try on a normal course
             	}
             	else { //mazeLevel
-            		if (WigerToods.getInstance().stepcount < WigerToods.getInstance().botSteps.size()) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
-            			Vector2d nextShot = ai.mazeSearch();
+            		if (true) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
+            			Vector2d nextShot = Search.getInstance().searchMaze().getLastShot();
             			take_shot(nextShot);
             			shot = false;
             			count = 0;

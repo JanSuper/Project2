@@ -102,6 +102,7 @@ public abstract class Solver implements PhysicsEngine{
     public Vector2d takeShot(Vector2d position, Vector2d velocity){
         this.velocity=velocity;
         this.position=position;
+        if(velocity.evaluateVector()>PuttingCourse.getInstance().get_maximum_velocity()) this.velocity.scaleDown(PuttingCourse.getInstance().get_maximum_velocity());
         int count =0;
         prevPos = position;
         while(count<300){
