@@ -276,8 +276,10 @@ public class PuttingSimulator extends Game implements Screen{
                 if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
                         (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern))) {
                 	
+                	if(!(textFieldSpeed.getText().equals("") || textFieldAngle.getText().equals(""))) {
                 	look = false;
                     play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                	}
                 }
                 else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
                     textFieldSpeed.setText("");
@@ -313,14 +315,7 @@ public class PuttingSimulator extends Game implements Screen{
         	giveUp.addListener(new ClickListener(){
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
-            		System.out.println("heregiveup");
-            		WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
-            		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
-            		Vector2d holdshot = WigerToods.getInstance().search();
-            		look=false;
-            		shot = false;
-            		count = 0;
-            		take_shot(holdshot);
+        			giveUp();
             	}
        		});
         }
@@ -338,21 +333,21 @@ public class PuttingSimulator extends Game implements Screen{
 
     @Override
     public void render (float delta) {
-    	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-    		canCount = true;
+    	if(Gdx.input.isKeyPressed(Keys.SPACE)) { // if space is pressed
+    		canCount = true; // counting system works now
     		count = 120;
     	}
     	
     	
     	if(!shot) {
-    	Gdx.input.setInputProcessor(camController);
+    	Gdx.input.setInputProcessor(camController); // to set the cam from the user menu back into game
     	}
         //TODO: add game over
-        if (Main.getInstance().getSolver().finish(PuttingCourse.getInstance().get_flag_position(), PuttingCourse.getInstance().get_hole_tolerance())) {
+        if (Main.getInstance().getSolver().finish(PuttingCourse.getInstance().get_flag_position(), PuttingCourse.getInstance().get_hole_tolerance())) { // if reached finish
            
 //        	Menu holdMenu = new Menu(Main.getInstance());
 //        	holdMenu.newLVL = true;
-        	setAi(null);
+        	setAi(null);				// reset
         	 	shot = false;
         	    look = true;
         	    canCount = false;
@@ -361,7 +356,7 @@ public class PuttingSimulator extends Game implements Screen{
             Main.getInstance().setScreen(Menu.getInstance());
         }
         else if (shot) {
-        	stage.act(delta);
+        	stage.act(delta); // frankenUI
             stage.draw();
         }
         else if (count >= 2*60) {
@@ -373,12 +368,17 @@ public class PuttingSimulator extends Game implements Screen{
                     @Override
                     public void touchUp(InputEvent e, float x, float y, int point, int button) {
                         count = 0;
-                        System.out.println("here");
+                        System.out.println("here"); 
                         if ((Pattern.matches(decimalPattern, textFieldSpeed.getText()) || textFieldSpeed.getText().matches(naturalPattern)) &&
                                 (Pattern.matches(decimalPattern, textFieldAngle.getText()) || textFieldAngle.getText().matches(naturalPattern))) {
 
-                            play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
-                            shot = false;
+                        		if(!(textFieldSpeed.getText().equals("") || textFieldAngle.getText().equals(""))) {
+                        		play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                            	shot = false;
+                        	}
+                        	else {
+                        		giveUp();
+                        	}
                             Gdx.input.setInputProcessor(camController);
                         } else if (!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
                             textFieldSpeed.setText("");
@@ -412,7 +412,7 @@ public class PuttingSimulator extends Game implements Screen{
             }
             count = 0;
         }
-        else {
+        else { // if there is no menu on screen
         	if (!look)
         	Main.getInstance().getSolver().nextStep();
         	Main.getInstance().getSolver().setPosZ(Main.getInstance().getSolver().get_height(Main.getInstance().getSolver().getPosition().getX(), Main.getInstance().getSolver().getPosition().getY()));
@@ -552,6 +552,17 @@ public class PuttingSimulator extends Game implements Screen{
         take_shot(shot);
         Main.getInstance().getSolver().nextStep();
         look = false;
+    }
+    
+    public void giveUp() {
+    	System.out.println("heregiveup");
+		WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
+		Vector2d holdshot = WigerToods.getInstance().search();
+		look=false;
+		shot = false;
+		count = 0;
+		take_shot(holdshot);
     }
 
 }
