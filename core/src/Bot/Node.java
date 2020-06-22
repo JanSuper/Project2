@@ -10,7 +10,7 @@ public class Node {
     private int id;
     private Vector2d coordBeforeShot;//before the shot
     private int costG;//number of shot taken
-    private int costh;//distance to the flag
+    private double costh;//distance to the flag
     private Node parent;
     private Vector2d coordAfterShot;
     private Vector2d lastShot;
@@ -25,6 +25,8 @@ public class Node {
         if(solver==null) solver = (Solver)Main.getInstance().getSolver();
         this.coordBeforeShot = start;
         this.parent=parent;
+        if(parent==null) this.costG=1;
+        else this.costG=parent.getCostG()+1;
         this.lastShot=shot;
         this.coordAfterShot = solver.takeShot(start, shot);
         this.id=counter++;
@@ -59,7 +61,7 @@ public class Node {
      * setter method
      * @param costh the score that represent how close it is to the flag
      */
-    public void setCosth(int costh) {
+    public void setCosth(double costh) {
         this.costh = costh;
     }
 
