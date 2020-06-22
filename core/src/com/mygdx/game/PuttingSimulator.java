@@ -60,7 +60,7 @@ public class PuttingSimulator extends Game implements Screen{
 
     private Vector2d ballPosition;
 
-    private Bot ai =null;
+    private boolean ai = false;
 
     PerspectiveCamera cam;
     CameraInputController camController;
@@ -302,9 +302,9 @@ public class PuttingSimulator extends Game implements Screen{
             		System.out.println("heregiveupmaze");
             		
             		MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
-            		MazeSearch.botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
-            		PuttingSimulator.getInstance().setAi(new MazeSearch());
-            		Vector2d nextShot = ai.search();
+            		MazeSearch.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
+            		PuttingSimulator.getInstance().setAi(MazeSearch.getInstance());
+            		Vector2d nextShot = MazeSearch.getInstance().search();
             		take_shot(nextShot);
             		count = 0;
             		shot = false;
@@ -316,7 +316,7 @@ public class PuttingSimulator extends Game implements Screen{
         	giveUp.addListener(new ClickListener(){
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
-        			giveUp();
+        			PuttingSimulator.getInstance().setAi(RoughBot.getInstance());
             	}
        		});
         }
@@ -346,7 +346,7 @@ public class PuttingSimulator extends Game implements Screen{
            
 //        	Menu holdMenu = new Menu(Main.getInstance());
 //        	holdMenu.newLVL = true;
-        	setAi(null);				// reset
+        	ai = false;
         	 	shot = false;
         	    look = true;
         	    canCount = false;
@@ -361,7 +361,7 @@ public class PuttingSimulator extends Game implements Screen{
         }
         else if (count >= 2*60) {
 //        	Main.getInstance().getSolver().setVelocity(new Vector2d(0,0));
-            if(ai==null) { // if a human is playing     	
+            if(!ai) { // if a human is playing     	
             	Gdx.input.setInputProcessor(stage);
                 shot = true;
                 buttonShot.addListener(new ClickListener() {
@@ -394,8 +394,8 @@ public class PuttingSimulator extends Game implements Screen{
             		// only reaches here if the bot doesnt make it on the first try on a normal course
             	}
             	else { //mazeLevel
-            		if (WigerToods.getInstance().stepcount < WigerToods.getInstance().botSteps.size()) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
-            			Vector2d nextShot = ai.mazeSearch();
+            		if (MazeSearch.getInstance().stepcount < MazeSearch.getInstance().botSteps.size()) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
+            			Vector2d nextShot = MazeSearch.getInstance().search();
             			take_shot(nextShot);
             			shot = false;
             			count = 0;
@@ -448,8 +448,8 @@ public class PuttingSimulator extends Game implements Screen{
 //        return cam.frustum.pointInFrustum(posTemp);
 //    }
     
-    public void setAi(WigerToods wt){
-        this.ai = wt;
+    public void setAi(Bot wt){
+        this.ai = true;
     }
 
     boolean checkCollision () {

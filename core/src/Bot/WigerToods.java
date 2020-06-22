@@ -8,7 +8,7 @@ import java.util.Arrays;
 import com.mygdx.game.PuttingCourse;
 import com.mygdx.game.PuttingSimulator;
 
-public class WigerToods {
+public class WigerToods implements Bot{
 
     private static WigerToods ai=null;
     static Solver solver = new RKSolver();
