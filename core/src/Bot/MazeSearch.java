@@ -63,9 +63,11 @@ public class MazeSearch implements Bot {
         Vector2d testFin;
         Vector2d testVelocity = (flag.subtract(currenStep)).multiplyBy(new Vector2d(.25,.25));
         Vector2d distanceToFlag = currenStep.absDifference(flag);
-
-        if(distanceToFlag.evaluateVector() > maxDistance)
+        if(distanceToFlag.evaluateVector() > maxDistance) {
             System.out.println("too far");
+            stepcount--;
+            return (flag.subtract(currenStep)).multiplyBy(new Vector2d(15,15));
+        }
 
         while(recalibrateX||recalibrateY){
             testFin = solver.takeShot(currenStep, testVelocity);
