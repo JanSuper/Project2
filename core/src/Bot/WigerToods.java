@@ -24,7 +24,7 @@ public class WigerToods implements Bot{
     public void setSolver(Solver s){
         solver = s;
         maxDistance = PuttingSimulator.getInstance().get_ball_position().subtract(solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), new Vector2d(15, 0))).evaluateVector();
-        System.out.println(maxDistance);
+//        System.out.println(maxDistance);
     }
 
     /**

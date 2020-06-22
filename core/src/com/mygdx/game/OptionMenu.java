@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import Bot.MazeGenerator;
+import Bot.MazeSearch;
 import Bot.WigerToods;
 import Model.RKSolver;
 import Model.Solver;
@@ -244,12 +246,19 @@ public class OptionMenu implements Screen {
     
     public void mazeGame() {
     	PuttingCourse.getInstance().get_height().setFunction("0");
-    	WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+    	MazeGenerator.restart();
+    	MazeSearch.getInstance().setSolver((Solver)Main.getInstance().getSolver());
     	 PuttingSimulator.getInstance().mazeLevel = true;
     	 PuttingSimulator.getInstance().create();
     	 play(0,0);
     	 PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
     	 Main.getInstance().setScreen(PuttingSimulator.getInstance());
+    	 mazeButton.addListener(new ClickListener(){
+             @Override
+             public void touchUp(InputEvent e, float x, float y, int point, int button){
+                 mazeGame();
+             }
+         });
     }
 
     /**

@@ -31,6 +31,7 @@ public class MazeGenerator {
 		this.y = y;
 		maze = new int[this.x][this.y];
 		generateMaze(0, 0);
+		MazeSearch.getInstance().stepcount = 0;
 		this.singleton = this;
 	}
 	
@@ -163,6 +164,10 @@ public class MazeGenerator {
 		MazeGenerator maze = new MazeGenerator(8,8);
 		maze.display();
 
+	}
+
+	public static void restart() {
+		createMaze = null;
 	}
  
 }

@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class MazeSearch implements Bot {
 
-    Solver solver = new RKSolver();
+    private Solver solver = new RKSolver();
     public ArrayList<int[]> botSteps;
     public static int stepcount;
     public double maxDistance;
@@ -44,7 +44,14 @@ public class MazeSearch implements Bot {
         System.out.println(PuttingSimulator.getInstance().get_ball_position().toString());
         System.out.println(Arrays.toString(currentStep));
         Vector2d currenStep = PuttingSimulator.getInstance().get_ball_position();
-        Vector2d flag = new Vector2d(currentStep[2]*MazeGenerator.BLOCK_SIZE + 1 + .5f, currentStep[3]*MazeGenerator.BLOCK_SIZE + 1 + .5f);
+        
+        Vector2d flag;
+        if (!MazeGenerator.getInstance().mazeBlocks.maze[currentStep[2]][currentStep[3]].finish) {
+        	flag = new Vector2d(currentStep[2]*MazeGenerator.BLOCK_SIZE + 1 + .5f, currentStep[3]*MazeGenerator.BLOCK_SIZE + 1 + .5f);
+        }
+        else {
+        	flag = PuttingCourse.getInstance().get_flag_position();
+        }
         boolean recalibrateY=true;
         boolean recalibrateX=true;
         double lastX = 0;
@@ -77,17 +84,14 @@ public class MazeSearch implements Bot {
             }
 
             if(testX(testFin, flag)){
-                System.out.println("testX1");
                 recalibrateX=false;
             }else if (!otherwayX){
-                System.out.println("testX2");
                 recalibrateX=true;
                 scalar = distanceToFlag.getX()/shotDistance.getX();
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
                 lastX = testFin.absDifference(flag).getX();
             }
             else {
-                System.out.println("testX3");
                 recalibrateX=true;
                 scalar = distanceToFlag.getX()/(shotDistance.getX() + 2 * Math.abs(distanceToFlag.getX()-shotDistance.getX()));
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
@@ -95,17 +99,14 @@ public class MazeSearch implements Bot {
             }
 
             if(testY(testFin, flag)) {
-                System.out.println("testY1");
                 recalibrateY = false;
             }else if(!otherwayY){
-                System.out.println("testY2");
                 recalibrateY = true;
                 scalar = distanceToFlag.getY()/shotDistance.getY();
                 testVelocity.setY(testVelocity.getY()*Math.cbrt(scalar));
                 lastY = testFin.absDifference(flag).getY();
             }
             else {
-                System.out.println("testY3");
                 recalibrateY = false;
                 scalar = distanceToFlag.getY()/(shotDistance.getY() + 2 * Math.abs(distanceToFlag.getY()-shotDistance.getY()));
                 testVelocity.setY(testVelocity.getY()*Math.cbrt(scalar));
@@ -115,7 +116,7 @@ public class MazeSearch implements Bot {
             if(!recalibrateX&&!recalibrateY) {
                 double holdx = flag.getX() - testFin.getX();
                 double holdy = flag.getY() - testFin.getY();
-                System.out.println("x; " + holdx + " y; " + holdy);
+//                System.out.println("x; " + holdx + " y; " + holdy);
             }
         }
 //        PuttingCourse.getInstance().botUse = false;
@@ -127,6 +128,7 @@ public class MazeSearch implements Bot {
 
     @Override
     public void setSolver(Solver x) {
-
+    	solver = x;
+    	 maxDistance = PuttingSimulator.getInstance().get_ball_position().subtract(solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), new Vector2d(15, 0))).evaluateVector();
     }
 }
