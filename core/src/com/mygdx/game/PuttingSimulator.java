@@ -303,7 +303,6 @@ public class PuttingSimulator extends Game implements Screen{
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
             		System.out.println("heregiveupmaze");
-            		
             		giveUpMaze();
             		
             	}
