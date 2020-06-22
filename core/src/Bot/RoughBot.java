@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class RoughBot implements Bot {
 
-    Solver solver = new FrictionRKSolver(.4);
+    Solver solver = new FrictionRKSolver(.2);
     Solver actualSolver = new RKSolver();
 
     private static RoughBot  singleton = null;

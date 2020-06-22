@@ -316,7 +316,8 @@ public class PuttingSimulator extends Game implements Screen{
         	giveUp.addListener(new ClickListener(){
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
-        			PuttingSimulator.getInstance().setAi(RoughBot.getInstance());
+        			//PuttingSimulator.getInstance().setAi(RoughBot.getInstance());
+                    giveUp();
             	}
        		});
         }
