@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import Bot.*;
 import Bot.Bot;
 import Bot.MazeGenerator;
-import Bot.WigerToods;
+import Bot.RoughBot;
 import Model.Sides.Side;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -402,7 +402,7 @@ public class PuttingSimulator extends Game implements Screen{
             			Gdx.input.setInputProcessor(camController);
             		}
             		else { // there are still steps to be taken to solve the maze
-            			Vector2d holdshot = WigerToods.getInstance().search();
+            			Vector2d holdshot = RoughBot.getInstance().search();
                 		look=false;
                 		shot = false;
                 		count = 0;
@@ -556,9 +556,9 @@ public class PuttingSimulator extends Game implements Screen{
     
     public void giveUp() {
     	System.out.println("heregiveup");
-		WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
-		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
-		Vector2d holdshot = WigerToods.getInstance().search();
+		RoughBot.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+		PuttingSimulator.getInstance().setAi(RoughBot.getInstance());
+		Vector2d holdshot = RoughBot.getInstance().search();
 		look=false;
 		shot = false;
 		count = 0;
