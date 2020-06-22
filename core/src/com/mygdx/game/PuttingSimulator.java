@@ -331,6 +331,8 @@ public class PuttingSimulator extends Game implements Screen{
     @Override
     public void render (float delta) {
     	if(Gdx.input.isKeyPressed(Keys.SPACE)) { // if space is pressed
+    		canCount = true; // counting system works now
+    		count = 120;
     		if (!canCount) {
     			canCount = true; // counting system works now
     			count = 120;
