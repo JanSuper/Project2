@@ -331,10 +331,29 @@ public class PuttingSimulator extends Game implements Screen{
     @Override
     public void render (float delta) {
     	if(Gdx.input.isKeyPressed(Keys.SPACE)) { // if space is pressed
-    		canCount = true; // counting system works now
-    		count = 120;
+    		if (!canCount) {
+    			canCount = true; // counting system works now
+    			count = 120;
+    		}
     	}
     	
+    	if(Gdx.input.isKeyPressed(Keys.ESCAPE)) { 
+    			look = true;
+    			count = 0;
+    			Main.getInstance().getSolver().pauseShot();
+    			ai = false;
+        	 	shot = false;
+        	    look = true;
+        	    canCount = false;
+        	    mazeLevel = false;
+        	    count = 0;
+        	    PuttingCourse.getInstance().obstacles = new LinkedList();
+        		if (mazeLevel) mazeLevel = false;
+        	    System.out.println(score);
+        	    
+        	    score = 0;
+            Main.getInstance().setScreen(Menu.getInstance());
+    	}
     	
     	if(!shot) {
     	Gdx.input.setInputProcessor(camController); // to set the cam from the user menu back into game
@@ -377,6 +396,7 @@ public class PuttingSimulator extends Game implements Screen{
                         		if(!(textFieldSpeed.getText().equals("") || textFieldAngle.getText().equals(""))) {
                         		play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
                             	shot = false;
+                            	canCount = true;
                             	score++;
                         	}
                         	else {

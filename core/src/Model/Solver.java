@@ -172,5 +172,15 @@ public abstract class Solver implements PhysicsEngine{
 //        Main.getInstance().getSolver().nextStep(); 
         stopShot=true;
     }
+    public void pauseShot(){
+    	double AMOUNT_BACK_FROM_WATER = 0.5;
+        //velocity = new Vector2d(0,0);
+//        Main.getInstance().getSolver().setPosition(new Vector2d
+//                (position.getX()+Math.signum(velocity.getX())*-AMOUNT_BACK_FROM_WATER,
+//                        position.getY()+Math.signum(velocity.getY())*-AMOUNT_BACK_FROM_WATER));
+//        Main.getInstance().getSolver().setVelocity(velocity = new Vector2d(0.001,0));
+//        Main.getInstance().getSolver().nextStep(); 
+        stopShot=true;
+    }
 
 }

@@ -16,5 +16,5 @@ public interface PhysicsEngine {
 	public int isLayingStill(int i, boolean b);
 	public void setIsAi(boolean x);
 	public void stopShot();
-
+	public void pauseShot();
 }
