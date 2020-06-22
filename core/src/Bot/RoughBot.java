@@ -2,18 +2,19 @@ package Bot;
 
 import Model.FrictionRKSolver;
 import Model.RKSolver;
+import Model.Solver;
 import Model.Vector2d;
 import com.mygdx.game.PuttingCourse;
 import com.mygdx.game.PuttingSimulator;
 
 import java.util.ArrayList;
 
-public class RoughBot {
+public class RoughBot implements Bot {
 
-    FrictionRKSolver solver = new FrictionRKSolver(.3);
+    Solver solver = new FrictionRKSolver(.3);
     RKSolver actualSolver = new RKSolver();
 
-    public Vector2d solve(){
+    public Vector2d search(){
         WigerToods.getInstance().setSolver(solver);
        Vector2d diff = PuttingCourse.getInstance().get_flag_position().absDifference(PuttingSimulator.getInstance().get_ball_position());
         Vector2d shotVel;
@@ -31,6 +32,10 @@ public class RoughBot {
         return shotVel;
     }
 
+    @Override
+    public void setSolver(Solver x) {
+        this.solver=x;
+    }
 
 
 }

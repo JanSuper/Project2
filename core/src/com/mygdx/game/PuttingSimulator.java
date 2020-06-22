@@ -3,7 +3,8 @@ package com.mygdx.game;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-
+import Bot.*;
+import Bot.Bot;
 import Bot.MazeGenerator;
 import Bot.WigerToods;
 import Model.Sides.Side;
@@ -59,7 +60,7 @@ public class PuttingSimulator extends Game implements Screen{
 
     private Vector2d ballPosition;
 
-    private WigerToods ai=null;
+    private Bot ai=null;
 
     PerspectiveCamera cam;
     CameraInputController camController;
@@ -301,9 +302,9 @@ public class PuttingSimulator extends Game implements Screen{
             		System.out.println("heregiveupmaze");
             		
             		MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
-            		WigerToods.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
-            		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
-            		Vector2d nextShot = WigerToods.getInstance().mazeSearch();
+            		MazeSearch.botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
+            		PuttingSimulator.getInstance().setAi(new MazeSearch());
+            		Vector2d nextShot = ai.search();
             		take_shot(nextShot);
             		count = 0;
             		shot = false;
