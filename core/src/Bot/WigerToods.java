@@ -166,6 +166,10 @@ public class WigerToods {
     	
     }
 
+    public void variedFriction(){
+
+    }
+
     /**
      * FOR TESTING PURPOSES
      * @param arg
