@@ -322,6 +322,13 @@ public class OptionMenu implements Screen {
 //    		path += " ";
 //    		path += holdarray[i];
 //    	}
+    	
+    	loadMapB.addListener(new ClickListener(){
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button){
+                loadMap(loadMapTF.getText());
+            }
+        });
 
     	PuttingCourse.getInstance().setFunction(new FunctionMaker(path));
         Menu.getInstance().newLVL = true;
