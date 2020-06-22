@@ -81,6 +81,39 @@ public class ObstacleBuilder {
     /**
      * Creates the Model for rendering a Box obstacle
      * Creates the Box Object with collision logic implemented
+     * @param startPos front left corner
+     * @param length length of the face, always along x axis
+     * @param width length of the side along the y axis
+     */
+    public static void makeBox(Vector2 startPos, float length, float width){
+        Vector2 vstartPos = new Vector2(startPos.x-BALL_RADIUS,startPos.y-BALL_RADIUS);
+        Vector2 v1 = new Vector2(startPos.x + length+BALL_RADIUS, startPos.y-BALL_RADIUS);
+        Vector2 v2 = new Vector2(startPos.x-BALL_RADIUS, startPos.y+width+BALL_RADIUS);
+        Vector2 v3 = new Vector2(startPos.x+length+BALL_RADIUS, startPos.y+width+BALL_RADIUS);
+
+        Obstacle tmp = new Obstacle();
+        tmp.addVertex(vstartPos);
+        tmp.addVertex(v1);
+        tmp.addVertex(v3);
+        tmp.addVertex(v2);
+
+        Side s1 = new VerticalSide(vstartPos, v2);
+        Side s2 = new VerticalSide(v1,v3);
+        Side s3 = new HorizontalSide(vstartPos, v1);
+        Side s4 = new HorizontalSide(v2,v3);
+
+        tmp.addSide(s1);
+        tmp.addSide(s2);
+        tmp.addSide(s3);
+        tmp.addSide(s4);
+
+        PuttingCourse.getInstance().obstacles.add(tmp);
+
+
+    }
+    /**
+     * Creates the Model for rendering a Box obstacle
+     * Creates the Box Object with collision logic implemented
      * @param centerGrav Center of gravity
      * @param length length of the face, always along x axis
      * @param width length of the side along the y axis

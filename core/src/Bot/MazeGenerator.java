@@ -133,6 +133,12 @@ public class MazeGenerator {
 		}
 	};
 
+	/**
+	 * Created for sole purpose of testing second ai
+	 * @param modelBuilder
+	 * @return
+	 */
+
 	public static Array<ModelInstance> createMaze(ModelBuilder modelBuilder){
 		if(createMaze != null) {
 			return createMaze;
@@ -155,7 +161,29 @@ public class MazeGenerator {
 		createMaze = result;
 		return result;
 	}
- 
+
+	/**
+	 * method used only when not playing
+	 * @param DEBUG
+	 */
+	public static void createMaze(Boolean DEBUG) {
+		if (createMaze != null) {
+			return;
+		}
+		PuttingCourse.getInstance().obstacles = new LinkedList<>();
+		MazeGenerator maze = new MazeGenerator(8, 8);
+		maze.display();
+		for (int i = 0; i < InfoObject.maze.length; i++) {
+			for (int j = 0; j < InfoObject.maze[0].length; j++) {
+				if (InfoObject.maze[i][j].wall) {
+					ObstacleBuilder.makeBox(new Vector2(i*BLOCK_SIZE,j*BLOCK_SIZE),BLOCK_SIZE,BLOCK_SIZE);
+					PuttingCourse.getInstance().obstacles.getLast().i = i;
+					PuttingCourse.getInstance().obstacles.getLast().j = j;
+				}
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		int x = args.length >= 1 ? (Integer.parseInt(args[0])) : 8;
 		int y = args.length == 2 ? (Integer.parseInt(args[1])) : 8;

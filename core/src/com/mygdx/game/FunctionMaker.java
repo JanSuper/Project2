@@ -423,6 +423,13 @@ public class FunctionMaker implements Function2d {
         PuttingSimulator.getInstance().create();
     }
 
+    public void setFunction(String function, boolean DEBUG) {
+
+        this.function = function.toLowerCase().replace(" ","");
+        transfer();
+
+    }
+
 
 }
 
