@@ -204,7 +204,7 @@ public class PuttingSimulator extends Game implements Screen{
         }*/
         instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
         
-        if (mazeLevel)
+        if (mazeLevel) 
         instances.addAll(MazeGenerator.createMaze(mb));
         
         

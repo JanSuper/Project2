@@ -43,14 +43,14 @@ public class WigerToods implements Bot{
             testFin = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), testVelocity);
             Vector2d shotDistance = PuttingSimulator.getInstance().get_ball_position().absDifference(testFin);
 
-
-            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<PuttingCourse.getInstance().get_hole_tolerance()/100){
+            System.out.println("here");
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<Math.sqrt(PuttingCourse.getInstance().get_hole_tolerance())){
                 recalibrateX=false;
             }else{
                 scalar = distanceToFlag.getX()/shotDistance.getX();
                 testVelocity.setX(testVelocity.getX()*Math.cbrt(scalar));
             }
-            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getY())<PuttingCourse.getInstance().get_hole_tolerance()/100) {
+            if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getY())<Math.sqrt(PuttingCourse.getInstance().get_hole_tolerance())) {
                 recalibrateY = false;
             }else{
                 scalar = distanceToFlag.getY()/shotDistance.getY();

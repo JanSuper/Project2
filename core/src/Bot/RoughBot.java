@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class RoughBot implements Bot {
 
-	double startingFric = new Random().nextDouble()*2;
+	double startingFric = 0.4;
     Solver solver = new FrictionRKSolver(startingFric);
     Solver actualSolver = new RKSolver();
 

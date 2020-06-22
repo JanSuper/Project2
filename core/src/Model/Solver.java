@@ -134,6 +134,7 @@ public abstract class Solver implements PhysicsEngine{
     }
 
     public boolean finish(Vector2d flagPostion, double tolerance) {
+    	tolerance+=0.15f;
     	return (((((flagPostion.getX() - tolerance <= this.position.getX()) &&
                 (position.getX() <= flagPostion.getX()+ tolerance))
                 &&((flagPostion.getY() - tolerance <= this.position.getY())
@@ -168,7 +169,7 @@ public abstract class Solver implements PhysicsEngine{
                 (position.getX()+Math.signum(velocity.getX())*-AMOUNT_BACK_FROM_WATER,
                         position.getY()+Math.signum(velocity.getY())*-AMOUNT_BACK_FROM_WATER));
 //        Main.getInstance().getSolver().setVelocity(velocity = new Vector2d(0.001,0));
-        Main.getInstance().getSolver().nextStep();
+//        Main.getInstance().getSolver().nextStep(); 
         stopShot=true;
     }
 
