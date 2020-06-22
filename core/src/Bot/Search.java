@@ -88,6 +88,10 @@ public class Search {
         return pathScore;
     }
 
+//    private int[][] setScore(int[][] pathScore, int i, int j, int score, BlockInfo[][] maze ){
+//        if()
+//    }
+
     private int[][] getPathScore() {
         return pathScore;
     }
@@ -98,7 +102,9 @@ public class Search {
      * @return score attributed to that coordinate
      */
     private int getScore(Vector2d currentPosition){
-        if(currentPosition.getY()<0||currentPosition.getX()<0) return 999;
+        if(currentPosition.getY()<0||currentPosition.getX()<0||
+                currentPosition.getX()>MazeGenerator.mazeBlocks.maze.length*BLOCK_SIZE||
+                currentPosition.getY()>MazeGenerator.mazeBlocks.maze.length*BLOCK_SIZE) return 999;
         return pathScore[(int)currentPosition.getX()/BLOCK_SIZE][(int)currentPosition.getY()/BLOCK_SIZE];
     }
 
