@@ -39,7 +39,7 @@ public class RoughBot implements Bot {
            shotVel = WigerToods.getInstance().search();
         }
 
-
+    ///estimate friction.
 
         return shotVel;
     }

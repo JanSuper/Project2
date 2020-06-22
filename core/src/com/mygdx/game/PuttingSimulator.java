@@ -392,6 +392,10 @@ public class PuttingSimulator extends Game implements Screen{
                 
             }else{
             	if(!mazeLevel) {
+            	    take_shot(RoughBot.getInstance().search());
+                    shot = false;
+                    count = 0;
+                    Gdx.input.setInputProcessor(camController);
             		// only reaches here if the bot doesnt make it on the first try on a normal course
             	}
             	else { //mazeLevel
