@@ -8,7 +8,6 @@ public class RKSolver extends Solver {
 
     @Override
     public void nextStep() {
-    	System.out.println("nextstep");
         PuttingCourse.getInstance().checkCollision(this);
         prevPos = position;
         currentPosZ = get_height(position);

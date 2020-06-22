@@ -353,6 +353,7 @@ public class PuttingSimulator extends Game implements Screen{
         	    canCount = false;
         	    mazeLevel = false;
         	    count = 0;
+        	    PuttingCourse.getInstance().obstacles = new LinkedList();
             Main.getInstance().setScreen(Menu.getInstance());
         }
         else if (shot) {
