@@ -2,6 +2,7 @@ package Model;
 
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Vector2d {
     private double x;
@@ -69,6 +70,26 @@ public class Vector2d {
         double norm=evaluateVector();
         x=x/norm*maxSpeed;
         y=y/norm*maxSpeed;
+    }
+    public static int pointLineSide(Vector2d linePoint1, Vector2d linePoint2, Vector2d point) {
+        return (int) Math.signum((linePoint2.getX() - linePoint1.getX()) * (point.getY() - linePoint1.getY()) - (linePoint2.getY() - linePoint1.getY()) * (point.getX() - linePoint1.getX()));
+    }
+    public static boolean isPointInPolygon(Array<Vector2d> polygon, Vector2d point) {
+        Vector2d last = (Vector2d)polygon.peek();
+        double x = point.getX();
+        double y = point.getY();
+        boolean oddNodes = false;
+
+        for(int i = 0; i < polygon.size; ++i) {
+            Vector2d vertex = (Vector2d)polygon.get(i);
+            if ((vertex.getY() < y && last.getY() >= y || last.getY() < y && vertex.getY() >= y) && vertex.getX() + (y - vertex.getY()) / (last.getY() - vertex.getY()) * (last.getX() - vertex.getX()) < x) {
+                oddNodes = !oddNodes;
+            }
+
+            last = vertex;
+        }
+
+        return oddNodes;
     }
 
 }

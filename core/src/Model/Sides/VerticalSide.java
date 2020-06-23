@@ -1,7 +1,8 @@
 package Model.Sides;
 
 import Model.Solver;
-import com.badlogic.gdx.math.Vector2;
+import Model.Vector2d;
+
 
 /**
  * Vertical with respect to the x axis
@@ -11,11 +12,9 @@ public class VerticalSide extends Side {
     /**
      * must create a side so the the direction of vertex1 to vertex2 is within the first 179 degrees
      * anticlockwise from the x-axis
-     *
-     * @param vertex1
-     * @param vertex2
-     */
-    public VerticalSide(Vector2 vertex1, Vector2 vertex2) {
+     *  @param vertex1
+     * @param vertex2*/
+    public VerticalSide(Vector2d vertex1, Vector2d vertex2) {
         super(vertex1, vertex2);
     }
 

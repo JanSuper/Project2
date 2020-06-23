@@ -7,6 +7,8 @@ import Bot.*;
 import Bot.Bot;
 import Bot.MazeGenerator;
 import Bot.RoughBot;
+import Bot.Search;
+import Bot.WigerToods;
 import Model.Sides.Side;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -91,7 +93,7 @@ public class PuttingSimulator extends Game implements Screen{
     boolean look = true;
     boolean canCount = false;
     boolean mazeLevel = false;
-    
+
     static int score = 0;
 
     /**
@@ -204,7 +206,7 @@ public class PuttingSimulator extends Game implements Screen{
         }*/
         instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
         
-        if (mazeLevel) 
+        if (mazeLevel)
         instances.addAll(MazeGenerator.createMaze(mb));
         
         
@@ -304,6 +306,7 @@ public class PuttingSimulator extends Game implements Screen{
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
             		System.out.println("heregiveupmaze");
             		giveUpMaze();
+
             		
             	}
        		});
@@ -318,7 +321,9 @@ public class PuttingSimulator extends Game implements Screen{
             	}
        		});
         }
+        
         stage = new Stage();
+        
         stage.addActor(buttonShot);
         stage.addActor(giveUp);
         stage.addActor(textFieldSpeed);
@@ -339,7 +344,7 @@ public class PuttingSimulator extends Game implements Screen{
     		}
     	}
     	
-    	if(Gdx.input.isKeyPressed(Keys.ESCAPE)) { 
+    	if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
     			look = true;
     			count = 0;
     			Main.getInstance().getSolver().pauseShot();
@@ -352,11 +357,11 @@ public class PuttingSimulator extends Game implements Screen{
         	    PuttingCourse.getInstance().obstacles = new LinkedList();
         		if (mazeLevel) mazeLevel = false;
         	    System.out.println(score);
-        	    
+
         	    score = 0;
             Main.getInstance().setScreen(Menu.getInstance());
     	}
-    	
+
     	if(!shot) {
     	Gdx.input.setInputProcessor(camController); // to set the cam from the user menu back into game
     	}
@@ -374,7 +379,7 @@ public class PuttingSimulator extends Game implements Screen{
         	    PuttingCourse.getInstance().obstacles = new LinkedList();
         		if (mazeLevel) mazeLevel = false;
         	    System.out.println(score);
-        	    
+
         	    score = 0;
             Main.getInstance().setScreen(Menu.getInstance());
         }
@@ -384,14 +389,14 @@ public class PuttingSimulator extends Game implements Screen{
         }
         else if (count >= 2*60) {
 //        	Main.getInstance().getSolver().setVelocity(new Vector2d(0,0));
-            if(!ai) { // if a human is playing     	
+            if(!ai) { // if a human is playing
             	Gdx.input.setInputProcessor(stage);
                 shot = true;
                 buttonShot.addListener(new ClickListener() {
                     @Override
                     public void touchUp(InputEvent e, float x, float y, int point, int button) {
                         count = 0;
-                        System.out.println("here"); 
+                        System.out.println("here");
                         if ((Pattern.matches(decimalPattern, textFieldSpeed.getText()) || textFieldSpeed.getText().matches(naturalPattern)) &&
                                 (Pattern.matches(decimalPattern, textFieldAngle.getText()) || textFieldAngle.getText().matches(naturalPattern))) {
 
@@ -587,7 +592,7 @@ public class PuttingSimulator extends Game implements Screen{
         Main.getInstance().getSolver().nextStep();
         look = false;
     }
-    
+
     public void giveUp() {
     	System.out.println("heregiveup");
 		RoughBot.getInstance().setSolver((Solver)Main.getInstance().getSolver());
@@ -598,7 +603,7 @@ public class PuttingSimulator extends Game implements Screen{
 		count = 0;
 		take_shot(holdshot);
     }
-    
+
     public void giveUpMaze() {
     	MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
 		MazeSearch.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
@@ -607,7 +612,7 @@ public class PuttingSimulator extends Game implements Screen{
 		take_shot(nextShot);
 		count = 0;
 		shot = false;
-		
+
 		score++;
         Gdx.input.setInputProcessor(camController);
     }

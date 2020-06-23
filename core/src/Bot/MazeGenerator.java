@@ -132,7 +132,13 @@ public class MazeGenerator {
 			this.dx = dx;
 			this.dy = dy;
 		}
-	};
+	}
+
+	/**
+	 * Created for sole purpose of testing second ai
+	 * @param modelBuilder
+	 * @return
+	 */
 
 	public static Array<ModelInstance> createMaze(ModelBuilder modelBuilder){
 		if(createMaze != null) {
@@ -145,7 +151,7 @@ public class MazeGenerator {
 		for(int i = 0; i<InfoObject.maze.length; i++){
 			for(int j=0; j< InfoObject.maze[0].length; j++){
 				if(InfoObject.maze[i][j].wall){
-					result.add(ObstacleBuilder.makeBox(new Vector2(i*BLOCK_SIZE,j*BLOCK_SIZE),BLOCK_SIZE,BLOCK_SIZE, modelBuilder));
+					result.add(ObstacleBuilder.makeBox(new Vector2d(i*BLOCK_SIZE,j*BLOCK_SIZE),BLOCK_SIZE,BLOCK_SIZE, modelBuilder));
 					PuttingCourse.getInstance().obstacles.getLast().i=i;
 					PuttingCourse.getInstance().obstacles.getLast().j=j;
 				}

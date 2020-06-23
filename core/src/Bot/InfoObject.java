@@ -57,6 +57,7 @@ public class InfoObject {
 	}
 	
 	public ArrayList<BlockInfo> getSteps(Vector2d start, Vector2d finish){
+		System.out.println("yohahhahahahahhha");
 		steps = new ArrayList();
 		strings = new ArrayList();
 		botSteps = new ArrayList();
