@@ -33,6 +33,7 @@ public class PuttingCourse{
     private double holeTolerance = 0.02f;
     private double maximumVelocity =15.0;
     private Function2d height;
+    private LinkedList<Obstacle> touched = new LinkedList<>();
 
     public LinkedList<Obstacle> obstacles = new LinkedList<Obstacle>();
 
@@ -327,19 +328,33 @@ public class PuttingCourse{
                 for(Side side: sides){
                     stop = side.collideIfCollision(solver);
 //                    if (stop) System.out.println("touchie");
-                    
-                    if(!botUse) {
                     	if(stop){
                         	//make the obstacle rise on contact !
-                        	if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) scale(obstacle);
-                        	else scale(obstacles.get(r.nextInt(obstacles.size())));
-                        	return;
+                            int ran= r.nextInt(obstacles.size());
+                        	if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) {//if it's not already up
+                                scale(obstacle);
+                                if(botUse)
+                                touched.add(obstacle);
+                            }else if(obstacles.get(ran).mi.transform.getScale(new Vector3()).y<5) {
+                                if(botUse)
+                        	    touched.add(obstacles.get(ran));
+                                scale(obstacles.get(ran));
+                            }
+                            return;
                     	}
-                    }
 
                 }
             }
         }
+    }
+
+    public void reset(){
+        while(touched.size()>0) {
+            Obstacle o = touched.pop();
+            if(o.mi.transform.getScale(new Vector3()).y==5)
+            o.mi.transform.scale(1, 1.0f / 5.0f, 1);
+        }
+
     }
     
     public void checkCollisionBot (Solver solver){
