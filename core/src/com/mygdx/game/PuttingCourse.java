@@ -316,12 +316,12 @@ public class PuttingCourse{
             return;
         }
 
-       Array<Vector2> polygon;
+       Array<Vector2d> polygon;
        LinkedList<Side> sides;
        boolean stop;
         for(Obstacle obstacle : obstacles){
             polygon=obstacle.getPolygon();
-            if(Intersector.isPointInPolygon(polygon ,new Vector2((float)solver.getPosition().getX(),(float)solver.getPosition().getY()))){
+            if(Vector2d.isPointInPolygon(polygon ,new Vector2d(solver.getPosition().getX(),solver.getPosition().getY()))){
 //            	System.out.println("need to talk");
                 sides = obstacle.getSides();
                 for(Side side: sides){
@@ -344,12 +344,12 @@ public class PuttingCourse{
     
     public void checkCollisionBot (Solver solver){
 
-        Array<Vector2> polygon;
+        Array<Vector2d> polygon;
         LinkedList<Side> sides;
         boolean stop;
          for(Obstacle obstacle : obstacles){
              polygon=obstacle.getPolygon();
-             if(Intersector.isPointInPolygon(polygon ,new Vector2((float)solver.getPosition().getX(),(float)solver.getPosition().getY()))){
+             if(Vector2d.isPointInPolygon(polygon ,new Vector2d(solver.getPosition().getX(),solver.getPosition().getY()))){
                  sides = obstacle.getSides();
                  for(Side side: sides){
                      stop = side.collideIfCollision(solver);

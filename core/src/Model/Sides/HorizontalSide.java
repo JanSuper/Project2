@@ -1,7 +1,7 @@
 package Model.Sides;
 
 import Model.Solver;
-import com.badlogic.gdx.math.Vector2;
+import Model.Vector2d;
 
 public class HorizontalSide extends Side {
     /**
@@ -11,7 +11,7 @@ public class HorizontalSide extends Side {
      * @param vertex1
      * @param vertex2
      */
-    public HorizontalSide(Vector2 vertex1, Vector2 vertex2) {
+    public HorizontalSide(Vector2d vertex1, Vector2d vertex2) {
         super(vertex1, vertex2);
     }
 
