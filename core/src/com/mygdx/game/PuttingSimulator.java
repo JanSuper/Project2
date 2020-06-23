@@ -3,8 +3,10 @@ package com.mygdx.game;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-
+import Bot.*;
+import Bot.Bot;
 import Bot.MazeGenerator;
+import Bot.RoughBot;
 import Bot.Search;
 import Bot.WigerToods;
 import Model.Sides.Side;
@@ -60,7 +62,7 @@ public class PuttingSimulator extends Game implements Screen{
 
     private Vector2d ballPosition;
 
-    private WigerToods ai=null;
+    private boolean ai = false;
 
     PerspectiveCamera cam;
     CameraInputController camController;
@@ -91,6 +93,8 @@ public class PuttingSimulator extends Game implements Screen{
     boolean look = true;
     boolean canCount = false;
     boolean mazeLevel = false;
+
+    static int score = 0;
 
     /**
      * Required for API on course manual
@@ -277,8 +281,11 @@ public class PuttingSimulator extends Game implements Screen{
                 if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
                         (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern))) {
                 	
+                	if(!(textFieldSpeed.getText().equals("") || textFieldAngle.getText().equals(""))) {
                 	look = false;
                     play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                    score++;
+                	}
                 }
                 else if(!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
                     textFieldSpeed.setText("");
@@ -298,12 +305,12 @@ public class PuttingSimulator extends Game implements Screen{
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
             		System.out.println("heregiveupmaze");
-            		
-            		//MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
-            		//WigerToods.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
+            		giveUpMaze();
 
+            		MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
+            		WigerToods.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
             		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
-            		Vector2d nextShot = Search.getInstance().searchMaze().getLastShot();
+            		Vector2d nextShot = WigerToods.getInstance().mazeSearch();
             		take_shot(nextShot);
             		count = 0;
             		shot = false;
@@ -315,14 +322,9 @@ public class PuttingSimulator extends Game implements Screen{
         	giveUp.addListener(new ClickListener(){
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
-            		System.out.println("heregiveup");
-            		WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
-            		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
-            		Vector2d holdshot = WigerToods.getInstance().search();
-            		look=false;
-            		shot = false;
-            		count = 0;
-            		take_shot(holdshot);
+        			//PuttingSimulator.getInstance().setAi(RoughBot.getInstance());
+        			score++;
+                    giveUp();
             	}
        		});
         }
@@ -340,37 +342,61 @@ public class PuttingSimulator extends Game implements Screen{
 
     @Override
     public void render (float delta) {
-    	if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-    		canCount = true;
+    	if(Gdx.input.isKeyPressed(Keys.SPACE)) { // if space is pressed
+    		canCount = true; // counting system works now
     		count = 120;
+    		if (!canCount) {
+    			canCount = true; // counting system works now
+    			count = 120;
+    		}
     	}
     	
-    	
-    	if(!shot) {
-    	Gdx.input.setInputProcessor(camController);
-    	}
-        //TODO: add game over
-        if (Main.getInstance().getSolver().finish(PuttingCourse.getInstance().get_flag_position(), PuttingCourse.getInstance().get_hole_tolerance())) {
-           
-//        	Menu holdMenu = new Menu(Main.getInstance());
-//        	holdMenu.newLVL = true;
-        	setAi(null);
+    	if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+    			look = true;
+    			count = 0;
+    			Main.getInstance().getSolver().pauseShot();
+    			ai = false;
         	 	shot = false;
         	    look = true;
         	    canCount = false;
         	    mazeLevel = false;
         	    count = 0;
+        	    PuttingCourse.getInstance().obstacles = new LinkedList();
+        		if (mazeLevel) mazeLevel = false;
+        	    System.out.println(score);
+
+        	    score = 0;
+            Main.getInstance().setScreen(Menu.getInstance());
+    	}
+
+    	if(!shot) {
+    	Gdx.input.setInputProcessor(camController); // to set the cam from the user menu back into game
+    	}
+        //TODO: add game over
+        if (Main.getInstance().getSolver().finish(PuttingCourse.getInstance().get_flag_position(), PuttingCourse.getInstance().get_hole_tolerance())) { // if reached finish
+           
+//        	Menu holdMenu = new Menu(Main.getInstance());
+//        	holdMenu.newLVL = true;
+        	ai = false;
+        	 	shot = false;
+        	    look = true;
+        	    canCount = false;
+        	    mazeLevel = false;
+        	    count = 0;
+        	    PuttingCourse.getInstance().obstacles = new LinkedList();
+        		if (mazeLevel) mazeLevel = false;
+        	    System.out.println(score);
+
+        	    score = 0;
             Main.getInstance().setScreen(Menu.getInstance());
         }
         else if (shot) {
-        	stage.act(delta);
+        	stage.act(delta); // frankenUI
             stage.draw();
         }
         else if (count >= 2*60) {
 //        	Main.getInstance().getSolver().setVelocity(new Vector2d(0,0));
-            if(ai==null) { // if a human is playing
-            	      	
-            	
+            if(!ai) { // if a human is playing
             	Gdx.input.setInputProcessor(stage);
                 shot = true;
                 buttonShot.addListener(new ClickListener() {
@@ -381,8 +407,16 @@ public class PuttingSimulator extends Game implements Screen{
                         if ((Pattern.matches(decimalPattern, textFieldSpeed.getText()) || textFieldSpeed.getText().matches(naturalPattern)) &&
                                 (Pattern.matches(decimalPattern, textFieldAngle.getText()) || textFieldAngle.getText().matches(naturalPattern))) {
 
-                            play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
-                            shot = false;
+                        		if(!(textFieldSpeed.getText().equals("") || textFieldAngle.getText().equals(""))) {
+                        		play(Float.parseFloat(textFieldSpeed.getText()), Float.parseFloat(textFieldAngle.getText()));
+                            	shot = false;
+                            	canCount = true;
+                            	score++;
+                        	}
+                        	else {
+                        		score++;
+                        		giveUp();
+                        	}
                             Gdx.input.setInputProcessor(camController);
                         } else if (!Pattern.matches(decimalPattern, textFieldSpeed.getText()))
                             textFieldSpeed.setText("");
@@ -395,14 +429,20 @@ public class PuttingSimulator extends Game implements Screen{
                 
             }else{
             	if(!mazeLevel) {
-            		// only reaches here if the bot doesnt make it on the first try on a normal course
+            		Vector2d holdshot = RoughBot.getInstance().search();
+            		look=false;
+            		shot = false;
+            		count = 0;
+            		score++;
+            		take_shot(holdshot);
             	}
             	else { //mazeLevel
-            		if (true) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
-            			Vector2d nextShot = Search.getInstance().searchMaze().getLastShot();
+            		if (MazeSearch.getInstance().stepcount + 1 < MazeSearch.getInstance().botSteps.size()) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
+            			Vector2d nextShot = MazeSearch.getInstance().search();
             			take_shot(nextShot);
             			shot = false;
             			count = 0;
+            			score++;
             			Gdx.input.setInputProcessor(camController);
             		}
             		else { // there are still steps to be taken to solve the maze
@@ -410,13 +450,14 @@ public class PuttingSimulator extends Game implements Screen{
                 		look=false;
                 		shot = false;
                 		count = 0;
+                		score++;
                 		take_shot(holdshot);
             		}
             	}
             }
             count = 0;
         }
-        else {
+        else { // if there is no menu on screen
         	if (!look)
         	Main.getInstance().getSolver().nextStep();
         	Main.getInstance().getSolver().setPosZ(Main.getInstance().getSolver().get_height(Main.getInstance().getSolver().getPosition().getX(), Main.getInstance().getSolver().getPosition().getY()));
@@ -549,12 +590,38 @@ public class PuttingSimulator extends Game implements Screen{
         if (speed>(float) PuttingCourse.getInstance().get_maximum_velocity()){
             speed=(float) PuttingCourse.getInstance().get_maximum_velocity();
         }
+        score++;
     	double holdxv = (speed*(Math.cos(angle/180*Math.PI)));
     	double holdyv = (speed*(Math.sin(angle/180*Math.PI)));
     	Vector2d shot = new Vector2d(holdxv, holdyv);
         Main.getInstance().getSolver().setVelocity(shot);
         take_shot(shot);
         Main.getInstance().getSolver().nextStep();
+        look = false;
+    }
+
+    public void giveUp() {
+    	System.out.println("heregiveup");
+		RoughBot.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+		PuttingSimulator.getInstance().setAi(RoughBot.getInstance());
+		Vector2d holdshot = RoughBot.getInstance().search();
+		look=false;
+		shot = false;
+		count = 0;
+		take_shot(holdshot);
+    }
+
+    public void giveUpMaze() {
+    	MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
+		MazeSearch.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
+		PuttingSimulator.getInstance().setAi(MazeSearch.getInstance());
+		Vector2d nextShot = MazeSearch.getInstance().search();
+		take_shot(nextShot);
+		count = 0;
+		shot = false;
+
+		score++;
+        Gdx.input.setInputProcessor(camController);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.Random;
+
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 
@@ -69,6 +71,7 @@ public class Menu implements Screen {
 //                	PuttingSimulator.getInstance().create();
 //                }
                 play(0,0);
+                PuttingCourse.getInstance().set_friction_coefficient((float)(1.0 - .5*new Random().nextDouble()));
                 PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
                 Main.getInstance().setScreen(PuttingSimulator.getInstance());
                 

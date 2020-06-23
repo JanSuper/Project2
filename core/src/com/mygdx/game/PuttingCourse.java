@@ -32,7 +32,7 @@ public class PuttingCourse{
 
     private Vector2d flag = new Vector2d(10,0);
     private Vector2d start = new Vector2d( 0,0);
-    private double friction = 0.3;
+    private double friction = 1.0 - .5*new Random().nextDouble();
     private double holeTolerance = 0.02f;
     private double maximumVelocity =15.0;
     private Function2d height;
@@ -322,7 +322,7 @@ public class PuttingCourse{
             return;
         }
         if (solver.get_height(solver.getPosition())<0){
-            solver.stopShot();
+        	Main.getInstance().getSolver().stopShot();
             PuttingSimulator.getInstance().look=true;
             return;
         }

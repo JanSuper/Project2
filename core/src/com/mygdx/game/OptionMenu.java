@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import Bot.MazeGenerator;
+import Bot.MazeSearch;
 import Bot.WigerToods;
 import Model.RKSolver;
 import Model.Solver;
@@ -244,12 +246,19 @@ public class OptionMenu implements Screen {
     
     public void mazeGame() {
     	PuttingCourse.getInstance().get_height().setFunction("0");
-    	WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+    	MazeGenerator.restart();
+    	MazeSearch.getInstance().setSolver((Solver)Main.getInstance().getSolver());
     	 PuttingSimulator.getInstance().mazeLevel = true;
     	 PuttingSimulator.getInstance().create();
     	 play(0,0);
     	 PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
     	 Main.getInstance().setScreen(PuttingSimulator.getInstance());
+    	 mazeButton.addListener(new ClickListener(){
+             @Override
+             public void touchUp(InputEvent e, float x, float y, int point, int button){
+                 mazeGame();
+             }
+         });
     }
 
     /**
@@ -282,40 +291,47 @@ public class OptionMenu implements Screen {
 
     public void loadMap(String path){
     	
-    	if (path.charAt(path.length() - 1) == 't') {
+//    	if (path.charAt(path.length() - 1) == 't') {
+//    	
+//    	try{
+//    		
+//            FileReader fr = new FileReader("C:\\Users\\Jan Super\\git\\Project2\\core\\assets/" + path);
+//            BufferedReader br = new BufferedReader (fr);
+//            String line = br.readLine();
+//            
+//            path = line;
+//            
+//            fr.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch(IOException e){
+//            e.printStackTrace();
+//        }
+//    	}
+//    
+//    	String[] holdarray = new String[14];
+//    	holdarray = path.split(" ");
+//    	PuttingCourse.getInstance().set_friction_coefficient(Float.parseFloat(holdarray[7]));
+//    	PuttingCourse.getInstance().setMaxVel(Float.parseFloat(holdarray[8]));
+//    	PuttingCourse.getInstance().set_start_position(new Vector2d(Float.parseFloat(holdarray[9]), Float.parseFloat(holdarray[10])));
+//    	PuttingCourse.getInstance().set_flag_position(new Vector2d(Float.parseFloat(holdarray[11]), Float.parseFloat(holdarray[12])));
+//    	PuttingCourse.getInstance().set_hole_tolerance(Float.parseFloat(holdarray[13]));
+//    	
+//    	path = holdarray[0];
+//    	for (int i = 1; i <= 6; i++) {
+//    		path += " ";
+//    		path += holdarray[i];
+//    	}
     	
-    	try{
-    		
-            FileReader fr = new FileReader("C:\\Users\\Jan Super\\git\\Project2\\core\\assets/" + path);
-            BufferedReader br = new BufferedReader (fr);
-            String line = br.readLine();
-            
-            path = line;
-            
-            fr.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-    	}
-    
-    	String[] holdarray = new String[14];
-    	holdarray = path.split(" ");
-    	PuttingCourse.getInstance().set_friction_coefficient(Float.parseFloat(holdarray[7]));
-    	PuttingCourse.getInstance().setMaxVel(Float.parseFloat(holdarray[8]));
-    	PuttingCourse.getInstance().set_start_position(new Vector2d(Float.parseFloat(holdarray[9]), Float.parseFloat(holdarray[10])));
-    	PuttingCourse.getInstance().set_flag_position(new Vector2d(Float.parseFloat(holdarray[11]), Float.parseFloat(holdarray[12])));
-    	PuttingCourse.getInstance().set_hole_tolerance(Float.parseFloat(holdarray[13]));
-    	
-    	path = holdarray[0];
-    	for (int i = 1; i <= 6; i++) {
-    		path += " ";
-    		path += holdarray[i];
-    	}
+    	loadMapB.addListener(new ClickListener(){
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button){
+                loadMap(loadMapTF.getText());
+            }
+        });
 
+    	PuttingCourse.getInstance().setFunction(new FunctionMaker(path));
         Menu.getInstance().newLVL = true;
-        WigerToods.getInstance().setSolver(new RKSolver());
         PuttingSimulator.getInstance().create();
         Main.getInstance().setScreen(Menu.getInstance());
 

@@ -136,6 +136,7 @@ public abstract class Solver implements PhysicsEngine{
     }
 
     public boolean finish(Vector2d flagPostion, double tolerance) {
+    	tolerance+=0.15f;
     	return (((((flagPostion.getX() - tolerance <= this.position.getX()) &&
                 (position.getX() <= flagPostion.getX()+ tolerance))
                 &&((flagPostion.getY() - tolerance <= this.position.getY())
@@ -153,7 +154,7 @@ public abstract class Solver implements PhysicsEngine{
                 return 0;
         }else{
             stopShot = false;
-            return Integer.MAX_VALUE;
+            return 0;
         }
     }
 
@@ -164,10 +165,23 @@ public abstract class Solver implements PhysicsEngine{
         this.isAi=x;
     }
     public void stopShot(){
+    	double AMOUNT_BACK_FROM_WATER = 0.5;
         //velocity = new Vector2d(0,0);
-        position = new Vector2d
-                (position.getX()+Math.signum(velocity.getX())*-2,
-                        position.getY()+Math.signum(velocity.getY())*-2);
+        Main.getInstance().getSolver().setPosition(new Vector2d
+                (position.getX()+Math.signum(velocity.getX())*-AMOUNT_BACK_FROM_WATER,
+                        position.getY()+Math.signum(velocity.getY())*-AMOUNT_BACK_FROM_WATER));
+//        Main.getInstance().getSolver().setVelocity(velocity = new Vector2d(0.001,0));
+//        Main.getInstance().getSolver().nextStep(); 
+        stopShot=true;
+    }
+    public void pauseShot(){
+    	double AMOUNT_BACK_FROM_WATER = 0.5;
+        //velocity = new Vector2d(0,0);
+//        Main.getInstance().getSolver().setPosition(new Vector2d
+//                (position.getX()+Math.signum(velocity.getX())*-AMOUNT_BACK_FROM_WATER,
+//                        position.getY()+Math.signum(velocity.getY())*-AMOUNT_BACK_FROM_WATER));
+//        Main.getInstance().getSolver().setVelocity(velocity = new Vector2d(0.001,0));
+//        Main.getInstance().getSolver().nextStep(); 
         stopShot=true;
     }
 

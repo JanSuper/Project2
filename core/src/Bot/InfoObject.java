@@ -223,6 +223,7 @@ public class InfoObject {
 				count = 1;
 				newStep = false;
 				startOver = false;
+				
 			}
 
 			if (Arrays.equals(hold, steps.get(i+1).getSteplist())) {
