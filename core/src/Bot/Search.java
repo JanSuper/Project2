@@ -122,12 +122,9 @@ public class Search {
     }
 
     public Node searchMaze(){
-       // if(choosen.size()>0&&choosen.getLast().getCosth()<3){ //TODO write here
-//        if((PuttingSimulator.getInstance().get_ball_position().getX()/BLOCK_SIZE==lastshot[0]&&
-//        PuttingSimulator.getInstance().get_ball_position().getY()/BLOCK_SIZE>=lastshot[1] &&
-//                PuttingSimulator.getInstance().get_ball_position().getY()<=lastshot[3])
-//        ||(PuttingSimulator.getInstance().get_ball_position().getY()==lastshot[1]&&
-//                PuttingSimulator.getInstance().get_ball_position().getX()>=))
+    	if(lastShot()) {
+        	return new Node(PuttingSimulator.getInstance().get_ball_position(), WigerToods.getInstance().search(), null);
+        }
             PuttingCourse.getInstance().botUse=true;
             Node start = new Node(PuttingSimulator.getInstance().get_ball_position(), new Vector2d(15, 0), null);
             start.setCosth(getScore(start.getCoordAfterShot()));
@@ -282,6 +279,17 @@ public class Search {
 //        LinkedList<Node> firstShots = search.searchMaze();
 //        for(Node n: firstShots) System.out.println(n);
 
+    }
+    
+    public boolean lastShot() {
+    	Vector2d curPos = PuttingSimulator.getInstance().get_ball_position();
+    	Vector2d flag = PuttingCourse.getInstance().get_flag_position();
+    	Vector2d from = new Vector2d(lastshot[0]*BLOCK_SIZE + 1 + 0.5f, lastshot[1]*BLOCK_SIZE + 1 + 0.5f);
+    	Vector2d to = new Vector2d(lastshot[2]*BLOCK_SIZE + 1 + 0.5f, lastshot[3]*BLOCK_SIZE + 1 + 0.5f);
+    	return	(	
+    				(from.getX() - 1.5f <= curPos.getX()) && (curPos.getX() <= to.getX() + 1.5f )&&
+    				(from.getY() - 1.5f <= curPos.getY()) && (curPos.getY() <= to.getY() + 1.5f )
+    			) && curPos.absDifference(flag).evaluateVector() < WigerToods.getInstance().maxDistance;
     }
 }
 
