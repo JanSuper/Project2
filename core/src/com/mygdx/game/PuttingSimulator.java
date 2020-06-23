@@ -307,14 +307,7 @@ public class PuttingSimulator extends Game implements Screen{
             		System.out.println("heregiveupmaze");
             		giveUpMaze();
 
-            		MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
-            		WigerToods.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
-            		PuttingSimulator.getInstance().setAi(WigerToods.getInstance());
-            		Vector2d nextShot = WigerToods.getInstance().mazeSearch();
-            		take_shot(nextShot);
-            		count = 0;
-            		shot = false;
-                    Gdx.input.setInputProcessor(camController);
+            		
             	}
        		});
         }
@@ -493,8 +486,8 @@ public class PuttingSimulator extends Game implements Screen{
 //        return cam.frustum.pointInFrustum(posTemp);
 //    }
     
-    public void setAi(WigerToods wt){
-        this.ai = wt;
+    public void setAi(Bot wt){
+        this.ai = true;
     }
 
     boolean checkCollision () {

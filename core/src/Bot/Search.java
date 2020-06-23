@@ -10,7 +10,7 @@ import com.mygdx.game.Menu;
 import com.mygdx.game.PuttingCourse;
 import com.mygdx.game.PuttingSimulator;
 import Model.RKSolver;
-
+import Model.Solver;
 import java.util.Random;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.LinkedList;
 
 import static Bot.MazeGenerator.BLOCK_SIZE;
 
-public class Search {
+public class Search implements Bot {
     public PuttingCourse course;
     private PhysicsEngine engine;
     private double radius;
@@ -121,9 +121,9 @@ public class Search {
         return pathScore[(int)currentPosition.getX()/BLOCK_SIZE][(int)currentPosition.getY()/BLOCK_SIZE];
     }
 
-    public Node searchMaze(){
+    public Vector2d search(){
     	if(lastShot()) {
-        	return new Node(PuttingSimulator.getInstance().get_ball_position(), WigerToods.getInstance().search(), null);
+        	return  WigerToods.getInstance().search();
         }
             PuttingCourse.getInstance().botUse=true;
             Node start = new Node(PuttingSimulator.getInstance().get_ball_position(), new Vector2d(15, 0), null);
@@ -154,7 +154,7 @@ public class Search {
             PuttingCourse.getInstance().botUse=false;
             choosen.add(start);
             PuttingCourse.getInstance().reset();
-            return start;
+            return start.getLastShot();
 
   /*      Node current = null;
         do{
@@ -193,7 +193,7 @@ public class Search {
         return 1000;
     }
 
-    public LinkedList<Node> search(){
+  /*  public LinkedList<Node> search(){
         Node start = new Node(course.get_start_position(), course.get_flag_position() ,null);
         start.setCosth(start.getCoordAfterShot().difference(course.get_flag_position()));
         for (int i = 2; i < 360; i++) {
@@ -219,11 +219,14 @@ public class Search {
 
         }while(current.getCosth()<choosen.getLast().getCosth());
 
-        /**
-         * Needs last couple of shots because velocity may be too high
-         */
+
 
         return choosen;
+    }*/
+
+    @Override
+    public void setSolver(Solver x) {
+        this.engine =x;
     }
 
     private double distance(Vector2d n, Vector2d p){
