@@ -326,7 +326,7 @@ public class FunctionMaker implements Function2d {
             }///////////////////////COMPARE TO NEXT NON COMPUTED OP//////////////////////////////
 
 
-            if (index+1>=computed.length || priority(type.get(index-1), type.get(index+1))){
+            if (index+1>=computed.length || (index>0&&priority(type.get(index-1), type.get(index+1)))){
                 if(!computed[index-1]) computed[index-1]=true;
                 else computed[index]=true;
             }else{
@@ -335,7 +335,7 @@ public class FunctionMaker implements Function2d {
                 if(!computed[index+1])
                 arg = helper(arg, computed, index+1, x,y);
                 //because earlier if !index -> OP : index++
-                if(!computed[index-1]) computed[index-1]=true;
+                if(index>0&&!computed[index-1]) computed[index-1]=true;
                 else computed[index]=true;
                 //next operation
                 int nex = nextFrom(computed, index+1);
@@ -345,8 +345,11 @@ public class FunctionMaker implements Function2d {
                 }
             }
             /////////////////////////////////
-            //System.out.println("\n"+index+" "+arguments.get(index-1)+" " +t+" "+arg);
+          //  System.out.println("\n"+index);
+           //         System.out.println(arguments.get(index-1)+" " +t+" "+arg);
+            if(index!=0)
             return map.get(arguments.get(index-1)).compute(t, arg);
+            else return arg;
         }else if(index<computed.length){
             if(type.get(index).equals("VAR")){
                 if(arguments.get(index).equals("x")) arg =x;
@@ -430,7 +433,10 @@ public class FunctionMaker implements Function2d {
 
     }
 
-
+    public static void main(String[] args){
+        FunctionMaker fm = new FunctionMaker("(x^2+y^2)");
+        System.out.println(fm.evaluate(0,4.0));
+    }
 }
 
 
