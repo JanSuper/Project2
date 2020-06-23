@@ -287,8 +287,8 @@ public class Search {
     	Vector2d from = new Vector2d(lastshot[0]*BLOCK_SIZE + 1 + 0.5f, lastshot[1]*BLOCK_SIZE + 1 + 0.5f);
     	Vector2d to = new Vector2d(lastshot[2]*BLOCK_SIZE + 1 + 0.5f, lastshot[3]*BLOCK_SIZE + 1 + 0.5f);
     	return	(	
-    				(from.getX() - 1.5f <= curPos.getX()) && (curPos.getX() <= to.getX() + 1.5f )&&
-    				(from.getY() - 1.5f <= curPos.getY()) && (curPos.getY() <= to.getY() + 1.5f )
+    				(from.getX() - 1f <= curPos.getX()) && (curPos.getX() <= to.getX() + 1f )&&
+    				(from.getY() - 1f <= curPos.getY()) && (curPos.getY() <= to.getY() + 1f )
     			) && curPos.absDifference(flag).evaluateVector() < WigerToods.getInstance().maxDistance;
     }
 }

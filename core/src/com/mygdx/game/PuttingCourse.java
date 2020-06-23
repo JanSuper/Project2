@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
+import Model.Sides.HorizontalSide;
 import Model.Sides.Side;
+import Model.Sides.VerticalSide;
+
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -40,6 +43,9 @@ public class PuttingCourse{
     private Random r = new Random();
     
     public boolean botUse = false;
+    
+    public Side currenthit = null;
+    public Side lasthit = null;
 
 
     private PuttingCourse(){ }
@@ -311,7 +317,7 @@ public class PuttingCourse{
 
     public void checkCollision (Solver solver){
 
-        if(solver.previousStepCollision){
+        if(solver.previousStepCollision && ((currenthit == lasthit ) && lasthit != null)){
             solver.previousStepCollision=false;
             return;
         }
@@ -331,7 +337,9 @@ public class PuttingCourse{
 //            	System.out.println("need to talk");
                 sides = obstacle.getSides();
                 for(Side side: sides){
+                	lasthit = currenthit;
                     stop = side.collideIfCollision(solver);
+                    currenthit = side;
 //                    if (stop) System.out.println("touchie");
                     	if(stop){
                         	//make the obstacle rise on contact !

@@ -14,7 +14,7 @@ public abstract class Solver implements PhysicsEngine{
      * TODO: make an array of all positions at these time intervals so we can set a the screen to update
      * ball position based off of this array instead of calculating on the fly, this will allow us to calculate the motion in smaller steps and only store evere 0.006 seconds
      */
-    public static double fps = 60.0;
+    public static double fps = 165.0;
     /**
      * Solver Step size
      * This is the step size that is changed for the set_step_size
