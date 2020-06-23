@@ -85,6 +85,7 @@ public class PuttingSimulator extends Game implements Screen{
     TextField textFieldAngle;
     TextButton buttonShot;
     TextButton giveUp;
+    TextButton giveUpBeta;
     Label shotLabelSpeed;
     Label shotLabelAngle;
     private Stage stage;
@@ -93,6 +94,8 @@ public class PuttingSimulator extends Game implements Screen{
     boolean look = true;
     boolean canCount = false;
     boolean mazeLevel = false;
+    
+    boolean beta;
 
     static int score = 0;
 
@@ -131,10 +134,6 @@ public class PuttingSimulator extends Game implements Screen{
     }
 
     public void take_shot(Vector2d initial_ball_velocity){
-   /** 	Main.getInstance(.getSolver().setVelX((float)initial_ball_velocity.getX());
-    	Main.getInstance(.getSolver().setVelY((float)initial_ball_velocity.getY());
-    *///changes to
-       // if(initial_ball_velocity.evaluateVector()> menu.vMax) initial_ball_velocity.scaleDown(menu.vMax);
     	if(initial_ball_velocity.evaluateVector() > PuttingCourse.getInstance().get_maximum_velocity())
     	initial_ball_velocity.scaleDown(PuttingCourse.getInstance().get_maximum_velocity());
         Main.getInstance().getSolver().setVelocity(initial_ball_velocity);
@@ -186,7 +185,6 @@ public class PuttingSimulator extends Game implements Screen{
 
         ball = new ModelInstance(model, "ball");
         groundBall = new ModelInstance(model, "groundBalls");
-      //TODO: double check variables
         // translate is to a certain position if wanted
         // remember that the middle of the object is 0.0.0
         ball.transform.setToTranslation((float)PuttingCourse.getInstance().get_start_position().getX(),
@@ -196,14 +194,6 @@ public class PuttingSimulator extends Game implements Screen{
         instances = new Array<ModelInstance>();
         instances.add(ball);
 
-
-      /*  for (float j = -5f; j <= 5f; j += 0.3f) {
-            for (float i = 0; i <= 199; i += 0.3f) {
-                groundBall = new ModelInstance(model, "groundBalls");
-                groundBall.transform.setToTranslation(i - 50,(float)course.get_height().evaluate(new Vector2d(i,j))-.25f, j);
-                instances.add(groundBall);
-            }
-        }*/
         instances.addAll(PuttingCourse.getInstance().getCourseModel(model));
         
         if (mazeLevel)
@@ -217,7 +207,6 @@ public class PuttingSimulator extends Game implements Screen{
         flag.transform.setToTranslation((float)PuttingCourse.getInstance().get_flag_position().getX(),(float)PuttingCourse.getInstance().get_height().evaluate(new Vector2d(PuttingCourse.getInstance().get_flag_position().getX(), PuttingCourse.getInstance().get_flag_position().getY())) + 4.5f, (float)PuttingCourse.getInstance().get_flag_position().getY()- .5f);
         instances.add(flag);
 
-        //instances.add(ObstacleBuilder.makeTiltedBox(new Vector2(5f,0f),1f,6f,60 ,mb));
 
 
         // give the object a collision shape if you want it to have collision
@@ -236,20 +225,10 @@ public class PuttingSimulator extends Game implements Screen{
 
         wallObject = new btCollisionObject();
         wallObject.setCollisionShape(wallShape);
-      //  ballObject.setWorldTransform(wall.transform);
 
-//        collisionConfig = new btDefaultCollisionConfiguration();
-//        dispatcher = new btCollisionDispatcher(collisionConfig);
-
-/**        Main.getInstance(.getSolver().setPosX((float)ballPosition.getX());
-        Main.getInstance(.getSolver().setPosY((float)ballPosition.getY());
-        Main.getInstance(.getSolver().setPosZ(Main.getInstance(.getSolver().get_height((float)ballPosition.getX(), (float)ballPosition.getY()) + 1f);
-*///changing these lines to make use of RKM
         Main.getInstance().getSolver().setPosition(ballPosition);
 
-//        take_shot(calcInit());
-        //System.out.println(course.get_flag_position().getX() + " " + course.get_flag_position().getY());
-        
+
         count = 0;
         
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -277,7 +256,6 @@ public class PuttingSimulator extends Game implements Screen{
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button){
             	count = 0;
-            	System.out.println("here");
                 if((Pattern.matches(decimalPattern, textFieldSpeed.getText())||textFieldSpeed.getText().matches(naturalPattern))&&
                         (Pattern.matches(decimalPattern, textFieldAngle.getText())||textFieldAngle.getText().matches(naturalPattern))) {
                 	
@@ -304,8 +282,7 @@ public class PuttingSimulator extends Game implements Screen{
         	giveUp.addListener(new ClickListener(){
         		@Override
             	public void touchUp(InputEvent e, float x, float y, int point, int button){
-            		System.out.println("heregiveupmaze");
-            		giveUpMaze();
+            		giveUpMazeOld();
 
             		
             	}
@@ -322,6 +299,18 @@ public class PuttingSimulator extends Game implements Screen{
        		});
         }
         
+        giveUpBeta = new TextButton("Beta AI",skin);
+        giveUpBeta.setPosition(600,Main.getInstance().HEIGHT-230);
+        giveUpBeta.setSize(100,30);
+        	giveUpBeta.addListener(new ClickListener(){
+        		@Override
+            	public void touchUp(InputEvent e, float x, float y, int point, int button){
+            		giveUpMaze();
+
+            		
+            	}
+       		});
+        
         stage = new Stage();
         
         stage.addActor(buttonShot);
@@ -330,6 +319,9 @@ public class PuttingSimulator extends Game implements Screen{
         stage.addActor(textFieldAngle);
         stage.addActor(shotLabelSpeed);
         stage.addActor(shotLabelAngle);
+        
+        if(mazeLevel)
+        stage.addActor(giveUpBeta);
     }
 
 
@@ -396,7 +388,6 @@ public class PuttingSimulator extends Game implements Screen{
                     @Override
                     public void touchUp(InputEvent e, float x, float y, int point, int button) {
                         count = 0;
-                        System.out.println("here");
                         if ((Pattern.matches(decimalPattern, textFieldSpeed.getText()) || textFieldSpeed.getText().matches(naturalPattern)) &&
                                 (Pattern.matches(decimalPattern, textFieldAngle.getText()) || textFieldAngle.getText().matches(naturalPattern))) {
 
@@ -430,7 +421,25 @@ public class PuttingSimulator extends Game implements Screen{
             		take_shot(holdshot);
             	}
             	else { //mazeLevel
-            		if (true) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
+            		if (!beta) {
+            			if (MazeSearch.getInstance().stepcount + 1 < MazeGenerator.getInstance().mazeBlocks.getBotSteps().size()) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
+            				Vector2d nextShot = MazeSearch.getInstance().search();
+            				take_shot(nextShot);
+            				shot = false;
+            				count = 0;
+            				score++;
+            				Gdx.input.setInputProcessor(camController);
+            			}
+            			else { // there are still steps to be taken to solve the maze
+            				Vector2d holdshot = WigerToods.getInstance().search();
+            				look=false;
+            				shot = false;
+            				count = 0;
+            				score++;
+            				take_shot(holdshot);
+            			}
+            		}
+            		else {
             			Vector2d nextShot = Search.getInstance().search();
             			take_shot(nextShot);
             			shot = false;
@@ -438,14 +447,6 @@ public class PuttingSimulator extends Game implements Screen{
             			score++;
             			Gdx.input.setInputProcessor(camController);
             		}
-//            		else { // there are still steps to be taken to solve the maze
-//            			Vector2d holdshot = WigerToods.getInstance().search();
-//                		look=false;
-//                		shot = false;
-//                		count = 0;
-//                		score++;
-//                		take_shot(holdshot);
-//            		}
             	}
             }
             count = 0;
@@ -455,9 +456,6 @@ public class PuttingSimulator extends Game implements Screen{
         	Main.getInstance().getSolver().nextStep();
         	Main.getInstance().getSolver().setPosZ(Main.getInstance().getSolver().get_height(Main.getInstance().getSolver().getPosition().getX(), Main.getInstance().getSolver().getPosition().getY()));
 
-   /**     	this.ballPosition.setX(Main.getInstance(.getSolver().getPosX());
-        	this.ballPosition.setY(Main.getInstance(.getSolver().getPosY());
-     */  // changes to..
             this.ballPosition= Main.getInstance().getSolver().getPosition();
 
             ball.transform.setToTranslation((float)ballPosition.getX(), (float) Main.getInstance().getSolver().getPosZ()+.5f,(float) ballPosition.getY());
@@ -481,10 +479,6 @@ public class PuttingSimulator extends Game implements Screen{
         }
     }
 
-//    public boolean isVisible(PerspectiveCamera cam, ModelInstance instance){
-//        instance.transform.getTranslation(posTemp);
-//        return cam.frustum.pointInFrustum(posTemp);
-//    }
     
     public void setAi(Bot wt){
         this.ai = true;
@@ -527,9 +521,6 @@ public class PuttingSimulator extends Game implements Screen{
         ballObject.dispose();
         ballShape.dispose();
 
-//        dispatcher.dispose();
-//        collisionConfig.dispose();
-
         modelBatch.dispose();
         model.dispose();
         
@@ -546,7 +537,6 @@ public class PuttingSimulator extends Game implements Screen{
     @Override
     public void resize (int width, int height) {
     }
-    //TODO: height formula becomes puttingCourse.getHeight().evaluate(vector2D)
     public static float heightFormula(float x, float y) {
         return (float)(Math.sin(x) + Math.pow(Math.abs(y), 1.5));
     }
@@ -594,7 +584,6 @@ public class PuttingSimulator extends Game implements Screen{
     }
 
     public void giveUp() {
-    	System.out.println("heregiveup");
 		RoughBot.getInstance().setSolver((Solver)Main.getInstance().getSolver());
 		PuttingSimulator.getInstance().setAi(RoughBot.getInstance());
 		Vector2d holdshot = RoughBot.getInstance().search();
@@ -605,10 +594,25 @@ public class PuttingSimulator extends Game implements Screen{
     }
 
     public void giveUpMaze() {
-    	MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
+    	beta = true;
+    	MazeGenerator.getInstance().mazeBlocks.getSteps(PuttingSimulator.getInstance().get_ball_position(), PuttingCourse.getInstance().get_flag_position());
 		MazeSearch.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
 		PuttingSimulator.getInstance().setAi(Search.getInstance());
 		Vector2d nextShot = Search.getInstance().search();
+		take_shot(nextShot);
+		count = 0;
+		shot = false;
+
+		score++;
+        Gdx.input.setInputProcessor(camController);
+    }
+    
+    public void giveUpMazeOld() {
+    	beta = false;
+    	MazeGenerator.getInstance().mazeBlocks.getSteps(PuttingSimulator.getInstance().get_ball_position(), PuttingCourse.getInstance().get_flag_position());
+		MazeSearch.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
+		PuttingSimulator.getInstance().setAi(Search.getInstance());
+		Vector2d nextShot = MazeSearch.getInstance().search();
 		take_shot(nextShot);
 		count = 0;
 		shot = false;

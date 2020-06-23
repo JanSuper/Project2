@@ -330,7 +330,6 @@ public class FunctionMaker implements Function2d {
                 else computed[index]=true;
             }else{
                 int next = nextFrom(computed, index+1);
-//				System.out.println(arguments.get(index)+"comes before");
                 if(!computed[index+1])
                 arg = helper(arg, computed, index+1, x,y);
                 //because earlier if !index -> OP : index++
@@ -344,8 +343,6 @@ public class FunctionMaker implements Function2d {
                 }
             }
             /////////////////////////////////
-          //  System.out.println("\n"+index);
-           //         System.out.println(arguments.get(index-1)+" " +t+" "+arg);
             if(index!=0)
             return map.get(arguments.get(index-1)).compute(t, arg);
             else return arg;
@@ -358,21 +355,12 @@ public class FunctionMaker implements Function2d {
                 arg = Double.parseDouble(arguments.get(index-1));
                 computed[index]=true;
             }
-            //System.out.println(t+" "+arg+" index:"+index );
             return arg;
         }
         //We should not reach this far unless all calc are done
-//        System.out.println(index+" "+ t + " " + arg);
-//        System.out.println("error here");
         return t;
     }
 
-//    public static void main(String[] args){
-//        FunctionMaker f = new FunctionMaker("3");
-//        for(String s : f.arguments) System.out.print(s);
-//        System.out.println("HERE "+f.evaluate(Math.PI/2,1));
-//        //System.out.println("HERE"+f.get_height(1,2));
-//    }
 
     /**
      * verify whether operation a is before b
@@ -383,8 +371,6 @@ public class FunctionMaker implements Function2d {
     private  boolean priority(String a, String b){
         if(a.startsWith("OP") && b.startsWith("OP")) return a.charAt(2)>=b.charAt(2);
         if(a.equals("FUN")) return true;
-//        System.out.println("bug in priority");
-//        System.out.println("op1: "+a+" / op2: "+b);
         return false;
     }
 
@@ -434,7 +420,6 @@ public class FunctionMaker implements Function2d {
 
     public static void main(String[] args){
         FunctionMaker fm = new FunctionMaker("(x^2+y^2)");
-        System.out.println(fm.evaluate(0,4.0));
     }
 }
 

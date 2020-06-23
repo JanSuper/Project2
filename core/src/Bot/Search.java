@@ -25,15 +25,10 @@ public class Search implements Bot {
     private double radius;
     private int[][] pathScore;
     private static Search singleton = null;
-    private int count=0;
     private LinkedList<Node> choosen = new LinkedList<>();
     private int[] lastshot;
 
-    /**
-     * Constructor
-     * @param course terrain on which we need to do the research
-     * @param engine phyisics engine to simulate shots
-     */
+
     private Search(PuttingCourse course, PhysicsEngine engine) {
         this.course = course;
         this.engine = engine;
@@ -48,13 +43,9 @@ public class Search implements Bot {
                 pathScore[i][j]=maxScore;
             }
         }
-//        for (BlockInfo bi : steps){
-//            pathScore = setScore(pathScore, bi.i,bi.j,--maxScore);
-//        }
         setScore(pathScore,15, 15,0, MazeGenerator.mazeBlocks.maze, set);
 
          lastshot = MazeGenerator.mazeBlocks.getBotSteps().get(MazeGenerator.mazeBlocks.getBotSteps().size()-1);
-         System.out.println(Arrays.toString(lastshot));
     }
     /**
      * Constructor
@@ -67,14 +58,6 @@ public class Search implements Bot {
         this.engine = engine;
         pathScore = new int[MazeGenerator.getInstance().mazeBlocks.maze.length][MazeGenerator.getInstance().mazeBlocks.maze[0].length];
         int score = steps.size();
-//        for (int i = 0; i < pathScore.length; i++) {
-//            for (int j = 0; j < pathScore[0].length; j++) {
-//                pathScore[i][j]=score;
-//            }
-//        }
-//        for (BlockInfo bi : steps){
-//            pathScore = setScore(pathScore, bi.i,bi.j,--score);
-//        }
 
     }
 
@@ -124,7 +107,6 @@ public class Search implements Bot {
 
     public Vector2d search(){
     	if(lastShot()) {
-    		System.out.println("here");
         	return  WigerToods.getInstance().search();
         }
             PuttingCourse.getInstance().botUse=true;
@@ -139,44 +121,16 @@ public class Search implements Bot {
                 tmp.setCosth(getScore(tmp.getCoordAfterShot()));
                 PuttingCourse.getInstance().reset();
 
-                if (tmp.getCosth() == 999) System.out.println(tmp.getLastShot() + " -- " + (i));
                 if (tmp.getCosth() < start.getCosth()) start = tmp;
                 //       else if(tmp.getCosth()==start.getCosth()&&distanceToNext(tmp.getCoordAfterShot())<standard) start = tmp;
 
             }
-//            if(choosen.size()>0&&start.getCosth()<3){
-//                Node wigerShot= new Node(PuttingSimulator.getInstance().get_ball_position(), WigerToods.getInstance().search(),null);
-//                if(wigerShot.getCosth()<=start.getCosth()) start = wigerShot;
-//            }
 
-            /*if(choosen.size()>0&&(start.getCosth()>=choosen.getLast().getCosth())){
-                System.out.println("It's wiger's time to shine !");
-                start= new Node(PuttingSimulator.getInstance().get_ball_position(),WigerToods.getInstance().search(), null);
-            }*/
             PuttingCourse.getInstance().botUse=false;
             choosen.add(start);
             PuttingCourse.getInstance().reset();
             PuttingCourse.getInstance().lasthit = null;
             return start.getLastShot();
-
-  /*      Node current = null;
-        do{
-            if (current != null) choosen.add(current);
-            current = new Node(choosen.getLast().getCoordAfterShot(), new Vector2d(15,0) ,choosen.getLast());
-            current.setCosth(getScore(current.getCoordAfterShot()));
-            for (int i = 2; i < 360; i+=2) {
-                Vector2d nextShot = new Vector2d(15*Math.cos(i/180*Math.PI),15*Math.sin(i/180*Math.PI));
-                Node tmp = new Node(choosen.getLast().getCoordAfterShot(), nextShot, choosen.getLast());
-                tmp.setCosth(getScore(tmp.getCoordAfterShot()));
-                if(tmp.getCosth()<current.getCosth()) current=tmp;
-            }
-
-        }while(current.getCosth()<choosen.getLast().getCosth());
-
-        /**
-         * Needs last couple of shots because velocity may be too high
-         */
-
 
 
     }
@@ -196,36 +150,6 @@ public class Search implements Bot {
         return 1000;
     }
 
-  /*  public LinkedList<Node> search(){
-        Node start = new Node(course.get_start_position(), course.get_flag_position() ,null);
-        start.setCosth(start.getCoordAfterShot().difference(course.get_flag_position()));
-        for (int i = 2; i < 360; i++) {
-            Vector2d firstShot = new Vector2d(15*Math.cos(i*180/Math.PI),15*Math.sin(i*180/Math.PI));
-            Node tmp = new Node(course.get_start_position(), firstShot, null);
-            tmp.setCosth(tmp.getCoordAfterShot().difference(course.get_flag_position()));
-            System.out.println(tmp);
-            if(tmp.getCosth()<start.getCosth()) start=tmp;
-        }
-
-        choosen.add(start);
-        Node current = null;
-        do{
-            if (current != null) choosen.add(current);
-            current = new Node(choosen.getLast().getCoordAfterShot(), course.get_flag_position() ,choosen.getLast());
-            current.setCosth(current.getCoordAfterShot().difference(course.get_flag_position()));
-            for (int i = 2; i < 360; i+=2) {
-                Vector2d nextShot = new Vector2d(15*Math.cos(i/180*Math.PI),15*Math.sin(i/180*Math.PI));
-                Node tmp = new Node(choosen.getLast().getCoordAfterShot(), nextShot, choosen.getLast());
-                tmp.setCosth(tmp.getCoordAfterShot().difference(course.get_flag_position()));
-                if(tmp.getCosth()<current.getCosth()) current=tmp;
-            }
-
-        }while(current.getCosth()<choosen.getLast().getCosth());
-
-
-
-        return choosen;
-    }*/
 
     @Override
     public void setSolver(Solver x) {
@@ -248,42 +172,13 @@ public class Search implements Bot {
     }
 
     public static void main(String[] args){
-//        ModelBuilder mb = new ModelBuilder();
-//        PuttingCourse.getInstance().get_height().setFunction("0", true);
         new MazeGenerator(8,8);
-//        System.out.println(mb);
-//        MazeGenerator.createMaze(mb);
         MazeGenerator.getInstance().display();
         Vector2d start = new Vector2d( BLOCK_SIZE + 1,  BLOCK_SIZE + 1);
         Vector2d finish = new Vector2d(15 * BLOCK_SIZE + 1, 15*BLOCK_SIZE + 1);
-        //ArrayList<BlockInfo> steps= MazeGenerator.getInstance().mazeBlocks.getSteps(start, finish);
 
         Search search = new Search(PuttingCourse.getInstance(), Main.getInstance().getSolver());
-//        PuttingCourse.getInstance().set_flag_position(new Vector2d(15.5*BLOCK_SIZE, 15.5*BLOCK_SIZE));
-//        PuttingCourse.getInstance().set_start_position(new Vector2d(1.5*BLOCK_SIZE, 1.5*BLOCK_SIZE));
         int[][] pathScore = search.getPathScore();
-//        System.out.println(search.course.obstacles.size()+"  grgrgr");
-
-
-        /**
-           * Here in the test, i find the coordinates of the score which would be 12 with a bit of randomness
-           */
-//        Random r= new Random();
-//        Vector2d currentPosition=new Vector2d(0,0);
-//        for (int i = 0; i < pathScore.length; i++) {
-//            for (int j = 0; j < pathScore[0].length; j++) {
-//                if(pathScore[i][j]==12) currentPosition=new Vector2d(i*BLOCK_SIZE+1.5+(r.nextDouble()-0.5)*BLOCK_SIZE, j*BLOCK_SIZE+1.5+(r.nextDouble()-0.5)*BLOCK_SIZE);
-//            }
-//        }
-//
-//        System.out.println(currentPosition);
-//        //return
-//       System.out.println("answer:"+pathScore[(int)currentPosition.getX()/BLOCK_SIZE][(int)currentPosition.getY()/BLOCK_SIZE]);
-//
-        for(int[] arr : pathScore) System.out.println(Arrays.toString(arr));
-
-//        LinkedList<Node> firstShots = search.searchMaze();
-//        for(Node n: firstShots) System.out.println(n);
 
     }
     

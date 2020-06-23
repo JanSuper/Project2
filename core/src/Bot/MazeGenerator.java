@@ -44,7 +44,6 @@ public class MazeGenerator {
 		for (int i = 0; i < y; i++) {
 			// draw the north edge
 			for (int j = 0; j < x; j++) {
-				System.out.print((maze[j][i] & 1) == 0 ? "+---" : "+   ");
 				if ((maze[j][i] / 1) % 2 == 0) {
 					mazeBlocks.addWall();
 					mazeBlocks.addWall();
@@ -55,10 +54,8 @@ public class MazeGenerator {
 				}
 			}
 			mazeBlocks.addWall();
-			System.out.println("+");
 			// draw the west edge
 			for (int j = 0; j < x; j++) {
-				System.out.print((maze[j][i] & 8) == 0 ? "|   " : "    ");
 				if((maze[j][i] / 8) % 2 == 0) {
 					mazeBlocks.addWall();
 					mazeBlocks.addCorridor();
@@ -69,27 +66,14 @@ public class MazeGenerator {
 				}
 			}
 			mazeBlocks.addWall();
-			System.out.println("|");
 		}
 		// draw the bottom line
 		for (int j = 0; j < x; j++) {
-			System.out.print("+---");
 			mazeBlocks.addWall();
 			mazeBlocks.addWall();
 		}
 		mazeBlocks.addWall();
-		System.out.println("+");
 		
-//		for(int i = 0; i<=16; i++) {
-//			for (int j = 0; j <= 15; j++) {
-//				System.out.print(mazeBlocks.maze[i][j].wall);
-//			}
-//			System.out.println(mazeBlocks.maze[i][16].wall);
-//		}
-
-//		mazeBlocks.getSteps();
-//		mazeBlocks.getBotSteps();
-//		mazeBlocks.printSteps();
 	}
  
 	private void generateMaze(int cx, int cy) {

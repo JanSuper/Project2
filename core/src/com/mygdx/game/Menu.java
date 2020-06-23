@@ -33,7 +33,6 @@ public class Menu implements Screen {
         PuttingSimulator.getInstance().create();
 
         newLVL = false;
-        //TODO:Golf becomes PuttingSimulator
         
         playButtonActive=new Texture("PlayButtonActive.jpg");
         playButtonInactive=new Texture("PlayButtonInactive.jpg");
@@ -63,13 +62,9 @@ public class Menu implements Screen {
         if(Gdx.input.getX()<Main.WIDTH/2-BUTTON_WIDTH/2+BUTTON_WIDTH && Gdx.input.getX() > Main.WIDTH/2-3*BUTTON_WIDTH/8
         && Gdx.input.getY()>Main.HEIGHT-(PLAY_HEIGHT+BUTTON_HEIGHT) && Gdx.input.getY()<Main.HEIGHT-PLAY_HEIGHT){
             Main.getInstance().batch.draw(playButtonInactive,Main.WIDTH/2-BUTTON_WIDTH/2,PLAY_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
-            if(Gdx.input.isTouched()){ // need to talk?
+            if(Gdx.input.isTouched()){ 
                 this.dispose();
 
-//                if (newLVL) {
-//                	play(0,0);
-//                	PuttingSimulator.getInstance().create();
-//                }
                 play(0,0);
                 PuttingCourse.getInstance().set_friction_coefficient((float)(1.0 - .5*new Random().nextDouble()));
                 PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
@@ -84,7 +79,7 @@ public class Menu implements Screen {
             if(Gdx.input.isTouched()) {
                 this.dispose();
                 Main.getInstance().setScreen(OptionMenu.getInstance());
-                //TODO options
+
             }
         }else
             Main.getInstance().batch.draw(optionButtonActive,Main.WIDTH/2-BUTTON_WIDTH/2,OPTION_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -129,16 +124,9 @@ public class Menu implements Screen {
     	if (speed == 0) {
     		speed = 0.00001f;
     	}
-//
-//    	
-//        this.velocity=speed;
-//        if (this.velocity>(float) PuttingCourse.getInstance().get_maximum_velocity()){
-//            this.velocity=(float) PuttingCourse.getInstance().get_maximum_velocity();
-//        }
-//        this.angle=angle;
+
     	
         PuttingSimulator.getInstance().create();
-//        PuttingSimulator.getInstance().take_shot(PuttingSimulator.getInstance().calcInit());
         Main.getInstance().setScreen(PuttingSimulator.getInstance());
     }
 }

@@ -24,7 +24,6 @@ public class WigerToods implements Bot{
     public void setSolver(Solver s){
         solver = s;
         maxDistance = PuttingSimulator.getInstance().get_ball_position().subtract(solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), new Vector2d(15, 0))).evaluateVector();
-//        System.out.println(maxDistance);
     }
 
     /**
@@ -32,7 +31,6 @@ public class WigerToods implements Bot{
      * @return Vector2d vector of shot(x and y strength)
      */
     public Vector2d search(){
-    	// TODO new method allowing for multiple shots
     	boolean recalibrateY=true;
         boolean recalibrateX=true;
         double scalar = 0.9; 
@@ -43,7 +41,6 @@ public class WigerToods implements Bot{
             testFin = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), testVelocity);
             Vector2d shotDistance = PuttingSimulator.getInstance().get_ball_position().absDifference(testFin);
 
-            System.out.println("here");
             if(Math.abs(testFin.subtract(PuttingCourse.getInstance().get_flag_position()).getX())<Math.sqrt(PuttingCourse.getInstance().get_hole_tolerance())){
                 recalibrateX=false;
             }else{
@@ -71,10 +68,4 @@ public class WigerToods implements Bot{
      * FOR TESTING PURPOSES
      * @param arg
      */
-    public static void main (String [] arg){
-        WigerToods blah = new WigerToods();
-        Vector2d result = blah.search();
-        System.out.print("finish X co-ordinate: "+ result.getX() + "\n finish Y co-ordinate: " +result.getY());
-    }
-
 }

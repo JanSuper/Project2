@@ -38,14 +38,12 @@ public class RoughBot implements Bot {
         Vector2d testShot = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), shotVel);
         startingFric = startingFric/(firstShot.evaluateVector() / testShot.evaluateVector());
         solver = new FrictionRKSolver(startingFric);
-        System.out.println(startingFric);
     }else{
            shotVel = WigerToods.getInstance().search();
            Vector2d firstShot = actualSolver.takeShot(PuttingSimulator.getInstance().get_ball_position(), shotVel);
            Vector2d testShot = solver.takeShot(PuttingSimulator.getInstance().get_ball_position(), shotVel);
            startingFric = startingFric/(firstShot.evaluateVector() / testShot.evaluateVector());
            solver = new FrictionRKSolver(startingFric);
-           System.out.println(startingFric);
         }
 
     ///estimate friction.

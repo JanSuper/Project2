@@ -57,7 +57,6 @@ public class InfoObject {
 	}
 	
 	public ArrayList<BlockInfo> getSteps(Vector2d start, Vector2d finish){
-		System.out.println("yohahhahahahahhha");
 		steps = new ArrayList();
 		strings = new ArrayList();
 		botSteps = new ArrayList();
@@ -67,15 +66,11 @@ public class InfoObject {
 		this.lasti = (int)(start.getX()-1)/ mynamejeff;
 		this.lastj = (int)(start.getY()-1)/ mynamejeff;
 		steps = recursion(hold);
-		System.out.println(steps.size());
-		System.out.println(strings.size());
 		return steps;
 	}
 	
 	private ArrayList<BlockInfo> recursion(BlockInfo step){
-//		System.out.println(step.i + " " + step.j);
 		if(step.up) {
-//			System.out.println("up");
 			if(delete) {
 				steps.remove(steps.size()-1);
 				strings.remove(strings.size()-1);
@@ -107,7 +102,6 @@ public class InfoObject {
 				strings.remove(strings.size()-1);
 				delete = false;
 			}
-//			System.out.println("right");
 			maze[step.i][step.j].right=false; 				// checking off step
 			BlockInfo hold = new BlockInfo(step.i, step.j);	// temporary object
 			hold.left=false;								// saving only one step
@@ -133,7 +127,6 @@ public class InfoObject {
 				strings.remove(strings.size()-1);
 				delete = false;
 			}
-//			System.out.println("down");
 			maze[step.i][step.j].down=false; 				// checking off step
 			BlockInfo hold = new BlockInfo(step.i, step.j);	// temporary object
 			hold.left=false;								// saving only one step
@@ -159,7 +152,6 @@ public class InfoObject {
 				strings.remove(strings.size()-1);
 				delete = false;
 			}
-//			System.out.println("left");
 			maze[step.i][step.j].left=false; 				// checking off step
 			BlockInfo hold = new BlockInfo(step.i, step.j);	// temporary object
 			hold.left=true;								// saving only one step
@@ -178,7 +170,6 @@ public class InfoObject {
 				return recursion(maze[step.i][step.j-1]);	// next step
 			}
 		}
-//		System.out.println("nope");
 		delete = true;
 		steps.remove(steps.size()-1);
 		strings.remove(strings.size()-1);
@@ -186,14 +177,6 @@ public class InfoObject {
 		return recursion(maze[hold.i][hold.j]);
 	}
 	
-	public void printSteps() {
-		for (int i = 0; i <= strings.size()-1; i++) {
-			System.out.println(strings.get(i));
-		}
-		for (int i = 0; i <= botSteps.size()-1; i++) {
-			System.out.println(Arrays.toString(botSteps.get(i)));
-		}
-	}
 	
 	private void nextStep() {
 		if(j<maze[0].length - 1) {
@@ -217,7 +200,6 @@ public class InfoObject {
 		boolean[] hold = {};
 		for(int i = 0; i <= steps.size()-2; i++) {
 			if ((newStep && !tooFar)|| startOver) {
-				//System.out.println("new");
 
 				hold = steps.get(i).getSteplist();
 				count = 1;
@@ -227,7 +209,6 @@ public class InfoObject {
 			}
 
 			if (Arrays.equals(hold, steps.get(i+1).getSteplist())) {
-		//		System.out.println("same");
 				count++;
 				if (count >= maxTravel) {
 					tooFar = true;
@@ -259,7 +240,6 @@ public class InfoObject {
 				tooFar = false;
 			}	
 		}
-		System.out.println(botSteps.size());
 		return botSteps;
 		
 	}

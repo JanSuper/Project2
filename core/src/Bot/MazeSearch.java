@@ -41,8 +41,6 @@ public class MazeSearch implements Bot {
 
         PuttingCourse.getInstance().botUse = true;
         int[] currentStep = nextStep();
-        System.out.println(PuttingSimulator.getInstance().get_ball_position().toString());
-        System.out.println(Arrays.toString(currentStep));
         Vector2d currenStep = PuttingSimulator.getInstance().get_ball_position();
         
         Vector2d flag;
@@ -64,7 +62,6 @@ public class MazeSearch implements Bot {
         Vector2d testVelocity = (flag.subtract(currenStep)).multiplyBy(new Vector2d(.25,.25));
         Vector2d distanceToFlag = currenStep.absDifference(flag);
         if(distanceToFlag.evaluateVector() > maxDistance) {
-            System.out.println("too far");
             stepcount--;
             return (flag.subtract(currenStep)).multiplyBy(new Vector2d(15,15));
         }
@@ -118,10 +115,8 @@ public class MazeSearch implements Bot {
             if(!recalibrateX&&!recalibrateY) {
                 double holdx = flag.getX() - testFin.getX();
                 double holdy = flag.getY() - testFin.getY();
-//                System.out.println("x; " + holdx + " y; " + holdy);
             }
         }
-//        PuttingCourse.getInstance().botUse = false;
         return testVelocity;
     }
     public int[] nextStep() {

@@ -14,12 +14,12 @@ public abstract class Solver implements PhysicsEngine{
      * TODO: make an array of all positions at these time intervals so we can set a the screen to update
      * ball position based off of this array instead of calculating on the fly, this will allow us to calculate the motion in smaller steps and only store evere 0.006 seconds
      */
-    public static double fps = 165.0;
+    public static double fps = 60.0;
     /**
      * Solver Step size
      * This is the step size that is changed for the set_step_size
      */
-    protected double solverStepSize = 1.0/165.0;//moving to 0.00001 when we refactor the putting simulator
+    protected double solverStepSize = 1.0/60.0;//moving to 0.00001 when we refactor the putting simulator
     private int modulus = (int)((1.0/fps)/solverStepSize);
 
     protected double currentPosZ;
@@ -170,18 +170,11 @@ public abstract class Solver implements PhysicsEngine{
         Main.getInstance().getSolver().setPosition(new Vector2d
                 (position.getX()+Math.signum(velocity.getX())*-AMOUNT_BACK_FROM_WATER,
                         position.getY()+Math.signum(velocity.getY())*-AMOUNT_BACK_FROM_WATER));
-//        Main.getInstance().getSolver().setVelocity(velocity = new Vector2d(0.001,0));
-//        Main.getInstance().getSolver().nextStep(); 
         stopShot=true;
     }
     public void pauseShot(){
     	double AMOUNT_BACK_FROM_WATER = 0.5;
-        //velocity = new Vector2d(0,0);
-//        Main.getInstance().getSolver().setPosition(new Vector2d
-//                (position.getX()+Math.signum(velocity.getX())*-AMOUNT_BACK_FROM_WATER,
-//                        position.getY()+Math.signum(velocity.getY())*-AMOUNT_BACK_FROM_WATER));
-//        Main.getInstance().getSolver().setVelocity(velocity = new Vector2d(0.001,0));
-//        Main.getInstance().getSolver().nextStep(); 
+
         stopShot=true;
     }
 

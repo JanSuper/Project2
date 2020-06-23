@@ -127,32 +127,11 @@ public class PuttingCourse{
                 modelInstance.transform.setToTranslation((float)currentChunkPosition.getX(), 0, (float)currentChunkPosition.getY());
 
                 chunkNum++;
- /*               if(print<=3){
-                    Mesh mesh2 = modelInstance.model.nodes.get(0).parts.get(0).meshPart.mesh;
-                    float[] temp = new float[mesh.getNumVertices()];
-                    mesh2.getVertices(temp);
-                    int counter = 0;
-                    String tempLine = "";
-                    System.out.println("" + mesh.getNumVertices() + " :" + mesh.getNumIndices());
-                    for(float temp2:temp){
-                        tempLine += (temp2 + " , ");
-                        counter++;
-                        if(counter == 9){
-                            System.out.println("DEBUG VERTEX INFO:" + tempLine);
-                            tempLine = "";
-                            counter = 0;
-                        }
-                    }
-                    print ++;
-                }*/
             }
         }
         Vector2d corner1 = coverage[0];
         Vector2d corner2 = coverage[1];
         Vector2d boxDiagonal = corner1.absDifference(corner2);
-//        
-//        ModelInstance waterBlock = new ModelInstance(new ModelBuilder().createBox((float)boxDiagonal.getX(), 0, (float)boxDiagonal.getY(), new Material(ColorAttribute.createDiffuse(Color.BLUE)), Usage.Position | Usage.Normal), 0, 0, 0);
-//        instances.add(waterBlock);
         
         mb.node().id = "ground";
         mb.part("box", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.BLUE)))
@@ -188,7 +167,6 @@ public class PuttingCourse{
         }
         return new Vector2d[]{new Vector2d(minX,minY), new Vector2d(maxX,maxY)};
     }
-    //TODO recreate the course?
     public void set_flag_position(Vector2d vector2d) {
         this.flag = vector2d;
     }
@@ -334,15 +312,12 @@ public class PuttingCourse{
             polygon=obstacle.getPolygon();
             if(Vector2d.isPointInPolygon(polygon ,new Vector2d(solver.getPosition().getX(),solver.getPosition().getY()))){
                 solver.previousStepCollision = true;
-//            	System.out.println("need to talk");
                 sides = obstacle.getSides();
                 for(Side side: sides){
                 	lasthit = currenthit;
                     stop = side.collideIfCollision(solver);
                     currenthit = side;
-//                    if (stop) System.out.println("touchie");
                     	if(stop){
-                        	//make the obstacle rise on contact !
                             int ran= r.nextInt(obstacles.size());
                         	if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) {//if it's not already up
                                 scale(obstacle);
