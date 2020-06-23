@@ -311,6 +311,10 @@ public class PuttingCourse{
 
     public void checkCollision (Solver solver){
 
+        if(solver.previousStepCollision){
+            solver.previousStepCollision=false;
+            return;
+        }
         if (solver.get_height(solver.getPosition())<0){
             solver.stopShot();
             PuttingSimulator.getInstance().look=true;
@@ -323,6 +327,7 @@ public class PuttingCourse{
         for(Obstacle obstacle : obstacles){
             polygon=obstacle.getPolygon();
             if(Vector2d.isPointInPolygon(polygon ,new Vector2d(solver.getPosition().getX(),solver.getPosition().getY()))){
+                solver.previousStepCollision = true;
 //            	System.out.println("need to talk");
                 sides = obstacle.getSides();
                 for(Side side: sides){
@@ -356,29 +361,6 @@ public class PuttingCourse{
         }
 
     }
-    
-    public void checkCollisionBot (Solver solver){
-
-        Array<Vector2d> polygon;
-        LinkedList<Side> sides;
-        boolean stop;
-         for(Obstacle obstacle : obstacles){
-             polygon=obstacle.getPolygon();
-             if(Vector2d.isPointInPolygon(polygon ,new Vector2d(solver.getPosition().getX(),solver.getPosition().getY()))){
-                 sides = obstacle.getSides();
-                 for(Side side: sides){
-                     stop = side.collideIfCollision(solver);
-                     if(stop){
-                         //make the obstacle rise on contact !
-                         if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) scale(obstacle);
-                         else scale(obstacles.get(r.nextInt(obstacles.size())));
-                         return;
-                     }
-
-                 }
-             }
-         }
-     }
 
     private void scale(Obstacle obstacle){
         if(obstacle.mi.transform.getScale(new Vector3(0,0,0)).y<5) obstacle.mi.transform.scale(1,5,1);

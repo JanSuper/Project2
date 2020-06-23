@@ -32,6 +32,7 @@ public abstract class Solver implements PhysicsEngine{
 
     boolean stopShot = false;
     boolean isAi = true;
+   public boolean previousStepCollision = false;
 
     /**
      * This is what the different solvers need to implement
