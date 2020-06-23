@@ -259,6 +259,7 @@ public class InfoObject {
 				tooFar = false;
 			}	
 		}
+		System.out.println(botSteps.size());
 		return botSteps;
 		
 	}

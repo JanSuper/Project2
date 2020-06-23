@@ -430,22 +430,22 @@ public class PuttingSimulator extends Game implements Screen{
             		take_shot(holdshot);
             	}
             	else { //mazeLevel
-            		if (MazeSearch.getInstance().stepcount + 1 < MazeSearch.getInstance().botSteps.size()) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
-            			Vector2d nextShot = MazeSearch.getInstance().search();
+            		if (true) { // if all steps from the maze solver were taken, Wiger will try to make the last shot himself
+            			Vector2d nextShot = Search.getInstance().search();
             			take_shot(nextShot);
             			shot = false;
             			count = 0;
             			score++;
             			Gdx.input.setInputProcessor(camController);
             		}
-            		else { // there are still steps to be taken to solve the maze
-            			Vector2d holdshot = WigerToods.getInstance().search();
-                		look=false;
-                		shot = false;
-                		count = 0;
-                		score++;
-                		take_shot(holdshot);
-            		}
+//            		else { // there are still steps to be taken to solve the maze
+//            			Vector2d holdshot = WigerToods.getInstance().search();
+//                		look=false;
+//                		shot = false;
+//                		count = 0;
+//                		score++;
+//                		take_shot(holdshot);
+//            		}
             	}
             }
             count = 0;
@@ -607,8 +607,8 @@ public class PuttingSimulator extends Game implements Screen{
     public void giveUpMaze() {
     	MazeGenerator.getInstance().mazeBlocks.getSteps(Main.getInstance().getSolver().getPosition(), PuttingCourse.getInstance().get_flag_position());
 		MazeSearch.getInstance().botSteps = MazeGenerator.getInstance().mazeBlocks.getBotSteps();
-		PuttingSimulator.getInstance().setAi(MazeSearch.getInstance());
-		Vector2d nextShot = MazeSearch.getInstance().search();
+		PuttingSimulator.getInstance().setAi(Search.getInstance());
+		Vector2d nextShot = Search.getInstance().search();
 		take_shot(nextShot);
 		count = 0;
 		shot = false;

@@ -39,7 +39,7 @@ public class Search implements Bot {
         this.engine = engine;
         Vector2d start = new Vector2d( BLOCK_SIZE + 1,  BLOCK_SIZE + 1);
         Vector2d finish = new Vector2d(15 * BLOCK_SIZE + 1, 15*BLOCK_SIZE + 1);
-        ArrayList<BlockInfo> steps= MazeGenerator.getInstance().mazeBlocks.getSteps(start, finish);
+        ArrayList<BlockInfo> steps= MazeGenerator.getInstance().mazeBlocks.steps;
         pathScore = new int[MazeGenerator.getInstance().mazeBlocks.maze.length][MazeGenerator.getInstance().mazeBlocks.maze[0].length];
         boolean[][] set = new boolean[pathScore.length][pathScore[0].length];
         int maxScore = steps.size()*2;
@@ -54,6 +54,7 @@ public class Search implements Bot {
         setScore(pathScore,15, 15,0, MazeGenerator.mazeBlocks.maze, set);
 
          lastshot = MazeGenerator.mazeBlocks.getBotSteps().get(MazeGenerator.mazeBlocks.getBotSteps().size()-1);
+         System.out.println(Arrays.toString(lastshot));
     }
     /**
      * Constructor
@@ -123,6 +124,7 @@ public class Search implements Bot {
 
     public Vector2d search(){
     	if(lastShot()) {
+    		System.out.println("here");
         	return  WigerToods.getInstance().search();
         }
             PuttingCourse.getInstance().botUse=true;
@@ -154,6 +156,7 @@ public class Search implements Bot {
             PuttingCourse.getInstance().botUse=false;
             choosen.add(start);
             PuttingCourse.getInstance().reset();
+            PuttingCourse.getInstance().lasthit = null;
             return start.getLastShot();
 
   /*      Node current = null;

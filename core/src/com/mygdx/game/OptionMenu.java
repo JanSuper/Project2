@@ -248,6 +248,7 @@ public class OptionMenu implements Screen {
     	PuttingCourse.getInstance().get_height().setFunction("0");
     	MazeGenerator.restart();
     	MazeSearch.getInstance().setSolver((Solver)Main.getInstance().getSolver());
+    	WigerToods.getInstance().setSolver((Solver)Main.getInstance().getSolver());
     	 PuttingSimulator.getInstance().mazeLevel = true;
     	 PuttingSimulator.getInstance().create();
     	 play(0,0);
